@@ -54,9 +54,11 @@
 
             <TextView
                 android:id="@+id/selfOrgInfo_TV"
-                android:layout_width="300dp"
-                android:layout_height="100dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget nisl hendrerit, tincidunt lacus non, pharetra nulla. In rhoncus, augue non posuere convallis, nibh enim feugiat leo, porttitor auctor velit augue sed tortor."
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"

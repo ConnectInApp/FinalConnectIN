@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.individual_registration_layout.*
 
 
 class IndvFragment :Fragment() {
@@ -28,6 +29,7 @@ class IndvFragment :Fragment() {
     lateinit var username : EditText
     lateinit var dob : EditText
     lateinit var gender : RadioGroup
+    lateinit var occupation : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +54,11 @@ class IndvFragment :Fragment() {
         dob =view.findViewById(R.id.indvDOB_EV)
         gender =view.findViewById(R.id.indvGender_EV)
         registerB= view.findViewById(R.id.indvRegisterB)
+        occupation = view.findViewById(R.id.indvOccupation_EV)
 
         var indvName = username.text
         var indvDOB = dob.text
+        var indvOccupation = occupation.text
         var indvGender = ""
 
         gender.setOnCheckedChangeListener { group, checkedId ->
@@ -73,6 +77,7 @@ class IndvFragment :Fragment() {
                 hm["username"] = indvName.toString()
                 hm["dateOfBirth"] = indvDOB.toString()
                 hm["gender"] = indvGender.toString()
+                hm["occupation"] = indvOccupation.toString()
                 hm["accountType"] = "individual"
                 userReference.updateChildren(hm).addOnCompleteListener {
                     if(it.isSuccessful)
