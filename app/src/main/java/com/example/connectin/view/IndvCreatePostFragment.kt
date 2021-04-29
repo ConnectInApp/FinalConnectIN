@@ -18,7 +18,7 @@ import kotlin.collections.HashMap
 
 class IndvCreatePostFragment : Fragment() {
 
-    lateinit var postTitle : EditText
+    //lateinit var postTitle : EditText
     lateinit var postContent : EditText
     lateinit var postB : Button
 
@@ -50,7 +50,7 @@ class IndvCreatePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        postTitle = view.findViewById(R.id.entertitle_EV)
+        //postTitle = view.findViewById(R.id.entertitle_EV)
         postContent = view.findViewById(R.id.postText_EV)
         postB = view.findViewById(R.id.postButton)
 
@@ -103,7 +103,7 @@ class IndvCreatePostFragment : Fragment() {
     }
 
     private fun validatingPostInfo() {
-        val title = postTitle.text.toString()
+        //val title = postTitle.text.toString()
         val content = postContent.text.toString()
         //if(title.isEmpty()) Toast.makeText(activity,"Please mention title",Toast.LENGTH_SHORT).show()
         if(content.isEmpty()) Toast.makeText(activity,"Please add content",Toast.LENGTH_SHORT).show()
