@@ -24,24 +24,39 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/indvOccupation_EV"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Occupation"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/indvName_EV" />
+
+    <EditText
         android:id="@+id/indvDOB_EV"
-        android:layout_width="200dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/birthday_cake"
         android:ems="10"
         android:hint="DD/MM/YYYY"
         android:inputType="date"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/indvName_EV" />
+        app:layout_constraintTop_toBottomOf="@+id/indvOccupation_EV" />
 
     <EditText
         android:id="@+id/indvName_EV"
-        android:layout_width="200dp"
-        android:layout_height="57dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:drawableLeft="@drawable/username"
         android:ems="10"
