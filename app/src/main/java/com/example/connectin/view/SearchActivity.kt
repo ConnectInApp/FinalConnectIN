@@ -26,6 +26,7 @@ class SearchActivity : AppCompatActivity() {
         usersArrayList= arrayListOf<Users>()
 
         searchView.setOnSearchClickListener {
+            rView.visibility=View.VISIBLE
             getUserData()
         }
 
@@ -49,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
      fun getUserData() {
+         usersArrayList.clear()
 
         dbref=FirebaseDatabase.getInstance().getReference("Users")
         dbref.addValueEventListener(object:ValueEventListener{

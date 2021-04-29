@@ -39,7 +39,7 @@ class SearchAdapter(var userList:ArrayList<Users>,var userListFilter:ArrayList<U
         return object:Filter(){
             override fun performFiltering(charsequence: CharSequence?): FilterResults {
                 val filterResults=FilterResults()
-                if(charsequence==null || charsequence.length==0){
+                if(charsequence==null || charsequence.length<0){
                     filterResults.count=userListFilter.size
                     filterResults.values=userListFilter
 
@@ -49,7 +49,7 @@ class SearchAdapter(var userList:ArrayList<Users>,var userListFilter:ArrayList<U
                     val Userdata=ArrayList<Users>()
 
                     for(user in userListFilter){
-                        if(user.username!!.contains(searchChr)){
+                        if(user.username!!.contains(searchChr,true)){
                             Userdata.add(user)
                         }
                     }
