@@ -71,13 +71,14 @@ class IndvCreatePostFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists()){
                         name = snapshot.child("username").value.toString()
-                        //val profileImg = snapshot.child("profileImg").getValue().toString()
+                        val profileImg = snapshot.child("profileImage").value.toString()
                         val postMap = HashMap<String,Any>()
                         postMap["uid"] = currentUserId
                         postMap["date"] = postDate
                         postMap["time"] = postTime
                         postMap["content"] = postContent.text.toString()
                         postMap["username"] = name
+                        postMap["profileImg"] = profileImg
 
                         postReference.child(postName).updateChildren(postMap).addOnCompleteListener {
                             if(it.isSuccessful)

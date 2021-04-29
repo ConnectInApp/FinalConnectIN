@@ -2,6 +2,8 @@ package com.example.connectin.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +52,27 @@ class NavigationActivity : AppCompatActivity() {
         } else {
             //checkUserExists()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menu?.add("SIGN OUT")
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.title){
+            "SIGN OUT" -> {
+                Toast.makeText(this,"Signing Out...",Toast.LENGTH_LONG).show()
+                mauth.signOut()
+                val i = Intent(this,LoginActivity::class.java)
+                startActivity(i)
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun checkUserExists() {

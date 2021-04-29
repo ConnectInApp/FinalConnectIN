@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -19,8 +21,10 @@ import com.example.connectin.view.Posts
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
+import kotlin.properties.Delegates
 
 class HomeFragment : Fragment() {
 
@@ -30,14 +34,21 @@ class HomeFragment : Fragment() {
 
     lateinit var userReference: DatabaseReference
     lateinit var postReference: DatabaseReference
+    lateinit var likesReference: DatabaseReference
+    lateinit var dislikesReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
+
     lateinit var currentUserId : String
+    var likeCheck = false
+    var dislikeCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         userReference = FirebaseDatabase.getInstance().reference.child("Users")
         postReference = FirebaseDatabase.getInstance().reference.child("Posts")
+        likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
+        dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
     }
@@ -83,6 +94,10 @@ class HomeFragment : Fragment() {
                 holder.dateT.setText(model.date)
                 holder.timeT.setText(model.time)
                 holder.contentT.setText(model.content)
+                Picasso.get().load(model.profileImg).into(holder.imgView)
+
+                holder.setLikeButtonStatus(postKey!!)
+                holder.setDislikeButtonStatus(postKey!!)
 
                 val uid = model.uid
                 if(currentUserId.compareTo(uid) == 0)
@@ -101,6 +116,53 @@ class HomeFragment : Fragment() {
                             ?.commit()
                     }
                 }
+
+
+                holder.likeButton.setOnClickListener {
+                    likeCheck = true
+                    likesReference.addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(likeCheck.equals(true))
+                            {
+                                if(snapshot.child(postKey!!).hasChild(currentUserId))
+                                {
+                                    likesReference.child(postKey).child(currentUserId).removeValue()
+                                    likeCheck = false
+                                } else {
+                                    likesReference.child(postKey).child(currentUserId).setValue(true)
+                                    dislikesReference.child(postKey).child(currentUserId).removeValue()
+                                    likeCheck = false
+                                }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+                }
+
+                holder.dislikeButton.setOnClickListener {
+                    dislikeCheck = true
+                    dislikesReference.addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(dislikeCheck.equals(true))
+                            {
+                                if(snapshot.child(postKey!!).hasChild(currentUserId))
+                                {
+                                    dislikesReference.child(postKey).child(currentUserId).removeValue()
+                                    dislikeCheck = false
+                                } else {
+                                    dislikesReference.child(postKey).child(currentUserId).setValue(true)
+                                    likesReference.child(postKey).child(currentUserId).removeValue()
+                                    dislikeCheck = false
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                    })
+                }
             }
 
         }
@@ -115,8 +177,54 @@ class HomeFragment : Fragment() {
         val dateT = itemView.findViewById<TextView>(R.id.userpostDateT)
         val timeT = itemView.findViewById<TextView>(R.id.userpostTimeT)
         val contentT = itemView.findViewById<TextView>(R.id.userpostContentT)
+        val imgView = itemView.findViewById<ImageView>(R.id.userpostImgIV)
+
+        val likeButton = itemView.findViewById<ImageButton>(R.id.postlikeButton)
+        val likeText = itemView.findViewById<TextView>(R.id.postlikeText)
+        val dislikeButton = itemView.findViewById<ImageButton>(R.id.postdislikeButton)
+        val dislikeText = itemView.findViewById<TextView>(R.id.postdislikeText)
+        val commentButton = itemView.findViewById<ImageButton>(R.id.postcommentButton)
+
+        var likesCount by Delegates.notNull<Int>()
+        var dislikesCount by Delegates.notNull<Int>()
+        val likesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Likes")
+        val dislikesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        val currentUserID = FirebaseAuth.getInstance().currentUser.uid
 
         val cardView = itemView.findViewById<CardView>(R.id.alluserpostCard)
 
+        fun setLikeButtonStatus(postKey: String){
+            likesRef.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.child(postKey).hasChild(currentUserID))
+                    {
+                        likesCount = snapshot.child(postKey).childrenCount.toInt()
+                        //likeButton.setImageDrawable()
+                        likeText.setText(likesCount.toString() + " likes")
+                    }else {
+                        likesCount = snapshot.child(postKey).childrenCount.toInt()
+                        likeText.setText(likesCount.toString() + " likes")
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+
+        fun setDislikeButtonStatus(postKey: String) {
+            dislikesRef.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child(postKey).hasChild(currentUserID))
+                    {
+                        dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeText.setText(dislikesCount.toString() + " dislikes")
+                    }
+                    else {
+                        dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeText.setText(dislikesCount.toString() + " dislikes")
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
     }
 }

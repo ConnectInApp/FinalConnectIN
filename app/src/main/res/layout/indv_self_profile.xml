@@ -23,12 +23,11 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="30dp"
-                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@android:drawable/btn_star_big_on" />
 
             <Button
                 android:id="@+id/uploadB"
