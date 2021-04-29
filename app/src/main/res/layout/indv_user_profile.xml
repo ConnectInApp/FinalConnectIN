@@ -6,29 +6,28 @@
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <TextView
-        android:id="@+id/textView16"
+    <Button
+        android:id="@+id/userViewPostsB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="User Profile"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:drawableLeft="@drawable/view_filled"
+        android:drawingCacheQuality="low"
+        android:text="View Post"
+        app:layout_constraintEnd_toStartOf="@+id/userEndorsementB"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sendConnectionReqB" />
 
     <ImageView
         android:id="@+id/userimg_IV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -36,6 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
+        android:hint="User Name will display here"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -50,7 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Analyst"
+        android:hint="User Occupation Will Display here"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -64,22 +64,24 @@
         android:id="@+id/userInfo_TV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
+        android:hint="User Info will Display Here"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userOccupation_TV" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
         android:id="@+id/sendConnectionReqB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Send Connection"
+        android:layout_marginTop="25dp"
+        android:drawableLeft="@drawable/connect"
+        android:text="Connect"
         app:layout_constraintEnd_toStartOf="@+id/sendMessageB"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,34 +91,37 @@
         android:id="@+id/sendMessageB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Message"
+        android:layout_marginTop="25dp"
+        android:drawableLeft="@drawable/send_message"
+        android:text="Message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sendConnectionReqB"
-        app:layout_constraintTop_toTopOf="@+id/sendConnectionReqB" />
-
-    <TextView
-        android:id="@+id/userViewPosts_TV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="VIEW POSTS"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userEndorsementB" />
+        app:layout_constraintTop_toBottomOf="@+id/userInfo_TV" />
 
     <Button
         android:id="@+id/userEndorsementB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
+        android:drawableLeft="@drawable/endorse"
         android:text="Endorse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.537"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/userViewPostsB"
+        app:layout_constraintTop_toBottomOf="@+id/sendMessageB" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="ABOUT"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendConnectionReqB" />
+        app:layout_constraintTop_toBottomOf="@+id/userOccupation_TV" />
 </androidx.constraintlayout.widget.ConstraintLayout>
