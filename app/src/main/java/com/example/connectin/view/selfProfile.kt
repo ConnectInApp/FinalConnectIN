@@ -47,44 +47,6 @@ class selfProfile : Fragment() {
     lateinit var job : Job
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        /*var decision : View = inflater.inflate(R.layout.indv_self_profile,container,false)
-        var layout = R.layout.indv_self_profile
-        var f = 3*/
-
-        //FlagTask().execute()
-
-        /*job = CoroutineScope(Dispatchers.Default).launch {
-            val result = CoroutineScope(Dispatchers.Default).async {
-                FlagTask().execute()
-            }
-            result.await()!!
-
-            val bundle = Bundle()
-            val fl = bundle.getInt("flag")
-            val fl1 = pref?.getInt("f",15)
-
-            Thread.sleep(3000)
-
-            activity?.runOnUiThread {
-                Toast.makeText(activity,"Its working: $type",Toast.LENGTH_LONG).show()
-
-            }
-        }*/
-
-        //Thread.sleep(3000)
-
-        /*if (flag?.compareTo(1) == 0) {
-            layout = R.layout.indv_self_profile
-        } else if (flag?.compareTo(0) == 0) {
-            layout = R.layout.org_self_profile
-        }*/
-
-        /*if(type?.compareTo("individual") == 0)
-        {
-            return inflater.inflate(R.layout.indv_self_profile,container,false)
-        } else
-            return inflater.inflate(R.layout.org_self_profile,container,false)*/
         return inflater.inflate(R.layout.fragment_selfprofile,container,false)
     }
 
@@ -125,7 +87,6 @@ class selfProfile : Fragment() {
                 Toast.makeText(activity,"Error",Toast.LENGTH_LONG).show()
             }
         }
-
     }
 
     /*fun getLayout() : Int{
@@ -136,7 +97,6 @@ class selfProfile : Fragment() {
         activity?.runOnUiThread {
             Toast.makeText(activity,"$a",Toast.LENGTH_LONG).show()
         }
-
         userReference.child(currentUserId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {

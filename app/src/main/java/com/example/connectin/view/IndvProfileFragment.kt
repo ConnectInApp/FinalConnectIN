@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -35,6 +36,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var aboutE : EditText
     lateinit var uploadB : Button
     lateinit var userPfp : ImageView
+    lateinit var createPostB : FloatingActionButton
 
     var galleryPick : Int? = 0
 
@@ -64,12 +66,22 @@ class IndvProfileFragment : Fragment() {
         aboutE = view.findViewById(R.id.selfAbout_EV)
         uploadB = view.findViewById(R.id.uploadB)
         userPfp = view.findViewById(R.id.selfImg_IV)
+        createPostB = view.findViewById(R.id.selfCreatePostB)
 
         userPfp.setOnClickListener {
             val gallery : Intent = Intent()
             gallery.setAction(Intent.ACTION_GET_CONTENT)
             gallery.setType("image/*")
             galleryPick?.let { it1 -> startActivityForResult(gallery, it1) }
+        }
+
+        createPostB.setOnClickListener {
+            //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
+            val frag = IndvCreatePostFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
         }
 
         userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{

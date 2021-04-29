@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -21,6 +23,7 @@ class OrgProfileFragment : Fragment() {
 
     var userProfileName : TextView? = null
     var orgProfileInfo : TextView? = null
+    lateinit var createJobB : FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,16 @@ class OrgProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        createJobB = view.findViewById(R.id.selfOrgCreatePost_FAB)
+        createJobB.setOnClickListener {
+            Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
+            val frag = OrgCreateJobFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.orgSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         userReference.child(currentUserId).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
