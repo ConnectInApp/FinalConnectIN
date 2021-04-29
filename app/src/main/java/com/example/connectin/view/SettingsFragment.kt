@@ -55,6 +55,9 @@ class SettingsFragment : Fragment() {
         search.setOnClickListener {
             //intent for search activity
             //supportfragment
+            val i=Intent(activity,SearchActivity::class.java)
+            startActivity(i)
+
         }
     }
 
