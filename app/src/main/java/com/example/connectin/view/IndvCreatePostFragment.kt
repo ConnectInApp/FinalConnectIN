@@ -51,8 +51,8 @@ class IndvCreatePostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         postTitle = view.findViewById(R.id.entertitle_EV)
-        postContent = view.findViewById(R.id.postText_EV)
-        postB = view.findViewById(R.id.postButton)
+        postContent = view.findViewById(R.id.newpostContent_EV)
+        postB = view.findViewById(R.id.editpostButton)
 
         var calendar = Calendar.getInstance()
         val currentDate = SimpleDateFormat("dd-MM-yyyy")
