@@ -112,7 +112,13 @@ class IndvProfileFragment : Fragment() {
                             if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
                                 val dob = snapshot.child("dateOfBirth").getValue().toString()
                                 val gender = snapshot.child("gender").getValue().toString()
-                                aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                if(snapshot.hasChild("about"))
+                                {
+                                    val about = snapshot.child("about").getValue().toString()
+                                    aboutE.setText("$about \n Date of Birth: $dob \n Gender: $gender")
+                                } else {
+                                    aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                }
                             }
                             if (snapshot.hasChild("occupation")) {
                                 val occ = snapshot.child("occupation").getValue().toString()
