@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
+import com.example.connectin.view.CommentsFragment
 import com.example.connectin.view.EditDeletePostFragment
 import com.example.connectin.view.Posts
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -163,6 +164,18 @@ class HomeFragment : Fragment() {
 
                     })
                 }
+
+                holder.commentButton.setOnClickListener {
+                    val frag = CommentsFragment()
+                    val bundle = Bundle()
+                    bundle.putString("postKey",postKey.toString())
+
+                    frag.arguments = bundle
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.homeFragmentL,frag)
+                            ?.addToBackStack(null)?.commit()
+                }
             }
 
         }
@@ -199,10 +212,11 @@ class HomeFragment : Fragment() {
                     if(snapshot.child(postKey).hasChild(currentUserID))
                     {
                         likesCount = snapshot.child(postKey).childrenCount.toInt()
-                        //likeButton.setImageDrawable()
+                        likeButton.setImageResource(R.drawable.liked)
                         likeText.setText(likesCount.toString() + " likes")
                     }else {
                         likesCount = snapshot.child(postKey).childrenCount.toInt()
+                        likeButton.setImageResource(R.drawable.not_liked)
                         likeText.setText(likesCount.toString() + " likes")
                     }
                 }
@@ -216,10 +230,12 @@ class HomeFragment : Fragment() {
                     if (snapshot.child(postKey).hasChild(currentUserID))
                     {
                         dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeButton.setImageResource(R.drawable.disliked)
                         dislikeText.setText(dislikesCount.toString() + " dislikes")
                     }
                     else {
                         dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeButton.setImageResource(R.drawable.not_disliked)
                         dislikeText.setText(dislikesCount.toString() + " dislikes")
                     }
                 }

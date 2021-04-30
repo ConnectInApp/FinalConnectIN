@@ -34,6 +34,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var uploadB : Button
     lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
+    lateinit var editInfo : Button
 
     var galleryPick : Int = 0
 
@@ -66,12 +67,21 @@ class IndvProfileFragment : Fragment() {
         uploadB = view.findViewById(R.id.uploadB)
         userPfp = view.findViewById(R.id.selfImg_IV)
         createPostB = view.findViewById(R.id.selfCreatePostB)
+        editInfo = view.findViewById(R.id.selfEdit_IV)
 
         createPostB.setOnClickListener {
             //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
             val frag = IndvCreatePostFragment()
             activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.indvSelfProfileL, frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
+
+        editInfo.setOnClickListener {
+            val frag = EditIndvInfo()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
                     ?.addToBackStack(null)
                     ?.commit()
         }
