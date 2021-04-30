@@ -18,7 +18,7 @@ import kotlin.collections.HashMap
 
 class IndvCreatePostFragment : Fragment() {
 
-    lateinit var postTitle : EditText
+    //lateinit var postTitle : EditText
     lateinit var postContent : EditText
     lateinit var postB : Button
 
@@ -50,9 +50,9 @@ class IndvCreatePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        postTitle = view.findViewById(R.id.entertitle_EV)
-        postContent = view.findViewById(R.id.postText_EV)
-        postB = view.findViewById(R.id.postButton)
+        //postTitle = view.findViewById(R.id.entertitle_EV)
+        postContent = view.findViewById(R.id.newpostContent_EV)
+        postB = view.findViewById(R.id.editpostButton)
 
         var calendar = Calendar.getInstance()
         val currentDate = SimpleDateFormat("dd-MM-yyyy")
@@ -71,13 +71,14 @@ class IndvCreatePostFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists()){
                         name = snapshot.child("username").value.toString()
-                        //val profileImg = snapshot.child("profileImg").getValue().toString()
+                        val profileImg = snapshot.child("profileImage").value.toString()
                         val postMap = HashMap<String,Any>()
                         postMap["uid"] = currentUserId
                         postMap["date"] = postDate
                         postMap["time"] = postTime
                         postMap["content"] = postContent.text.toString()
                         postMap["username"] = name
+                        postMap["profileImg"] = profileImg
 
                         postReference.child(postName).updateChildren(postMap).addOnCompleteListener {
                             if(it.isSuccessful)
@@ -103,7 +104,7 @@ class IndvCreatePostFragment : Fragment() {
     }
 
     private fun validatingPostInfo() {
-        val title = postTitle.text.toString()
+        //val title = postTitle.text.toString()
         val content = postContent.text.toString()
         //if(title.isEmpty()) Toast.makeText(activity,"Please mention title",Toast.LENGTH_SHORT).show()
         if(content.isEmpty()) Toast.makeText(activity,"Please add content",Toast.LENGTH_SHORT).show()

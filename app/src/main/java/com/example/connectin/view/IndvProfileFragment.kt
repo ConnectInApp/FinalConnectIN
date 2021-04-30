@@ -1,27 +1,24 @@
 package com.example.connectin.view
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
-import android.media.Image
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.squareup.picasso.Picasso
+import java.net.URI
 
 class IndvProfileFragment : Fragment() {
 
@@ -31,14 +28,16 @@ class IndvProfileFragment : Fragment() {
 
     lateinit var currentUserId : String
 
-    lateinit var nameE : EditText
-    lateinit var occupationE : EditText
-    lateinit var aboutE : EditText
+    lateinit var nameE : TextView
+    lateinit var occupationE : TextView
+    lateinit var aboutE : TextView
     lateinit var uploadB : Button
     lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
 
-    var galleryPick : Int? = 0
+    var galleryPick : Int = 0
+
+    var imgUri:Uri = Uri.parse("")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +45,7 @@ class IndvProfileFragment : Fragment() {
 
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
         userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
     }
 
@@ -68,42 +67,52 @@ class IndvProfileFragment : Fragment() {
         userPfp = view.findViewById(R.id.selfImg_IV)
         createPostB = view.findViewById(R.id.selfCreatePostB)
 
-        userPfp.setOnClickListener {
-            val gallery : Intent = Intent()
-            gallery.setAction(Intent.ACTION_GET_CONTENT)
-            gallery.setType("image/*")
-            galleryPick?.let { it1 -> startActivityForResult(gallery, it1) }
-        }
-
         createPostB.setOnClickListener {
             //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
             val frag = IndvCreatePostFragment()
             activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.replace(R.id.indvSelfProfileL, frag)
                     ?.addToBackStack(null)
                     ?.commit()
         }
 
-        userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
+        uploadB.setOnClickListener {
+            //uploadtoStorage()
+            val gallery : Intent = Intent()
+            gallery.setAction(Intent.ACTION_GET_CONTENT)
+            gallery.setType("image/*")
+            startActivityForResult(gallery,galleryPick)
+        }
+
+        userReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()) {
-                    if(snapshot.hasChild("accountType")){
+                if (snapshot.exists()) {
+                    if (snapshot.hasChild("accountType")) {
                         val type = snapshot.child("accountType").getValue().toString()
-                        if(type.compareTo("individual") == 0) {
-                            if(snapshot.hasChild("username")) {
+                        if (type.compareTo("individual") == 0) {
+                            if(snapshot.hasChild("profileImage")) {
+                                val img = snapshot.child("profileImage").value.toString()
+                                Picasso.get().load(img).into(userPfp)
+                            }
+
+                            if (snapshot.hasChild("username")) {
                                 val name = snapshot.child("username").getValue().toString()
                                 nameE.setText(name)
                             }
-                            if(snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
+                            if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
                                 val dob = snapshot.child("dateOfBirth").getValue().toString()
                                 val gender = snapshot.child("gender").getValue().toString()
                                 aboutE.setText("Date of Birth: $dob \n Gender: $gender")
                             }
-                            if(snapshot.hasChild("occupation")){
+                            if (snapshot.hasChild("occupation")) {
                                 val occ = snapshot.child("occupation").getValue().toString()
                                 occupationE.setText(occ)
-                            } else{
-                                Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "Profile name does not exists!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -117,17 +126,57 @@ class IndvProfileFragment : Fragment() {
         })
     }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun uploadtoStorage() {
+        val resultUri = imgUri
+
+        val path = userProfileImgRef.child("$currentUserId.jpg")
+
+        path.putFile(resultUri).addOnCompleteListener {
+
+            if (it.isSuccessful) {
+                Toast.makeText(activity, "Profile image stored to database!!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                path.downloadUrl.addOnSuccessListener {
+                    val downloadUrl = it.toString()
+                    userReference.child("profileImage").setValue(downloadUrl)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(
+                                            activity,
+                                            "Image stored to firebase database",
+                                            Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                }
+                //val downLoadUrl = it.result?.downloadUrl.toString()
+            } else Toast.makeText(
+                activity,
+                "Error: ${it.exception?.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == galleryPick && resultCode == RESULT_OK && data!=null)
-        {
-            val imgUri = data.data
-            activity?.let { CropImage.activity(imgUri)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1).start(it) }
+
+        if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
+            imgUri = data.data!!
+
+            //userPfp.setImageURI(imgUri)
+            uploadtoStorage()
+            userPfp.setImageURI(imgUri)
+//            activity?.let {
+//                CropImage.activity(imgUri)
+//                    .setGuidelines(CropImageView.Guidelines.ON)
+//                    .setAspectRatio(1, 1).start(it)
+//            }
         }
-        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+        /*if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
             val result = CropImage.getActivityResult(data)
 
@@ -157,4 +206,12 @@ class IndvProfileFragment : Fragment() {
             Toast.makeText(activity,"Error occured",Toast.LENGTH_SHORT).show()
         }
     }*/
+
+         else {
+            Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
 }
