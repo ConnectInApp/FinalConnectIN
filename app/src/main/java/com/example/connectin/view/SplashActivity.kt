@@ -16,6 +16,6 @@ class SplashActivity : AppCompatActivity() {
             //val i = Intent(this,NavigationActivity::class.java)
             startActivity(i)
             finish()
-        },1500)
+        },2500)
     }
 }

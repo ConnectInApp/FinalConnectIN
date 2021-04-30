@@ -3,7 +3,10 @@ package com.example.connectin.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -92,11 +95,25 @@ class LoginActivity : AppCompatActivity(){
         } else {
             auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
                 if(it.isSuccessful) {
-                    Toast.makeText(this,"You are now logged in",Toast.LENGTH_SHORT).show()
-                    val i = Intent(this,NavigationActivity::class.java)
-                    startActivity(i)
-                    finish()
-                } else Toast.makeText(this, "Error: ${it.exception?.message}",Toast.LENGTH_LONG).show()
+                    loginAnimation.visibility= VISIBLE
+                    loginAnimation.playAnimation()
+                    Handler().postDelayed({
+                        Toast.makeText(this,"You are now logged in",Toast.LENGTH_SHORT).show()
+                        val i = Intent(this,NavigationActivity::class.java)
+                        startActivity(i)
+                        loginAnimation.visibility= GONE
+                        finish()
+                    },2000)
+
+                } else {
+                    wrongPasswordAnimation.visibility= VISIBLE
+                    wrongPasswordAnimation.playAnimation()
+                    Handler().postDelayed({
+                        Toast.makeText(this, "Error: ${it.exception?.message}",Toast.LENGTH_LONG).show()
+                        wrongPasswordAnimation.visibility= GONE
+                    },2000)
+
+                }
             }
         }
     }

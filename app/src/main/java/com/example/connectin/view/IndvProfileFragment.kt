@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
 import com.google.android.gms.tasks.OnCompleteListener
@@ -31,9 +28,9 @@ class IndvProfileFragment : Fragment() {
 
     lateinit var currentUserId : String
 
-    lateinit var nameE : EditText
-    lateinit var occupationE : EditText
-    lateinit var aboutE : EditText
+    lateinit var nameE : TextView
+    lateinit var occupationE : TextView
+    lateinit var aboutE : TextView
     lateinit var uploadB : Button
     lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
