@@ -28,6 +28,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <Button
+                android:id="@+id/orguploadB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Upload"
+                android:textColor="#FFFFFF"
+                app:icon="@drawable/camera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selfOrgImg_IV" />
+
             <TextView
                 android:id="@+id/selfOrgName_TV"
                 android:layout_width="wrap_content"
@@ -36,9 +48,9 @@
                 android:text="Name"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selfOrgImg_IV" />
+                app:layout_constraintTop_toBottomOf="@+id/orguploadB" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -49,7 +61,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selfOrgName_TV" />
 
@@ -58,12 +70,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget nisl hendrerit, tincidunt lacus non, pharetra nulla. In rhoncus, augue non posuere convallis, nibh enim feugiat leo, porttitor auctor velit augue sed tortor."
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
