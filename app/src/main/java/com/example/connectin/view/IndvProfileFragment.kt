@@ -35,6 +35,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
     lateinit var editInfo : Button
+    lateinit var viewPosts : Button
 
     var galleryPick : Int = 0
 
@@ -68,6 +69,7 @@ class IndvProfileFragment : Fragment() {
         userPfp = view.findViewById(R.id.selfImg_IV)
         createPostB = view.findViewById(R.id.selfCreatePostB)
         editInfo = view.findViewById(R.id.selfEdit_IV)
+        viewPosts = view.findViewById(R.id.selfViewPostsB)
 
         createPostB.setOnClickListener {
             //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
@@ -92,6 +94,14 @@ class IndvProfileFragment : Fragment() {
             gallery.setAction(Intent.ACTION_GET_CONTENT)
             gallery.setType("image/*")
             startActivityForResult(gallery,galleryPick)
+        }
+
+        viewPosts.setOnClickListener {
+            val frag = IndvViewPosts()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
         }
 
         userReference.addValueEventListener(object : ValueEventListener {

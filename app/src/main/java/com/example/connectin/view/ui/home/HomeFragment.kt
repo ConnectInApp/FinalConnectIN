@@ -68,8 +68,8 @@ class HomeFragment : Fragment() {
         postList = view.findViewById(R.id.all_user_post_list)
         postList.setHasFixedSize(true)
         val layout = LinearLayoutManager(view.context)
-        layout.reverseLayout = false
-        layout.stackFromEnd = false
+        layout.reverseLayout = true
+        layout.stackFromEnd = true
         postList.layoutManager = layout
 
         displayAllPost()
@@ -77,7 +77,9 @@ class HomeFragment : Fragment() {
 
     private fun displayAllPost() {
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(postReference,Posts::class.java).build()
+        val sortPostQuery = postReference.orderByChild("counter")
+
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostQuery,Posts::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {

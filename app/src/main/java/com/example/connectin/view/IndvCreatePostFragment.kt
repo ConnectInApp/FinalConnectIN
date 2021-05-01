@@ -31,6 +31,8 @@ class IndvCreatePostFragment : Fragment() {
     lateinit var postTime : String
     lateinit var postName : String
 
+    var countPost : Long = 0
+
     lateinit var name : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,22 @@ class IndvCreatePostFragment : Fragment() {
         postB.setOnClickListener {
             validatingPostInfo()
 
+            postReference.addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists())
+                    {
+                        countPost = snapshot.childrenCount
+                    } else {
+                        countPost = 0
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
             userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists()){
@@ -79,6 +97,7 @@ class IndvCreatePostFragment : Fragment() {
                         postMap["content"] = postContent.text.toString()
                         postMap["username"] = name
                         postMap["profileImg"] = profileImg
+                        postMap["counter"] = countPost
 
                         postReference.child(postName).updateChildren(postMap).addOnCompleteListener {
                             if(it.isSuccessful)
