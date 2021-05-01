@@ -18,6 +18,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
 import java.net.URI
 
 class IndvProfileFragment : Fragment() {
@@ -36,6 +37,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var createPostB : FloatingActionButton
     lateinit var editInfo : Button
     lateinit var viewPosts : Button
+    lateinit var viewConnections : TextView
 
     var galleryPick : Int = 0
 
@@ -70,6 +72,15 @@ class IndvProfileFragment : Fragment() {
         createPostB = view.findViewById(R.id.selfCreatePostB)
         editInfo = view.findViewById(R.id.selfEdit_IV)
         viewPosts = view.findViewById(R.id.selfViewPostsB)
+        viewConnections = view.findViewById(R.id.selfConnection_TV)
+
+        viewConnections.setOnClickListener {
+            val frag = ConnectionsFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         createPostB.setOnClickListener {
             //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()

@@ -175,7 +175,7 @@ class HomeFragment : Fragment() {
                     frag.arguments = bundle
 
                     activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.homeFragmentL,frag)
+                            ?.replace(R.layout.fragment_connections,frag)
                             ?.addToBackStack(null)?.commit()
                 }
             }

@@ -68,6 +68,10 @@ class SearchIndvProfileFragment:Fragment() {
         initialisation(view)
 
         declineConnectionB.visibility = View.GONE
+        aboutE.visibility = View.INVISIBLE
+        occupationE.visibility = View.INVISIBLE
+        viewPostConnectionB.visibility = View.INVISIBLE
+        endorseConnectionB.visibility = View.INVISIBLE
 
         if(currentUserId.compareTo(postKey) == 0) {
             sendConnectionB.visibility = View.INVISIBLE
@@ -149,6 +153,10 @@ class SearchIndvProfileFragment:Fragment() {
                         sendConnectionB.setText("Connect")
 
                         declineConnectionB.visibility = View.GONE
+                        aboutE.visibility = View.INVISIBLE
+                        occupationE.visibility = View.INVISIBLE
+                        viewPostConnectionB.visibility = View.INVISIBLE
+                        endorseConnectionB.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -175,6 +183,10 @@ class SearchIndvProfileFragment:Fragment() {
                                         sendConnectionB.setText("Unconnect")
 
                                         declineConnectionB.visibility = View.GONE
+                                        aboutE.visibility = View.VISIBLE
+                                        occupationE.visibility = View.VISIBLE
+                                        viewPostConnectionB.visibility = View.VISIBLE
+                                        endorseConnectionB.visibility = View.VISIBLE
                                     }
                                 }
                             }
@@ -193,6 +205,7 @@ class SearchIndvProfileFragment:Fragment() {
                         sendConnectionB.isEnabled = true
                         curr_state = "notConnected"
                         sendConnectionB.setText("Connect")
+                        declineConnectionB.visibility = View.GONE
                     }
                 }
             }
@@ -230,6 +243,10 @@ class SearchIndvProfileFragment:Fragment() {
                                 sendConnectionB.setText("Unconnect")
 
                                 declineConnectionB.visibility = View.GONE
+                                aboutE.visibility = View.VISIBLE
+                                occupationE.visibility = View.VISIBLE
+                                viewPostConnectionB.visibility = View.VISIBLE
+                                endorseConnectionB.visibility = View.VISIBLE
                             }
                         }
 
