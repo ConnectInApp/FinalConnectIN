@@ -50,9 +50,9 @@ class IndvProfileFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.indv_self_profile, container, false)
     }
@@ -68,7 +68,7 @@ class IndvProfileFragment : Fragment() {
         createPostB = view.findViewById(R.id.selfCreatePostB)
 
         createPostB.setOnClickListener {
-            //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
+//Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
             val frag = IndvCreatePostFragment()
             activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.indvSelfProfileL, frag)
@@ -77,7 +77,7 @@ class IndvProfileFragment : Fragment() {
         }
 
         uploadB.setOnClickListener {
-            //uploadtoStorage()
+//uploadtoStorage()
             val gallery : Intent = Intent()
             gallery.setAction(Intent.ACTION_GET_CONTENT)
             gallery.setType("image/*")
@@ -109,9 +109,9 @@ class IndvProfileFragment : Fragment() {
                                 occupationE.setText(occ)
                             } else {
                                 Toast.makeText(
-                                    activity,
-                                    "Profile name does not exists!",
-                                    Toast.LENGTH_SHORT
+                                        activity,
+                                        "Profile name does not exists!",
+                                        Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
@@ -135,7 +135,7 @@ class IndvProfileFragment : Fragment() {
 
             if (it.isSuccessful) {
                 Toast.makeText(activity, "Profile image stored to database!!",
-                    Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT
                 ).show()
                 path.downloadUrl.addOnSuccessListener {
                     val downloadUrl = it.toString()
@@ -150,11 +150,11 @@ class IndvProfileFragment : Fragment() {
                                 }
                             }
                 }
-                //val downLoadUrl = it.result?.downloadUrl.toString()
+//val downLoadUrl = it.result?.downloadUrl.toString()
             } else Toast.makeText(
-                activity,
-                "Error: ${it.exception?.message}",
-                Toast.LENGTH_SHORT
+                    activity,
+                    "Error: ${it.exception?.message}",
+                    Toast.LENGTH_SHORT
             ).show()
         }
     }
@@ -166,48 +166,48 @@ class IndvProfileFragment : Fragment() {
         if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
             imgUri = data.data!!
 
-            //userPfp.setImageURI(imgUri)
+//userPfp.setImageURI(imgUri)
             uploadtoStorage()
             userPfp.setImageURI(imgUri)
-//            activity?.let {
-//                CropImage.activity(imgUri)
-//                    .setGuidelines(CropImageView.Guidelines.ON)
-//                    .setAspectRatio(1, 1).start(it)
-//            }
+// activity?.let {
+// CropImage.activity(imgUri)
+// .setGuidelines(CropImageView.Guidelines.ON)
+// .setAspectRatio(1, 1).start(it)
+// }
         }
 
-        /*if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+/*if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
-            val result = CropImage.getActivityResult(data)
+val result = CropImage.getActivityResult(data)
 
-            if(resultCode == RESULT_OK) {
-                val resultUri = result.uri
+if(resultCode == RESULT_OK) {
+val resultUri = result.uri
 
-                val path = userProfileImgRef.child("$currentUserId.jpg")
+val path = userProfileImgRef.child("$currentUserId.jpg")
 
-                path.putFile(resultUri).addOnCompleteListener {
+path.putFile(resultUri).addOnCompleteListener {
 
-                    if(it.isSuccessful){
-                        Toast.makeText(activity,"Profile image stored to database!!",Toast.LENGTH_SHORT).show()
-                        val downLoadUrl = it.result?.storage?.downloadUrl.toString()
-                        userReference.child("profileImage").setValue(downLoadUrl).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val i =Intent(activity,NavigationActivity::class.java)
-                                startActivity(i)
-                                Toast.makeText(activity,"Image stored to firebase database",Toast.LENGTH_SHORT).show()
-                            }
-                        }
+if(it.isSuccessful){
+Toast.makeText(activity,"Profile image stored to database!!",Toast.LENGTH_SHORT).show()
+val downLoadUrl = it.result?.storage?.downloadUrl.toString()
+userReference.child("profileImage").setValue(downLoadUrl).addOnCompleteListener {
+if (it.isSuccessful) {
+val i =Intent(activity,NavigationActivity::class.java)
+startActivity(i)
+Toast.makeText(activity,"Image stored to firebase database",Toast.LENGTH_SHORT).show()
+}
+}
 
 
-                    } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            Toast.makeText(activity,"Error occured",Toast.LENGTH_SHORT).show()
-        }
-    }*/
+} else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
+}
+}
+} else {
+Toast.makeText(activity,"Error occured",Toast.LENGTH_SHORT).show()
+}
+}*/
 
-         else {
+        else {
             Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()
         }
     }

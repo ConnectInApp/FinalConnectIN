@@ -56,8 +56,6 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-
-
         return root
     }
 
@@ -74,6 +72,7 @@ class HomeFragment : Fragment() {
         displayAllPost()
     }
 
+
     private fun displayAllPost() {
 
         val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(postReference,Posts::class.java).build()
@@ -82,6 +81,7 @@ class HomeFragment : Fragment() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
                 val view:View = LayoutInflater.from(parent.context).inflate(R.layout.all_user_post_layout,parent,false)
                 val viewHolder = PostsViewHolder(view)
+
 
                 return viewHolder
             }
