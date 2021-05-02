@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class IndvCreatePostFragment : Fragment() {
+class  IndvCreatePostFragment : Fragment() {
 
     //lateinit var postTitle : EditText
     lateinit var postContent : EditText

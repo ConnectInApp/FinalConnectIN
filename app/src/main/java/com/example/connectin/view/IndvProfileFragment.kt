@@ -38,6 +38,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var editInfo : Button
     lateinit var viewPosts : Button
     lateinit var viewConnections : TextView
+    lateinit var viewEndorsements : TextView
 
     var galleryPick : Int = 0
 
@@ -73,6 +74,7 @@ class IndvProfileFragment : Fragment() {
         editInfo = view.findViewById(R.id.selfEdit_IV)
         viewPosts = view.findViewById(R.id.selfViewPostsB)
         viewConnections = view.findViewById(R.id.selfConnection_TV)
+        viewEndorsements = view.findViewById(R.id.selfEndorsement_TV)
 
         viewConnections.setOnClickListener {
             val frag = ConnectionsFragment()
@@ -109,6 +111,14 @@ class IndvProfileFragment : Fragment() {
 
         viewPosts.setOnClickListener {
             val frag = IndvViewPosts()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
+
+        viewEndorsements.setOnClickListener {
+            val frag = EndorsementFragment()
             activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.indvSelfProfileL,frag)
                     ?.addToBackStack(null)

@@ -55,7 +55,7 @@ class IndvViewPosts : Fragment(){
         }
         else {
             UserId =  currentUserId!!
-            //commentLayout = R.id.indvSelfProfileL
+            commentLayout = R.id.indvSelfProfileL
         }
 
 

@@ -1,5 +1,6 @@
 package com.example.connectin.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +18,14 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class SearchIndvProfileFragment:Fragment() {
     lateinit var userReference: DatabaseReference
     lateinit var userProfileImgRef : StorageReference
     lateinit var connectionReqRef : DatabaseReference
     lateinit var conntectionReference : DatabaseReference
+    lateinit var endorseReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
 
     lateinit var currentUserId : String
@@ -48,10 +51,11 @@ class SearchIndvProfileFragment:Fragment() {
 
 
         postKey=arguments?.getString("postKey")!!
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child("$postKey")
+        userReference = FirebaseDatabase.getInstance().reference.child("Users")
         userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
         connectionReqRef = FirebaseDatabase.getInstance().reference.child("ConnectionRequests")
         conntectionReference = FirebaseDatabase.getInstance().reference.child("Connections")
+        endorseReference = FirebaseDatabase.getInstance().reference.child("Endorsements")
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
     }
@@ -105,11 +109,19 @@ class SearchIndvProfileFragment:Fragment() {
             viewPostConnectionB.setOnClickListener {
                 viewUserPosts()
             }
+
+            chatConnectionB.setOnClickListener {
+
+            }
+
+            endorseConnectionB.setOnClickListener {
+                endorseUser()
+            }
         }
 
 
 
-        userReference.addValueEventListener(object : ValueEventListener {
+        userReference.child("$postKey").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     if (snapshot.hasChild("accountType")) {
@@ -147,6 +159,39 @@ class SearchIndvProfileFragment:Fragment() {
         })
 
 
+    }
+
+    private fun endorseUser() {
+        Toast.makeText(activity,"Endorsed", Toast.LENGTH_SHORT).show()
+        userReference.child(currentUserId).addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists())
+                {
+                    val name = snapshot.child("username").value.toString()
+                    val occupation = snapshot.child("occupation").value.toString()
+                    val profileImg = snapshot.child("profileImage").value.toString()
+                    val hm = HashMap<String,Any>()
+                    hm["username"] = name
+                    hm["occupation"] = occupation
+                    hm["profileImg"] = profileImg
+                    hm["uid"] = currentUserId
+
+                    endorseReference.child(postKey).child(currentUserId).updateChildren(hm).addOnCompleteListener {
+                        if(it.isSuccessful)
+                        {
+                            Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
+                            val i = Intent(activity,NavigationActivity::class.java)
+                            startActivity(i)
+                            activity?.finish()
+                        } else {
+                            Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 
     private fun viewUserPosts() {
