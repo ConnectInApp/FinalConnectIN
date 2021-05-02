@@ -161,9 +161,7 @@ class HomeFragment : Fragment() {
                             }
                         }
 
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-
+                        override fun onCancelled(error: DatabaseError) {}
                     })
                 }
 
@@ -175,7 +173,7 @@ class HomeFragment : Fragment() {
                     frag.arguments = bundle
 
                     activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.layout.fragment_connections,frag)
+                            ?.replace(R.id.homeFragmentL,frag)
                             ?.addToBackStack(null)?.commit()
                 }
             }

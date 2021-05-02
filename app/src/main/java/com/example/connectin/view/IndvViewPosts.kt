@@ -26,16 +26,39 @@ class IndvViewPosts : Fragment(){
 
     lateinit var userReference: DatabaseReference
     lateinit var postReference: DatabaseReference
+    lateinit var likesReference: DatabaseReference
+    lateinit var dislikesReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
-    lateinit var currentUserId : String
+    lateinit var UserId : String
+
+    var postKey : String? = null
+    var currentUserId : String? = null
+    var likeCheck = false
+    var dislikeCheck = false
+    var commentLayout : Int? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
+        postKey=arguments?.getString("postKey","")
+        userReference = FirebaseDatabase.getInstance().reference.child("Users")
         postReference = FirebaseDatabase.getInstance().reference.child("Posts")
+        likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
+        dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        if(postKey?.isNullOrBlank() == false)
+        {
+            UserId = postKey!!
+            //commentLayout = R.id.parentL
+        }
+        else {
+            UserId =  currentUserId!!
+            //commentLayout = R.id.indvSelfProfileL
+        }
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,7 +80,9 @@ class IndvViewPosts : Fragment(){
 
     private fun displayAllPost() {
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(postReference,Posts::class.java).build()
+        val indvQuery = postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
+
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery,Posts::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
@@ -77,8 +102,11 @@ class IndvViewPosts : Fragment(){
                 holder.contentT.setText(model.content)
                 Picasso.get().load(model.profileImg).into(holder.imgView)
 
+                holder.setLikeButtonStatus(postKey!!)
+                holder.setDislikeButtonStatus(postKey!!)
+
                 val uid = model.uid
-                if(currentUserId.compareTo(uid) == 0)
+                if(currentUserId?.compareTo(uid) == 0)
                 {
                     holder.cardView.setOnClickListener {
                         //Toast.makeText(activity,"Editable and deletable!!: $postKey",Toast.LENGTH_LONG).show()
@@ -89,15 +117,69 @@ class IndvViewPosts : Fragment(){
                         frag.arguments = bundle
 
                         activity?.supportFragmentManager?.beginTransaction()
-                                ?.replace(R.id.homeFragmentL,frag)
+                                ?.replace(R.id.indvSelfProfileL,frag)
                                 ?.addToBackStack(null)
                                 ?.commit()
                     }
                 }
+
+                holder.likeButton.setOnClickListener {
+                    likeCheck = true
+                    likesReference.addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(likeCheck.equals(true))
+                            {
+                                if(snapshot.child(postKey!!).hasChild(currentUserId!!))
+                                {
+                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    likeCheck = false
+                                } else {
+                                    likesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    likeCheck = false
+                                }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+                }
+
+                holder.dislikeButton.setOnClickListener {
+                    dislikeCheck = true
+                    dislikesReference.addValueEventListener(object : ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if(dislikeCheck.equals(true))
+                            {
+                                if(snapshot.child(postKey!!).hasChild(currentUserId!!))
+                                {
+                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    dislikeCheck = false
+                                } else {
+                                    dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    dislikeCheck = false
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                }
+
+                holder.commentButton.setOnClickListener {
+                    val frag = CommentsFragment()
+                    val bundle = Bundle()
+                    bundle.putString("postKey",postKey.toString())
+
+                    frag.arguments = bundle
+
+                    activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(commentLayout!!,frag)
+                            ?.addToBackStack(null)?.commit()
+                }
             }
-
         }
-
         postList.adapter = firebaseRecyclerAdapter
         firebaseRecyclerAdapter.startListening()
     }
@@ -111,5 +193,54 @@ class IndvViewPosts : Fragment(){
         val imgView = itemView.findViewById<ImageView>(R.id.userpostImgIV)
 
         val cardView = itemView.findViewById<CardView>(R.id.alluserpostCard)
+
+        val likeButton = itemView.findViewById<ImageButton>(R.id.postlikeButton)
+        val likeText = itemView.findViewById<TextView>(R.id.postlikeText)
+        val dislikeButton = itemView.findViewById<ImageButton>(R.id.postdislikeButton)
+        val dislikeText = itemView.findViewById<TextView>(R.id.postdislikeText)
+        val commentButton = itemView.findViewById<ImageButton>(R.id.postcommentButton)
+
+        var likesCount by Delegates.notNull<Int>()
+        var dislikesCount by Delegates.notNull<Int>()
+        val likesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Likes")
+        val dislikesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        val currentUserID = FirebaseAuth.getInstance().currentUser.uid
+
+        fun setLikeButtonStatus(postKey: String){
+            likesRef.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.child(postKey).hasChild(currentUserID))
+                    {
+                        likesCount = snapshot.child(postKey).childrenCount.toInt()
+                        likeButton.setImageResource(R.drawable.liked)
+                        likeText.setText(likesCount.toString() + " likes")
+                    }else {
+                        likesCount = snapshot.child(postKey).childrenCount.toInt()
+                        likeButton.setImageResource(R.drawable.not_liked)
+                        likeText.setText(likesCount.toString() + " likes")
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+
+        fun setDislikeButtonStatus(postKey: String) {
+            dislikesRef.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child(postKey).hasChild(currentUserID))
+                    {
+                        dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeButton.setImageResource(R.drawable.disliked)
+                        dislikeText.setText(dislikesCount.toString() + " dislikes")
+                    }
+                    else {
+                        dislikesCount = snapshot.child(postKey).childrenCount.toInt()
+                        dislikeButton.setImageResource(R.drawable.not_disliked)
+                        dislikeText.setText(dislikesCount.toString() + " dislikes")
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
     }
 }

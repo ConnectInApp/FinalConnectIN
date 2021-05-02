@@ -101,7 +101,13 @@ class SearchIndvProfileFragment:Fragment() {
                     unconnect()
                 }
             }
+
+            viewPostConnectionB.setOnClickListener {
+                viewUserPosts()
+            }
         }
+
+
 
         userReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -141,6 +147,17 @@ class SearchIndvProfileFragment:Fragment() {
         })
 
 
+    }
+
+    private fun viewUserPosts() {
+        val frag = IndvViewPosts()
+        val bundle = Bundle()
+        bundle.putString("postKey",postKey)
+        frag.arguments = bundle
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.parentL,frag)
+                ?.addToBackStack(null)
+                ?.commit()
     }
 
     private fun unconnect() {
