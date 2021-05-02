@@ -35,6 +35,7 @@ class OrgProfileFragment : Fragment() {
     lateinit var orgPfp : ImageView
     lateinit var createJobB : FloatingActionButton
     lateinit var editInfoB : Button
+    lateinit var viewJobs : Button
 
     var galleryPick : Int = 0
 
@@ -67,6 +68,18 @@ class OrgProfileFragment : Fragment() {
         uploadB = view.findViewById(R.id.orguploadB)
         orgPfp = view.findViewById(R.id.selfOrgImg_IV)
         editInfoB = view.findViewById(R.id.selfOrgEditInfoB)
+        viewJobs = view.findViewById(R.id.orgViewPostsB5)
+
+        viewJobs.setOnClickListener {
+            val frag = OrgViewJobs()
+            val bundle = Bundle()
+            bundle.putString("postKey",currentUserId)
+            frag.arguments = bundle
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.orgSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         createJobB.setOnClickListener {
             Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()

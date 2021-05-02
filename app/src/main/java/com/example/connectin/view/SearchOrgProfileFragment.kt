@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -16,18 +18,23 @@ import com.squareup.picasso.Picasso
 class SearchOrgProfileFragment:Fragment() {
     lateinit var userReference: DatabaseReference
     lateinit var userProfileImgRef : StorageReference
+    lateinit var mauth : FirebaseAuth
 
     lateinit var currentUserId : String
+    lateinit var postKey : String
 
     lateinit var userProfileName : TextView
     lateinit var orgProfileInfo : TextView
     lateinit var orgPfp: ImageView
+    lateinit var orgViewPost : Button
+    lateinit var orgFollowB : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
-        var postKey=arguments?.getString("postKey")!!
+        postKey=arguments?.getString("postKey")!!
         userReference = FirebaseDatabase.getInstance().reference.child("Users").child(postKey)
+        mauth = FirebaseAuth.getInstance()
+        currentUserId = mauth.currentUser.uid
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +49,17 @@ class SearchOrgProfileFragment:Fragment() {
         userProfileName = view.findViewById(R.id.orgName_TV)
         orgProfileInfo = view.findViewById(R.id.orgInfo_TV)
         orgPfp = view.findViewById(R.id.orgImg_IV)
+        orgViewPost = view.findViewById(R.id.selfOrgViewPostB)
+        orgFollowB = view.findViewById(R.id.orgFollowB)
+
+        if(currentUserId.compareTo(postKey) ==0 )
+        {
+            orgFollowB.visibility = View.INVISIBLE
+        }
+
+        orgViewPost.setOnClickListener {
+            viewOrgJobs()
+        }
 
         userReference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -71,13 +89,20 @@ class SearchOrgProfileFragment:Fragment() {
 
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-
+    private fun viewOrgJobs() {
+        val frag = OrgViewJobs()
+        val bundle = Bundle()
+        bundle.putString("postKey",postKey)
+        frag.arguments = bundle
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.parentL,frag)
+                ?.addToBackStack(null)
+                ?.commit()
+    }
 
 
 }
