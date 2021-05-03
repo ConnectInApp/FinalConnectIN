@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 
 class SearchOrgProfileFragment:Fragment() {
     lateinit var userReference: DatabaseReference
-    lateinit var userProfileImgRef : StorageReference
+    lateinit var followReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
 
     lateinit var currentUserId : String
@@ -29,10 +29,13 @@ class SearchOrgProfileFragment:Fragment() {
     lateinit var orgViewPost : Button
     lateinit var orgFollowB : Button
 
+    lateinit var curr_state : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         postKey=arguments?.getString("postKey")!!
         userReference = FirebaseDatabase.getInstance().reference.child("Users").child(postKey)
+        followReference = FirebaseDatabase.getInstance().reference.child("Follows")
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
     }
@@ -46,6 +49,7 @@ class SearchOrgProfileFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        curr_state = "notFollows"
         userProfileName = view.findViewById(R.id.orgName_TV)
         orgProfileInfo = view.findViewById(R.id.orgInfo_TV)
         orgPfp = view.findViewById(R.id.orgImg_IV)
@@ -61,6 +65,23 @@ class SearchOrgProfileFragment:Fragment() {
             viewOrgJobs()
         }
 
+        if(!currentUserId.equals(postKey)) {
+            orgViewPost.visibility = View.INVISIBLE
+        }
+
+        orgFollowB.setOnClickListener {
+            orgFollowB.isEnabled = false
+
+            if(curr_state.equals("notFollows"))
+            {
+                followOrg()
+            }
+            if(curr_state.equals("follows"))
+            {
+                unfollowOrg()
+            }
+        }
+
         userReference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
@@ -74,12 +95,12 @@ class SearchOrgProfileFragment:Fragment() {
                             //validation
                             if (snapshot.hasChild("username")) {
                                 val name = snapshot.child("username").getValue().toString()
-                                userProfileName?.setText(name)
+                                userProfileName.setText(name)
                             }
                             if (snapshot.hasChild("address") && snapshot.hasChild("website")) {
                                 val address = snapshot.child("address").getValue().toString()
                                 val website = snapshot.child("website").getValue().toString()
-                                orgProfileInfo?.setText("$address \n $website")
+                                orgProfileInfo.setText("$address \n $website")
                             } else {
                                 Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
                             }
@@ -91,6 +112,32 @@ class SearchOrgProfileFragment:Fragment() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    private fun unfollowOrg() {
+        followReference.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+            if(it.isSuccessful) {
+                followReference.child(currentUserId).child(postKey).removeValue()
+                orgFollowB.isEnabled = true
+                curr_state = "notFollows"
+                orgFollowB.setText("Follow")
+                orgViewPost.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun followOrg() {
+        followReference.child(postKey).child(currentUserId).child("follows").setValue("yes").addOnCompleteListener {
+            if(it.isSuccessful) {
+                followReference.child(postKey).child(currentUserId).child("uid").setValue(currentUserId)
+                followReference.child(currentUserId).child(postKey).child("following").setValue("yes")
+                followReference.child(currentUserId).child(postKey).child("uid").setValue(postKey)
+                orgFollowB.isEnabled = true
+                curr_state = "follows"
+                orgFollowB.setText("Unfollow")
+                orgViewPost.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun viewOrgJobs() {

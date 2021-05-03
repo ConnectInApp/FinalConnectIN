@@ -117,16 +117,12 @@
                 android:id="@+id/selfCreatePostB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="295dp"
-                android:layout_marginTop="180dp"
-                android:layout_marginEnd="40dp"
                 android:layout_marginBottom="32dp"
                 android:clickable="true"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selfAbout_EV"
+                app:layout_constraintStart_toEndOf="@+id/selfViewPostsB"
                 app:maxImageSize="70dp"
                 app:srcCompat="@drawable/post_icon" />
 
@@ -134,13 +130,15 @@
                 android:id="@+id/selfViewPostsB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
                 android:drawableLeft="@drawable/view_filled"
                 android:text="View Posts"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selfJobsApplied_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/selfFollowing" />
 
             <TextView
                 android:id="@+id/selfName_EV"
@@ -177,6 +175,18 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/selfFollowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Following"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selfJobsApplied_TV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

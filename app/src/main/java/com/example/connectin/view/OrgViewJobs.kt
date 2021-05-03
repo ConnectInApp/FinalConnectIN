@@ -41,6 +41,7 @@ class OrgViewJobs : Fragment() {
 
     var postKey : String? = null
     var currentUserId : String? = null
+    var check:String?=null
 
     var type : String? = ""
 
@@ -49,6 +50,7 @@ class OrgViewJobs : Fragment() {
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
         postKey=arguments?.getString("postKey","")
+        check=arguments?.getString("profile")
         Toast.makeText(activity,"$postKey",Toast.LENGTH_SHORT).show()
         jobReference = FirebaseDatabase.getInstance().reference.child("Jobs")
         userReference = FirebaseDatabase.getInstance().reference.child("Users")
@@ -124,6 +126,27 @@ class OrgViewJobs : Fragment() {
                         }
                     }
                 }
+                if(currentUserId?.compareTo(postKey!!) ==0) {
+                    holder.cardView.setOnClickListener {
+                        val frag = JobApplicationsFragment()
+                        val bundle = Bundle()
+                        bundle.putString("jobKey",postKey)
+                        bundle.putString("jobTitle",model.title)
+                        frag.arguments = bundle
+                        if (check.isNullOrEmpty())
+                        {
+                            activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.parentL,frag)
+                                    ?.addToBackStack(null)
+                                    ?.commit()
+                        }else {
+                            activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.orgSelfProfileL,frag)
+                                    ?.addToBackStack(null)
+                                    ?.commit()
+                        }
+                    }
+                }
             }
         }
         jobList.adapter = firebaseRecyclerAdapter
@@ -135,9 +158,11 @@ class OrgViewJobs : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     val name = snapshot.child("username").value.toString()
+                    val pfp = snapshot.child("profileImage").value.toString()
                     val hm = HashMap<String,Any>()
                     hm["username"] = name
                     hm["email"] = mauth.currentUser.email
+                    hm["profileImg"] = pfp
                     jobReference.child("$postKey$title").child("applications").child(currentUserId!!).updateChildren(hm).addOnCompleteListener {
                         Toast.makeText(activity,"Job Applied",Toast.LENGTH_SHORT).show()
                         if (it.isSuccessful){
