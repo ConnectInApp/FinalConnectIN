@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/recieverProfPic"
+            android:layout_width="35dp"
+            android:layout_height="58dp"
+            android:layout_marginLeft="350dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/chatting_name_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name of User you are chatting to"
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messages_users"
+        android:layout_width="match_parent"
+        android:layout_height="630dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_chat"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/input_message_EV"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Write Message..."
+            android:inputType="textPersonName"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/send_messageB"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hapticFeedbackEnabled="true"
+            android:keepScreenOn="true"
+            android:padding="10dp"
+            android:textAlignment="center"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/send_message"
+            app:iconGravity="textEnd"
+            app:iconPadding="0dp"
+            app:iconSize="20dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

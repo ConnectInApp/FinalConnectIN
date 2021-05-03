@@ -112,6 +112,11 @@ class SearchIndvProfileFragment:Fragment() {
 
             chatConnectionB.setOnClickListener {
 
+                val i = Intent(activity,ChatActivity::class.java)
+                i.putExtra("currentUserId",currentUserId)
+                i.putExtra("postKey",postKey)
+                startActivity(i)
+
             }
 
             endorseConnectionB.setOnClickListener {
