@@ -1,122 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
-    android:layout_margin="8dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
     app:cardBackgroundColor="#29B6F6"
     app:cardCornerRadius="20dp"
     app:cardElevation="10dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/indvViewPostRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/photo_IV"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="6dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toStartOf="@+id/scrollView3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/username" />
-
-        <ScrollView
-            android:id="@+id/scrollView3"
-            android:layout_width="291dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/photo_IV"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/overviewT"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:text="Overview"
-                    android:textColor="@color/purple_700"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </ScrollView>
-
-        <Button
-            android:id="@+id/commentB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="49dp"
-            android:layout_marginEnd="10dp"
-            android:text="comment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/comment_EV"
-            app:layout_constraintTop_toBottomOf="@+id/edit_IB" />
-
-        <EditText
-            android:id="@+id/comment_EV"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="140dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="Add Comment"
-            android:inputType="textMultiLine"
-            app:layout_constraintEnd_toStartOf="@+id/commentB"
-            app:layout_constraintStart_toEndOf="@+id/likeB"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
-
-        <Button
-            android:id="@+id/delete_IB"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="51dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="247dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="10dp"
-            app:icon="@drawable/delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/photo_IV"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
-
-        <Button
-            android:id="@+id/edit_IB"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="51dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="334dp"
-            android:layout_marginEnd="10dp"
-            app:icon="@drawable/edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/delete_IB" />
-
-        <Button
-            android:id="@+id/likeB"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="50dp"
-            android:layout_height="46dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="92dp"
-            android:layout_marginEnd="6dp"
-            app:icon="@drawable/like"
-            app:layout_constraintEnd_toStartOf="@+id/comment_EV"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/photo_IV" />
-        <!--            app:srcCompat="@drawable/like2" />-->
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+        android:layout_height="match_parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

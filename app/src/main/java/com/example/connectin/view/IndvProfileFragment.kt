@@ -18,6 +18,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
 import java.net.URI
 
 class IndvProfileFragment : Fragment() {
@@ -34,6 +35,10 @@ class IndvProfileFragment : Fragment() {
     lateinit var uploadB : Button
     lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
+    lateinit var editInfo : Button
+    lateinit var viewPosts : Button
+    lateinit var viewConnections : TextView
+    lateinit var viewEndorsements : TextView
 
     var galleryPick : Int = 0
 
@@ -66,6 +71,18 @@ class IndvProfileFragment : Fragment() {
         uploadB = view.findViewById(R.id.uploadB)
         userPfp = view.findViewById(R.id.selfImg_IV)
         createPostB = view.findViewById(R.id.selfCreatePostB)
+        editInfo = view.findViewById(R.id.selfEdit_IV)
+        viewPosts = view.findViewById(R.id.selfViewPostsB)
+        viewConnections = view.findViewById(R.id.selfConnection_TV)
+        viewEndorsements = view.findViewById(R.id.selfEndorsement_TV)
+
+        viewConnections.setOnClickListener {
+            val frag = ConnectionsFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         createPostB.setOnClickListener {
             //Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
@@ -76,12 +93,36 @@ class IndvProfileFragment : Fragment() {
                     ?.commit()
         }
 
+        editInfo.setOnClickListener {
+            val frag = EditIndvInfo()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
+
         uploadB.setOnClickListener {
             //uploadtoStorage()
             val gallery : Intent = Intent()
             gallery.setAction(Intent.ACTION_GET_CONTENT)
             gallery.setType("image/*")
             startActivityForResult(gallery,galleryPick)
+        }
+
+        viewPosts.setOnClickListener {
+            val frag = IndvViewPosts()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
+
+        viewEndorsements.setOnClickListener {
+            val frag = EndorsementFragment()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.indvSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
         }
 
         userReference.addValueEventListener(object : ValueEventListener {
@@ -102,7 +143,13 @@ class IndvProfileFragment : Fragment() {
                             if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
                                 val dob = snapshot.child("dateOfBirth").getValue().toString()
                                 val gender = snapshot.child("gender").getValue().toString()
-                                aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                if(snapshot.hasChild("about"))
+                                {
+                                    val about = snapshot.child("about").getValue().toString()
+                                    aboutE.setText("$about \n Date of Birth: $dob \n Gender: $gender")
+                                } else {
+                                    aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                }
                             }
                             if (snapshot.hasChild("occupation")) {
                                 val occ = snapshot.child("occupation").getValue().toString()

@@ -34,6 +34,8 @@ class OrgProfileFragment : Fragment() {
     lateinit var uploadB : Button
     lateinit var orgPfp : ImageView
     lateinit var createJobB : FloatingActionButton
+    lateinit var editInfoB : Button
+    lateinit var viewJobs : Button
 
     var galleryPick : Int = 0
 
@@ -65,6 +67,19 @@ class OrgProfileFragment : Fragment() {
         createJobB = view.findViewById(R.id.selfOrgCreatePost_FAB)
         uploadB = view.findViewById(R.id.orguploadB)
         orgPfp = view.findViewById(R.id.selfOrgImg_IV)
+        editInfoB = view.findViewById(R.id.selfOrgEditInfoB)
+        viewJobs = view.findViewById(R.id.orgViewPostsB5)
+
+        viewJobs.setOnClickListener {
+            val frag = OrgViewJobs()
+            val bundle = Bundle()
+            bundle.putString("postKey",currentUserId)
+            frag.arguments = bundle
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.orgSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         createJobB.setOnClickListener {
             Toast.makeText(activity,"Working",Toast.LENGTH_SHORT).show()
@@ -80,6 +95,14 @@ class OrgProfileFragment : Fragment() {
             gallery.setAction(Intent.ACTION_GET_CONTENT)
             gallery.setType("image/*")
             startActivityForResult(gallery,galleryPick)
+        }
+
+        editInfoB.setOnClickListener {
+            val frag = EditOrgInfo()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.orgSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
         }
 
         userReference.addValueEventListener(object: ValueEventListener {
@@ -101,7 +124,13 @@ class OrgProfileFragment : Fragment() {
                             if (snapshot.hasChild("address") && snapshot.hasChild("website")) {
                                 val address = snapshot.child("address").getValue().toString()
                                 val website = snapshot.child("website").getValue().toString()
-                                orgProfileInfo?.setText("$address \n $website")
+                                if(snapshot.hasChild("about")) {
+                                    val about = snapshot.child("about").value.toString()
+                                    orgProfileInfo?.setText("$about \n $address \n $website")
+                                }else{
+                                    orgProfileInfo?.setText("$address \n $website")
+                                }
+
                             } else {
                                 Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
                             }

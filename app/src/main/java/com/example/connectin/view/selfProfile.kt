@@ -145,7 +145,7 @@ class selfProfile : Fragment() {
             val fl = bundle.getInt("flag")
             val fl1 = pref?.getInt("f",15)
 
-            Thread.sleep(3000)
+            Thread.sleep(1000)
 
             activity?.runOnUiThread {
                 Toast.makeText(activity,"Its working: $type",Toast.LENGTH_LONG).show()

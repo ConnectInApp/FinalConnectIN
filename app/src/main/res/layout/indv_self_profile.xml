@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:drawableLeft="@drawable/view_filled"
-                android:text="View Post"
+                android:text="View Posts"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

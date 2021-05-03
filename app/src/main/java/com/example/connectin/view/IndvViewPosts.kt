@@ -1,4 +1,4 @@
-package com.example.connectin.view.ui.home
+package com.example.connectin.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,69 +7,72 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
-import com.example.connectin.view.CommentsFragment
-import com.example.connectin.view.EditDeletePostFragment
-import com.example.connectin.view.Posts
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import kotlin.properties.Delegates
 
-class HomeFragment : Fragment() {
+class IndvViewPosts : Fragment(){
 
     lateinit var postList : RecyclerView
-
-    private lateinit var homeViewModel: HomeViewModel
 
     lateinit var userReference: DatabaseReference
     lateinit var postReference: DatabaseReference
     lateinit var likesReference: DatabaseReference
     lateinit var dislikesReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
+    lateinit var UserId : String
 
-    lateinit var currentUserId : String
+    var postKey : String? = null
+    var currentUserId : String? = null
     var likeCheck = false
     var dislikeCheck = false
+    var commentLayout : Int? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mauth = FirebaseAuth.getInstance()
+        currentUserId = mauth.currentUser.uid
+        postKey=arguments?.getString("postKey","")
         userReference = FirebaseDatabase.getInstance().reference.child("Users")
         postReference = FirebaseDatabase.getInstance().reference.child("Posts")
         likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
         dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
+        if(postKey?.isNullOrBlank() == false)
+        {
+            UserId = postKey!!
+            //commentLayout = R.id.parentL
+        }
+        else {
+            UserId =  currentUserId!!
+            commentLayout = R.id.indvSelfProfileL
+        }
+
+
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-
-
-        return root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.indv_view_post,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        postList = view.findViewById(R.id.all_user_post_list)
+        postList = view.findViewById(R.id.indvViewPostRV)
         postList.setHasFixedSize(true)
         val layout = LinearLayoutManager(view.context)
-        layout.reverseLayout = true
-        layout.stackFromEnd = true
+        layout.reverseLayout = false
+        layout.stackFromEnd = false
         postList.layoutManager = layout
 
         displayAllPost()
@@ -77,11 +80,11 @@ class HomeFragment : Fragment() {
 
     private fun displayAllPost() {
 
-        val sortPostQuery = postReference.orderByChild("counter")
+        val indvQuery = postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostQuery,Posts::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery,Posts::class.java).build()
 
-        val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options){
+        val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
                 val view:View = LayoutInflater.from(parent.context).inflate(R.layout.all_user_post_layout,parent,false)
                 val viewHolder = PostsViewHolder(view)
@@ -103,7 +106,7 @@ class HomeFragment : Fragment() {
                 holder.setDislikeButtonStatus(postKey!!)
 
                 val uid = model.uid
-                if(currentUserId.compareTo(uid) == 0)
+                if(currentUserId?.compareTo(uid) == 0)
                 {
                     holder.cardView.setOnClickListener {
                         //Toast.makeText(activity,"Editable and deletable!!: $postKey",Toast.LENGTH_LONG).show()
@@ -114,12 +117,11 @@ class HomeFragment : Fragment() {
                         frag.arguments = bundle
 
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.homeFragmentL,frag)
-                            ?.addToBackStack(null)
-                            ?.commit()
+                                ?.replace(R.id.indvSelfProfileL,frag)
+                                ?.addToBackStack(null)
+                                ?.commit()
                     }
                 }
-
 
                 holder.likeButton.setOnClickListener {
                     likeCheck = true
@@ -127,13 +129,13 @@ class HomeFragment : Fragment() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(likeCheck.equals(true))
                             {
-                                if(snapshot.child(postKey!!).hasChild(currentUserId))
+                                if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    likesReference.child(postKey).child(currentUserId).removeValue()
+                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 } else {
-                                    likesReference.child(postKey).child(currentUserId).setValue(true)
-                                    dislikesReference.child(postKey).child(currentUserId).removeValue()
+                                    likesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 }
                             }
@@ -149,13 +151,13 @@ class HomeFragment : Fragment() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(dislikeCheck.equals(true))
                             {
-                                if(snapshot.child(postKey!!).hasChild(currentUserId))
+                                if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    dislikesReference.child(postKey).child(currentUserId).removeValue()
+                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 } else {
-                                    dislikesReference.child(postKey).child(currentUserId).setValue(true)
-                                    likesReference.child(postKey).child(currentUserId).removeValue()
+                                    dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 }
                             }
@@ -173,13 +175,11 @@ class HomeFragment : Fragment() {
                     frag.arguments = bundle
 
                     activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.homeFragmentL,frag)
+                            ?.replace(commentLayout!!,frag)
                             ?.addToBackStack(null)?.commit()
                 }
             }
-
         }
-
         postList.adapter = firebaseRecyclerAdapter
         firebaseRecyclerAdapter.startListening()
     }
@@ -192,6 +192,8 @@ class HomeFragment : Fragment() {
         val contentT = itemView.findViewById<TextView>(R.id.userpostContentT)
         val imgView = itemView.findViewById<ImageView>(R.id.userpostImgIV)
 
+        val cardView = itemView.findViewById<CardView>(R.id.alluserpostCard)
+
         val likeButton = itemView.findViewById<ImageButton>(R.id.postlikeButton)
         val likeText = itemView.findViewById<TextView>(R.id.postlikeText)
         val dislikeButton = itemView.findViewById<ImageButton>(R.id.postdislikeButton)
@@ -203,8 +205,6 @@ class HomeFragment : Fragment() {
         val likesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Likes")
         val dislikesRef : DatabaseReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
         val currentUserID = FirebaseAuth.getInstance().currentUser.uid
-
-        val cardView = itemView.findViewById<CardView>(R.id.alluserpostCard)
 
         fun setLikeButtonStatus(postKey: String){
             likesRef.addValueEventListener(object : ValueEventListener{
