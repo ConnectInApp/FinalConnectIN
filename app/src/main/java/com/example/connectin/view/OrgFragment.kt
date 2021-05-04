@@ -50,42 +50,44 @@ class OrgFragment : Fragment(), OrgPresenter.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        username = view.findViewById(R.id.orgName_EV)
-        address = view.findViewById(R.id.orgAddress_EV)
-        website = view.findViewById(R.id.orgWebsite)
-        orgRegister = view.findViewById(R.id.orgRegisterB)
-
-        var name = username.text
-        var address = address.text
-        var website = website.text
-
+        initialiseValues(view)
 
         orgRegister.setOnClickListener {
-            if(name.isEmpty()) Toast.makeText(activity,"Please enter valid name",Toast.LENGTH_LONG).show()
-            if(address.isEmpty()) Toast.makeText(activity,"Please enter address",Toast.LENGTH_LONG).show()
-            if(website.isEmpty()) Toast.makeText(activity,"Please enter your website",Toast.LENGTH_LONG).show()
-            else {
-                val hm = HashMap<String,Any>()
-                hm["username"] = name.toString()
-                hm["address"] = address.toString()
-                hm["website"] = website.toString()
-                hm["accountType"] = "organisation"
-                userReference.updateChildren(hm).addOnCompleteListener {
-                    if(it.isSuccessful)
-                    {
-                        Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
-                        val i = Intent(activity,NavigationActivity::class.java)
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        startActivity(i)
-                        activity?.finish()
-                    } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
-                }
-            }
+            registerOrg()
         }
     }
 
     override fun registerOrg() {
+        var name = username.text
+        var address = address.text
+        var website = website.text
+        if(name.isEmpty()) Toast.makeText(activity,"Please enter valid name",Toast.LENGTH_LONG).show()
+        if(address.isEmpty()) Toast.makeText(activity,"Please enter address",Toast.LENGTH_LONG).show()
+        if(website.isEmpty()) Toast.makeText(activity,"Please enter your website",Toast.LENGTH_LONG).show()
+        else {
+            val hm = HashMap<String,Any>()
+            hm["username"] = name.toString()
+            hm["address"] = address.toString()
+            hm["website"] = website.toString()
+            hm["accountType"] = "organisation"
+            userReference.updateChildren(hm).addOnCompleteListener {
+                if(it.isSuccessful)
+                {
+                    Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
+                    val i = Intent(activity,NavigationActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(i)
+                    activity?.finish()
+                } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
+    fun initialiseValues(view:View) {
+        username = view.findViewById(R.id.orgName_EV)
+        address = view.findViewById(R.id.orgAddress_EV)
+        website = view.findViewById(R.id.orgWebsite)
+        orgRegister = view.findViewById(R.id.orgRegisterB)
     }
 
 }

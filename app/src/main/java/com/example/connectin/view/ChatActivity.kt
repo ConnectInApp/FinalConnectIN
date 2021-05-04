@@ -1,10 +1,6 @@
 package com.example.connectin.view
 
-import android.icu.number.NumberFormatter.with
-import android.icu.number.NumberRangeFormatter.with
 import android.os.Bundle
-import android.provider.DocumentsContract
-import android.sax.RootElement
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -18,6 +14,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.connectin.R
+import com.example.connectin.model.Chats
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso

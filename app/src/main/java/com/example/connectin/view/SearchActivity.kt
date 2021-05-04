@@ -1,20 +1,16 @@
 package com.example.connectin.view
 
-import android.content.Context
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
-import com.example.connectin.view.ui.home.HomeFragment
+import com.example.connectin.model.Users
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.*
@@ -119,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
     private fun getFromFire(string: String){
         var query=dbref.orderByChild("username").startAt(string).endAt(string+"\uf8ff")
 
-        val options = FirebaseRecyclerOptions.Builder<Users>().setQuery(query,Users::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Users>().setQuery(query, Users::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Users, MyViewHolder> = object : FirebaseRecyclerAdapter<Users, MyViewHolder>(options){
 

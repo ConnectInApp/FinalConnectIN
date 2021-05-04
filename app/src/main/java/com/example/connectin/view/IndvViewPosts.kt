@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
+import com.example.connectin.model.Posts
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlin.properties.Delegates
 
@@ -82,7 +82,7 @@ class IndvViewPosts : Fragment(){
 
         val indvQuery = postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery,Posts::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery, Posts::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {

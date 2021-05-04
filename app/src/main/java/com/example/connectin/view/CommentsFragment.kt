@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
+import com.example.connectin.model.Comments
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -52,7 +53,7 @@ class CommentsFragment : Fragment(){
 
     override fun onStart() {
         super.onStart()
-        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference,Comments::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference, Comments::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Comments,CommentsViewHolder> = object : FirebaseRecyclerAdapter<Comments,CommentsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
@@ -111,7 +112,7 @@ class CommentsFragment : Fragment(){
     }
 
     private fun displayAllComments() {
-        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference,Comments::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference, Comments::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Comments,CommentsViewHolder> = object : FirebaseRecyclerAdapter<Comments,CommentsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
