@@ -38,21 +38,21 @@
 
             <TextView
                 android:id="@+id/simple_text_TV"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="commented on"
                 android:textAlignment="center"
-                android:textColor="#292727"
-                android:textStyle="bold" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/comment_date_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date:"
-                android:textStyle="bold" />
+                android:text="Date: "
+                android:textAlignment="center"
+                android:textColor="#000000" />
         </LinearLayout>
 
         <TextView
@@ -61,8 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Comment text will display here.."
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="#000000"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/comment_time_TV"
@@ -70,10 +70,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:text="Time:"
+            android:text="Time: "
             android:textAlignment="viewStart"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

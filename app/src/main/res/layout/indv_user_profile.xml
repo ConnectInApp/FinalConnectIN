@@ -14,6 +14,7 @@
         android:drawableLeft="@drawable/view_filled"
         android:drawingCacheQuality="low"
         android:text="View Posts"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toStartOf="@+id/userEndorsementB"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +83,7 @@
         android:layout_marginTop="25dp"
         android:drawableLeft="@drawable/connect"
         android:text="Connect"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toStartOf="@+id/sendMessageB"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +96,7 @@
         android:layout_marginTop="25dp"
         android:drawableLeft="@drawable/send_message"
         android:text="Message"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sendConnectionReqB"
@@ -106,6 +109,7 @@
         android:layout_marginTop="25dp"
         android:drawableLeft="@drawable/endorse"
         android:text="Endorse"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/userViewPostsB"
@@ -118,6 +122,7 @@
         android:layout_marginTop="10dp"
         android:text="ABOUT"
         android:textAllCaps="true"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,18 +135,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:drawableLeft="@drawable/connect"
-        android:text="Decline Request"
+        android:drawableLeft="@drawable/reject_request"
+        android:text="Reject"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userViewPostsB" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/blockUserB"
+        app:layout_constraintTop_toBottomOf="@+id/userEndorsementB" />
 
     <Button
         android:id="@+id/blockUserB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/block"
         android:text="Block"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toStartOf="@+id/declineConnectionReqB"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userViewPostsB" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/message_animation"
+        android:layout_width="375dp"
+        android:layout_height="162dp"
+
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="61dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/declineConnectionReqB"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/message_animation" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/endorse_animation"
+        android:layout_width="296dp"
+        android:layout_height="103dp"
+
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="61dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/declineConnectionReqB"
+        app:layout_constraintVertical_bias="1.0"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/endorse" />
 </androidx.constraintlayout.widget.ConstraintLayout>

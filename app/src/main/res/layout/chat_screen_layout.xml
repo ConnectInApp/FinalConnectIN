@@ -10,8 +10,10 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/chat_background1"
         android:backgroundTint="#FFFFFF"
+        app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,19 +28,21 @@
         <TextView
             android:id="@+id/chatting_name_TV"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name of User you are chatting to"
+            android:layout_height="46dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Name of User"
             android:textAlignment="viewStart"
-            android:textSize="18sp" />
+            android:textAllCaps="true"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messages_users"
-        android:layout_width="match_parent"
-        android:layout_height="630dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="402dp"
+        android:layout_height="620dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
@@ -60,13 +64,15 @@
             android:ems="10"
             android:hint="Write Message..."
             android:inputType="textPersonName"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="#000000" />
 
         <Button
             android:id="@+id/send_messageB"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:hapticFeedbackEnabled="true"
             android:keepScreenOn="true"
@@ -76,7 +82,7 @@
             app:icon="@drawable/send_message"
             app:iconGravity="textEnd"
             app:iconPadding="0dp"
-            app:iconSize="20dp" />
+            app:iconSize="30dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

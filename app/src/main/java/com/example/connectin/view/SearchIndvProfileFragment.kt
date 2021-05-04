@@ -2,8 +2,11 @@ package com.example.connectin.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -16,6 +19,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.indv_user_profile.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -119,15 +123,26 @@ class SearchIndvProfileFragment:Fragment() {
 
             chatConnectionB.setOnClickListener {
 
-                val i = Intent(activity,ChatActivity::class.java)
-                i.putExtra("currentUserId",currentUserId)
-                i.putExtra("postKey",postKey)
-                startActivity(i)
+                message_animation.visibility= VISIBLE
+                message_animation.playAnimation()
+
+                Handler().postDelayed({
+                    val i = Intent(activity,ChatActivity::class.java)
+                    i.putExtra("currentUserId",currentUserId)
+                    i.putExtra("postKey",postKey)
+                    startActivity(i)
+                    message_animation.visibility= INVISIBLE
+                },2000)
 
             }
 
             endorseConnectionB.setOnClickListener {
-                endorseUser()
+                endorse_animation.visibility= VISIBLE
+                endorse_animation.playAnimation()
+                Handler().postDelayed({
+                    endorseUser()
+                    endorse_animation.visibility= INVISIBLE
+                },1500)
             }
 
             blockUserB.setOnClickListener {

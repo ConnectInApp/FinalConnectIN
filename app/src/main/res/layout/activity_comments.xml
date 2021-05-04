@@ -10,7 +10,7 @@
         android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Comments :"
+        android:text="Comments"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -51,6 +51,7 @@
         android:layout_alignBottom="@+id/comment_input_EV"
 
         android:layout_alignParentEnd="true"
+        android:hapticFeedbackEnabled="true"
         android:textColor="@color/black"
         app:icon="@drawable/chat_send_message"
         app:iconTint="@color/black"

@@ -2,8 +2,10 @@ package com.example.connectin.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -14,6 +16,8 @@ import androidx.fragment.app.setFragmentResultListener
 import com.example.connectin.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.indv_edit_delete_post.*
+import kotlinx.android.synthetic.main.indv_user_profile.*
 
 class EditDeletePostFragment : Fragment() {
 
@@ -77,10 +81,16 @@ class EditDeletePostFragment : Fragment() {
         })
 
         deletePostButton.setOnClickListener {
-            editdelpostReference.removeValue()
-            val i = Intent(activity,NavigationActivity::class.java)
-            startActivity(i)
-            Toast.makeText(activity,"Post deleted",Toast.LENGTH_SHORT).show()
+            delete_post_animation.visibility= VISIBLE
+            delete_post_animation.playAnimation()
+            Handler().postDelayed({
+                editdelpostReference.removeValue()
+                val i = Intent(activity,NavigationActivity::class.java)
+                startActivity(i)
+                Toast.makeText(activity,"Post deleted",Toast.LENGTH_SHORT).show()
+                delete_post_animation.visibility= View.INVISIBLE
+            },1500)
+
         }
     }
 }

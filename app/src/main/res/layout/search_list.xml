@@ -9,5 +9,6 @@
         android:id="@+id/nameT"
         android:layout_width="360dp"
         android:layout_height="36dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="@color/black" />
 </androidx.cardview.widget.CardView>
