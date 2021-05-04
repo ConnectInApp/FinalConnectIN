@@ -21,9 +21,8 @@ import kotlin.collections.HashMap
 var CHANNEL_ID="chats"
 
 
-class FirebaseNotificationService:FirebaseMessagingService(){
-    lateinit var auth:FirebaseAuth
-
+class FirebaseNotificationService : FirebaseMessagingService(){
+    var auth:FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
@@ -52,7 +51,7 @@ class FirebaseNotificationService:FirebaseMessagingService(){
     }
     private fun updateToken(token: String) {
 
-
+        auth = FirebaseAuth.getInstance()
         val databaseReference =
             FirebaseDatabase.getInstance().getReference("Users").child(auth.currentUser.uid)
         val map: MutableMap<String, Any> = HashMap()
