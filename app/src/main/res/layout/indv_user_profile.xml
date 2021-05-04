@@ -129,10 +129,19 @@
         android:id="@+id/declineConnectionReqB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="20dp"
         android:drawableLeft="@drawable/connect"
         android:text="Decline Request"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userViewPostsB" />
+
+    <Button
+        android:id="@+id/blockUserB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Block"
+        app:layout_constraintEnd_toStartOf="@+id/declineConnectionReqB"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userViewPostsB" />
 </androidx.constraintlayout.widget.ConstraintLayout>

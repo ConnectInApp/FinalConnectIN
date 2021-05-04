@@ -25,6 +25,7 @@ class SearchIndvProfileFragment:Fragment() {
     lateinit var userProfileImgRef : StorageReference
     lateinit var connectionReqRef : DatabaseReference
     lateinit var conntectionReference : DatabaseReference
+    lateinit var blockReference: DatabaseReference
     lateinit var endorseReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
 
@@ -39,10 +40,12 @@ class SearchIndvProfileFragment:Fragment() {
     lateinit var chatConnectionB : Button
     lateinit var viewPostConnectionB : Button
     lateinit var declineConnectionB : Button
+    lateinit var blockUserB : Button
 
     lateinit var currentDate : String
 
     lateinit var curr_state : String
+    lateinit var block_state : String
 
     lateinit var postKey : String
 
@@ -56,6 +59,7 @@ class SearchIndvProfileFragment:Fragment() {
         connectionReqRef = FirebaseDatabase.getInstance().reference.child("ConnectionRequests")
         conntectionReference = FirebaseDatabase.getInstance().reference.child("Connections")
         endorseReference = FirebaseDatabase.getInstance().reference.child("Endorsements")
+        blockReference = FirebaseDatabase.getInstance().reference.child("Blocks")
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
     }
@@ -76,12 +80,15 @@ class SearchIndvProfileFragment:Fragment() {
         occupationE.visibility = View.INVISIBLE
         viewPostConnectionB.visibility = View.INVISIBLE
         endorseConnectionB.visibility = View.INVISIBLE
+        chatConnectionB.visibility = View.INVISIBLE
+        blockUserB.visibility = View.INVISIBLE
 
         if(currentUserId.compareTo(postKey) == 0) {
             sendConnectionB.visibility = View.INVISIBLE
             endorseConnectionB.visibility = View.INVISIBLE
             chatConnectionB.visibility = View.INVISIBLE
             viewPostConnectionB.visibility = View.INVISIBLE
+            blockUserB.visibility = View.INVISIBLE
             declineConnectionB.visibility = View.GONE
         }
         else {
@@ -112,14 +119,29 @@ class SearchIndvProfileFragment:Fragment() {
 
             chatConnectionB.setOnClickListener {
 
+                val i = Intent(activity,ChatActivity::class.java)
+                i.putExtra("currentUserId",currentUserId)
+                i.putExtra("postKey",postKey)
+                startActivity(i)
+
             }
 
             endorseConnectionB.setOnClickListener {
                 endorseUser()
             }
+
+            blockUserB.setOnClickListener {
+                blockUserB.isEnabled = false
+                if(block_state.equals("unblocked"))
+                {
+                    blockUser()
+                }
+                if(block_state.equals("blocked"))
+                {
+                    unblockUser()
+                }
+            }
         }
-
-
 
         userReference.child("$postKey").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -151,6 +173,8 @@ class SearchIndvProfileFragment:Fragment() {
                                 ).show()
                             }
                             connectButtonText()
+                            blockButtonText()
+                            endorseButtonText()
                         }
                     }
                 }
@@ -159,6 +183,103 @@ class SearchIndvProfileFragment:Fragment() {
         })
 
 
+    }
+
+    private fun blockButtonText() {
+        blockReference.child(currentUserId).addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.hasChild(postKey))
+                {
+                    val status = snapshot.child(postKey).child("blocked").value.toString()
+                    if(status.equals("yes")) {
+                        block_state = "blocked"
+                        blockUserB.setText("Unblock")
+
+                        aboutE.visibility = View.INVISIBLE
+                        occupationE.visibility = View.INVISIBLE
+                        viewPostConnectionB.visibility = View.INVISIBLE
+                        chatConnectionB.visibility = View.INVISIBLE
+                        endorseConnectionB.visibility = View.INVISIBLE
+                    }
+                }
+                else
+                {
+                    block_state = "unblocked"
+                    blockUserB.setText("Block")
+
+                    aboutE.visibility = View.VISIBLE
+                    occupationE.visibility = View.VISIBLE
+                    viewPostConnectionB.visibility = View.VISIBLE
+                    chatConnectionB.visibility = View.VISIBLE
+                    endorseConnectionB.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+    }
+
+    private fun unblockUser() {
+        blockReference.child(currentUserId).child(postKey).removeValue().addOnCompleteListener {
+            if(it.isSuccessful)
+            {
+                blockReference.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+                    if(it.isSuccessful)
+                    {
+                        blockUserB.isEnabled = true
+                        curr_state = "unblocked"
+                        blockUserB.setText("Block")
+
+                        aboutE.visibility = View.VISIBLE
+                        occupationE.visibility = View.VISIBLE
+                        viewPostConnectionB.visibility = View.VISIBLE
+                        chatConnectionB.visibility = View.VISIBLE
+                        endorseConnectionB.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    private fun blockUser() {
+        blockReference.child(currentUserId).child(postKey).child("blocked").setValue("yes").addOnCompleteListener {
+            if(it.isSuccessful)
+            {
+                blockReference.child(postKey).child(currentUserId).child("blocked").setValue("yes").addOnCompleteListener {
+                    if(it.isSuccessful)
+                    {
+                        blockUserB.isEnabled = true
+                        curr_state = "blocked"
+                        blockUserB.setText("Unblock")
+
+                        aboutE.visibility = View.INVISIBLE
+                        occupationE.visibility = View.INVISIBLE
+                        viewPostConnectionB.visibility = View.INVISIBLE
+                        chatConnectionB.visibility = View.INVISIBLE
+                        endorseConnectionB.visibility = View.INVISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    private fun endorseButtonText() {
+        endorseReference.child(postKey).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.hasChild(currentUserId))
+                {
+                    endorseConnectionB.setText("Endorsed")
+                }
+                else
+                {
+                    endorseConnectionB.setText("Endorse")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 
     private fun endorseUser() {
@@ -218,7 +339,9 @@ class SearchIndvProfileFragment:Fragment() {
                         aboutE.visibility = View.INVISIBLE
                         occupationE.visibility = View.INVISIBLE
                         viewPostConnectionB.visibility = View.INVISIBLE
+                        chatConnectionB.visibility = View.INVISIBLE
                         endorseConnectionB.visibility = View.INVISIBLE
+                        blockUserB.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -249,6 +372,9 @@ class SearchIndvProfileFragment:Fragment() {
                                         occupationE.visibility = View.VISIBLE
                                         viewPostConnectionB.visibility = View.VISIBLE
                                         endorseConnectionB.visibility = View.VISIBLE
+                                        chatConnectionB.visibility = View.VISIBLE
+                                        blockUserB.visibility = View.VISIBLE
+
                                     }
                                 }
                             }
@@ -309,12 +435,12 @@ class SearchIndvProfileFragment:Fragment() {
                                 occupationE.visibility = View.VISIBLE
                                 viewPostConnectionB.visibility = View.VISIBLE
                                 endorseConnectionB.visibility = View.VISIBLE
+                                blockUserB.visibility = View.VISIBLE
+                                blockButtonText()
                             }
                         }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
+                        override fun onCancelled(error: DatabaseError) {}
 
                     })
                 }
@@ -348,7 +474,9 @@ class SearchIndvProfileFragment:Fragment() {
         chatConnectionB = view.findViewById(R.id.sendMessageB)
         viewPostConnectionB = view.findViewById(R.id.userViewPostsB)
         declineConnectionB = view.findViewById(R.id.declineConnectionReqB)
+        blockUserB = view.findViewById(R.id.blockUserB)
 
         curr_state = "notConnected"
+        block_state = "unblocked"
     }
 }

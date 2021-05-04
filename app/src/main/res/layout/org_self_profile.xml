@@ -99,14 +99,14 @@
                 android:id="@+id/orgViewPostsB5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
                 android:drawableLeft="@drawable/view_filled"
                 android:drawingCacheQuality="low"
                 android:text="View Jobs"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.505"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selfOrgInfo_TV" />
+                app:layout_constraintTop_toBottomOf="@+id/orgFollowers" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/selfOrgCreatePost_FAB"
@@ -124,6 +124,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/selfOrgInfo_TV"
                 app:maxImageSize="70dp"
                 app:srcCompat="@drawable/post_icon" />
+
+            <TextView
+                android:id="@+id/orgFollowers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Followers"
+                android:textAlignment="viewStart"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selfOrgInfo_TV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

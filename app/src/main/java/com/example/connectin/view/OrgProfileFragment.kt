@@ -19,12 +19,14 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
 
 class OrgProfileFragment : Fragment() {
 
 
     lateinit var mauth : FirebaseAuth
     lateinit var userReference: DatabaseReference
+    lateinit var followersReference: DatabaseReference
     lateinit var orgProfileImgRef : StorageReference
 
     lateinit var currentUserId : String
@@ -36,6 +38,7 @@ class OrgProfileFragment : Fragment() {
     lateinit var createJobB : FloatingActionButton
     lateinit var editInfoB : Button
     lateinit var viewJobs : Button
+    lateinit var viewFollowers : TextView
 
     var galleryPick : Int = 0
 
@@ -47,6 +50,7 @@ class OrgProfileFragment : Fragment() {
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
         userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
+        followersReference = FirebaseDatabase.getInstance().reference.child("Follows")
         orgProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
 
     }
@@ -69,11 +73,21 @@ class OrgProfileFragment : Fragment() {
         orgPfp = view.findViewById(R.id.selfOrgImg_IV)
         editInfoB = view.findViewById(R.id.selfOrgEditInfoB)
         viewJobs = view.findViewById(R.id.orgViewPostsB5)
+        viewFollowers = view.findViewById(R.id.orgFollowers)
+
+        viewFollowers.setOnClickListener {
+            val frag = OrgFollowers()
+            activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.orgSelfProfileL,frag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
 
         viewJobs.setOnClickListener {
             val frag = OrgViewJobs()
             val bundle = Bundle()
             bundle.putString("postKey",currentUserId)
+            bundle.putString("profile","orgprofile")
             frag.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.orgSelfProfileL,frag)
