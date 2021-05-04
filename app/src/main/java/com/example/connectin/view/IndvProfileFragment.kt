@@ -126,6 +126,9 @@ class IndvProfileFragment : Fragment() {
 
         viewPosts.setOnClickListener {
             val frag = IndvViewPosts()
+            val bundle = Bundle()
+            bundle.putString("from","connections")
+            frag.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.indvSelfProfileL,frag)
                     ?.addToBackStack(null)

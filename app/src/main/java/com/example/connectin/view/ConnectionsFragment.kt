@@ -80,7 +80,7 @@ class ConnectionsFragment : Fragment() {
                         val frag = SearchIndvProfileFragment()
                         val bundle = Bundle()
                         bundle.putString("postKey",userID.toString())
-
+                        bundle.putString("from","connections")
                         frag.arguments = bundle
 
                         activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.indvSelfProfileL,frag)?.addToBackStack(null)?.commit()

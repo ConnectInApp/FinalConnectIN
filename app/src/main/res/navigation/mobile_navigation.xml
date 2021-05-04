@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_profile">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -18,6 +18,6 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.connectin.view.selfProfile"
+        android:name="com.example.connectin.view.SelfProfile"
         android:label="selfProfile" />
 </navigation>

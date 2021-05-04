@@ -55,7 +55,8 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messages_users">
 
         <EditText
             android:id="@+id/input_message_EV"
@@ -64,10 +65,10 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/chat_message"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:padding="10dp"
-            android:textColor="#000000"
-            android:importantForAutofill="no" />
+            android:textColor="#000000" />
 
         <Button
             android:id="@+id/send_messageB"

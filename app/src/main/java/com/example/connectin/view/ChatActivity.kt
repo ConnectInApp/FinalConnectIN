@@ -41,6 +41,9 @@ class ChatActivity: AppCompatActivity() {
     lateinit var Recieverprofilephoto:ImageView
     lateinit var messageKey:String
 
+    //new field added
+    var name :String = ""
+
     var chatlist=ArrayList<Chats>()
     lateinit var adapter: ChatsAdapter
 
@@ -181,6 +184,16 @@ class ChatActivity: AppCompatActivity() {
 
     }
     fun getToken(message:String){
+
+        userReference.child("Users").child(currentUserId).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                name = snapshot.child("username").value.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+
         val databaseref=FirebaseDatabase.getInstance().getReference("Users").child(postKey)
         databaseref.addListenerForSingleValueEvent(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -195,7 +208,8 @@ class ChatActivity: AppCompatActivity() {
                     data.put("photo",Recieverprofilephoto)
                     data.put("message",message)
                     data.put("chatId",messageKey)
-                    data.put("title",chattingName.text.toString())
+                    //data.put("title",chattingName.text.toString())
+                    data.put("title",name)
 
                     to.put("to",token)
                     to.put("data",data)

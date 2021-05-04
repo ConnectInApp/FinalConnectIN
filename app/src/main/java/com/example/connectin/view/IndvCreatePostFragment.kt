@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.DatabaseReferencePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -18,12 +19,13 @@ import kotlin.collections.HashMap
 
 class  IndvCreatePostFragment : Fragment() {
 
-    //lateinit var postTitle : EditText
+    lateinit var reference : DatabaseReferencePresenter
+
     lateinit var postContent : EditText
     lateinit var postB : Button
 
-    lateinit var userReference: DatabaseReference
-    lateinit var postReference: DatabaseReference
+    /*lateinit var userReference: DatabaseReference
+    lateinit var postReference: DatabaseReference*/
     lateinit var mauth : FirebaseAuth
     lateinit var currentUserId : String
 
@@ -38,8 +40,8 @@ class  IndvCreatePostFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        postReference = FirebaseDatabase.getInstance().reference.child("Posts")
+        /*userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        postReference = FirebaseDatabase.getInstance().reference.child("Posts")*/
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
 
@@ -52,7 +54,9 @@ class  IndvCreatePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //postTitle = view.findViewById(R.id.entertitle_EV)
+        //initializing presenter reference
+        reference = DatabaseReferencePresenter(view)
+
         postContent = view.findViewById(R.id.newpostContent_EV)
         postB = view.findViewById(R.id.editpostButton)
 
@@ -69,7 +73,9 @@ class  IndvCreatePostFragment : Fragment() {
         postB.setOnClickListener {
             validatingPostInfo()
 
-            postReference.addValueEventListener(object: ValueEventListener{
+            //
+
+            reference.postReference.addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists())
                     {
@@ -79,13 +85,11 @@ class  IndvCreatePostFragment : Fragment() {
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
+                override fun onCancelled(error: DatabaseError) {}
 
             })
 
-            userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
+            reference.userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists()){
                         name = snapshot.child("username").value.toString()
@@ -99,7 +103,7 @@ class  IndvCreatePostFragment : Fragment() {
                         postMap["profileImg"] = profileImg
                         postMap["counter"] = countPost
 
-                        postReference.child(postName).updateChildren(postMap).addOnCompleteListener {
+                        reference.postReference.child(postName).updateChildren(postMap).addOnCompleteListener {
                             if(it.isSuccessful)
                             {
                                 Toast.makeText(activity,"Post created",Toast.LENGTH_SHORT).show()
@@ -114,18 +118,13 @@ class  IndvCreatePostFragment : Fragment() {
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun onCancelled(error: DatabaseError) {}
             })
         }
     }
 
     private fun validatingPostInfo() {
-        //val title = postTitle.text.toString()
         val content = postContent.text.toString()
-        //if(title.isEmpty()) Toast.makeText(activity,"Please mention title",Toast.LENGTH_SHORT).show()
         if(content.isEmpty()) Toast.makeText(activity,"Please add content",Toast.LENGTH_SHORT).show()
     }
 }

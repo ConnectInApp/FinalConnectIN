@@ -52,6 +52,8 @@ class SearchIndvProfileFragment:Fragment() {
     lateinit var block_state : String
 
     lateinit var postKey : String
+    lateinit var from : String
+    var layout : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +68,15 @@ class SearchIndvProfileFragment:Fragment() {
         blockReference = FirebaseDatabase.getInstance().reference.child("Blocks")
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
+
+        from = arguments?.getString("from","")!!
+        if(from.isNullOrEmpty())
+        {
+            layout = R.id.parentL
+        }
+        else {
+            layout = R.id.indvSelfProfileL
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -243,7 +254,7 @@ class SearchIndvProfileFragment:Fragment() {
                     if(it.isSuccessful)
                     {
                         blockUserB.isEnabled = true
-                        curr_state = "unblocked"
+                        block_state = "unblocked"
                         blockUserB.setText("Block")
 
                         aboutE.visibility = View.VISIBLE
@@ -265,7 +276,7 @@ class SearchIndvProfileFragment:Fragment() {
                     if(it.isSuccessful)
                     {
                         blockUserB.isEnabled = true
-                        curr_state = "blocked"
+                        block_state = "blocked"
                         blockUserB.setText("Unblock")
 
                         aboutE.visibility = View.INVISIBLE
@@ -316,9 +327,9 @@ class SearchIndvProfileFragment:Fragment() {
                         if(it.isSuccessful)
                         {
                             Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
-                            val i = Intent(activity,NavigationActivity::class.java)
+                            /*val i = Intent(activity,NavigationActivity::class.java)
                             startActivity(i)
-                            activity?.finish()
+                            activity?.finish()*/
                         } else {
                             Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
                         }
@@ -334,9 +345,10 @@ class SearchIndvProfileFragment:Fragment() {
         val frag = IndvViewPosts()
         val bundle = Bundle()
         bundle.putString("postKey",postKey)
+        bundle.putString("from",from)
         frag.arguments = bundle
         activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.parentL,frag)
+                ?.replace(layout!!,frag)
                 ?.addToBackStack(null)
                 ?.commit()
     }

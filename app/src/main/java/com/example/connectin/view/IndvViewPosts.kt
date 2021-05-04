@@ -36,6 +36,7 @@ class IndvViewPosts : Fragment(){
     var likeCheck = false
     var dislikeCheck = false
     var commentLayout : Int? = null
+    lateinit var from : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,15 +49,19 @@ class IndvViewPosts : Fragment(){
         postReference = FirebaseDatabase.getInstance().reference.child("Posts")
         likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
         dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        from = arguments?.getString("from","")!!
         if(postKey?.isNullOrBlank() == false)
         {
             UserId = postKey!!
-            //commentLayout = R.id.parentL
+
         }
         else {
             UserId =  currentUserId!!
-            commentLayout = R.id.indvSelfProfileL
+
         }
+        if(from.isNullOrEmpty()){
+            commentLayout = R.id.parentL
+        }else commentLayout = R.id.indvSelfProfileL
 
 
     }

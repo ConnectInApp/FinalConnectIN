@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Comments
+import com.example.connectin.presenter.DatabaseReferencePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +24,8 @@ import kotlin.collections.HashMap
 
 class CommentsFragment : Fragment(){
 
+    lateinit var reference: DatabaseReferencePresenter
+
     lateinit var comments : RecyclerView
     lateinit var commentInput : EditText
     lateinit var commentButton : Button
@@ -30,8 +33,8 @@ class CommentsFragment : Fragment(){
     var postKey = ""
 
     lateinit var currentUserId : String
-    lateinit var userReference: DatabaseReference
-    lateinit var postReference: DatabaseReference
+    /*lateinit var userReference: DatabaseReference
+    lateinit var postReference: DatabaseReference*/
     lateinit var mauth : FirebaseAuth
     var commentName = ""
 
@@ -41,8 +44,8 @@ class CommentsFragment : Fragment(){
         val bundle : Bundle? = this.arguments
         postKey = bundle?.getString("postKey").toString()
         Toast.makeText(activity,"$postKey",Toast.LENGTH_SHORT).show()
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        postReference = FirebaseDatabase.getInstance().reference.child("Posts").child(postKey).child("Comments")
+        /*userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        postReference = FirebaseDatabase.getInstance().reference.child("Posts").child(postKey).child("Comments")*/
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
     }
@@ -53,7 +56,10 @@ class CommentsFragment : Fragment(){
 
     override fun onStart() {
         super.onStart()
-        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference, Comments::class.java).build()
+        //val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference, Comments::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Comments>()
+                .setQuery(reference.postReference.child(postKey).child("Comments")
+                        , Comments::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Comments,CommentsViewHolder> = object : FirebaseRecyclerAdapter<Comments,CommentsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
@@ -79,6 +85,9 @@ class CommentsFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //initializing presenter reference
+        reference = DatabaseReferencePresenter(view)
+
         comments = view?.findViewById(R.id.display_comments_RV)!!
         comments.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
@@ -92,7 +101,7 @@ class CommentsFragment : Fragment(){
         commentButton = view.findViewById(R.id.post_commentB)
 
         commentButton.setOnClickListener {
-            userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
+            reference.userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
 
                     if(snapshot.exists()) {
@@ -111,8 +120,9 @@ class CommentsFragment : Fragment(){
 
     }
 
-    private fun displayAllComments() {
-        val options = FirebaseRecyclerOptions.Builder<Comments>().setQuery(postReference, Comments::class.java).build()
+    /*private fun displayAllComments() {
+        val options = FirebaseRecyclerOptions.Builder<Comments>()
+                .setQuery(reference.postReference.child(postKey).child("Comments"), Comments::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Comments,CommentsViewHolder> = object : FirebaseRecyclerAdapter<Comments,CommentsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
@@ -134,7 +144,7 @@ class CommentsFragment : Fragment(){
         comments.adapter = firebaseRecyclerAdapter
         firebaseRecyclerAdapter.startListening()
 
-    }
+    }*/
 
     private fun commentValidation(username: String) {
         val comment = commentInput.text.toString()
@@ -157,7 +167,7 @@ class CommentsFragment : Fragment(){
             hm["time"] = commentTime.toString()
             hm["username"] = username
 
-            postReference.child(commentName).updateChildren(hm).addOnCompleteListener {
+            reference.postReference.child(postKey).child("Comments").child(commentName).updateChildren(hm).addOnCompleteListener {
                 if(it.isSuccessful)
                 {
                     Toast.makeText(activity,"Comment added!",Toast.LENGTH_SHORT).show()

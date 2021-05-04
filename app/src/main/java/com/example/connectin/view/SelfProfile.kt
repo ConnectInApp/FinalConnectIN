@@ -21,7 +21,7 @@ import java.lang.Runnable
 import java.net.HttpURLConnection
 import java.net.URL
 
-class selfProfile : Fragment() {
+class SelfProfile : Fragment() {
 
     lateinit var mauth : FirebaseAuth
     lateinit var userReference: DatabaseReference
