@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Create New Post"
+        android:text="@string/indv_create_post_header"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -29,13 +29,14 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="What's on your mind?"
+        android:hint="@string/indv_create_post_hint"
         android:inputType="textMultiLine"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/editpostButton"
@@ -43,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:hapticFeedbackEnabled="true"
-        android:text="POST"
+        android:text="@string/indv_create_postB"
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

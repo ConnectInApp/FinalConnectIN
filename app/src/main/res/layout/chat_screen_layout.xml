@@ -23,6 +23,7 @@
             android:layout_width="35dp"
             android:layout_height="58dp"
             android:layout_marginLeft="350dp"
+            android:contentDescription="@string/chat_prof_pic"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -31,7 +32,7 @@
             android:layout_height="46dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:text="Name of User"
+            android:text="@string/chat_user_name"
             android:textAlignment="viewStart"
             android:textAllCaps="true"
             android:textColor="#000000"
@@ -62,10 +63,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Write Message..."
+            android:hint="@string/chat_message"
             android:inputType="textPersonName"
             android:padding="10dp"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:importantForAutofill="no" />
 
         <Button
             android:id="@+id/send_messageB"

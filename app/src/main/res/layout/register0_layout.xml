@@ -12,15 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="30dp"
-        android:drawableLeft="@drawable/username"
-        android:text="User Registration"
+        android:text="@string/register0_header"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/uname_EV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableLeftCompat="@drawable/username" />
 
     <EditText
         android:id="@+id/uname_EV"
@@ -28,9 +28,9 @@
         android:layout_height="57dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/email"
+        android:drawableStart="@drawable/email"
         android:ems="10"
-        android:hint="Username(Email)"
+        android:hint="@string/register0_uname"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -38,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/pass_EV"
@@ -46,9 +47,9 @@
         android:layout_height="57dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
+        android:drawableStart="@drawable/password"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/register0_password"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -56,7 +57,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uname_EV" />
+        app:layout_constraintTop_toBottomOf="@+id/uname_EV"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/Cpass_EV"
@@ -64,9 +66,9 @@
         android:layout_height="57dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
+        android:drawableStart="@drawable/password"
         android:ems="10"
-        android:hint="Confirm Password"
+        android:hint="@string/register0_Conf_pass"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -74,7 +76,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_EV" />
+        app:layout_constraintTop_toBottomOf="@+id/pass_EV"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/nextB"
@@ -84,7 +87,7 @@
         android:layout_marginBottom="374dp"
         android:hapticFeedbackEnabled="true"
         android:onClick="onClickButton"
-        android:text="Create Account"
+        android:text="@string/register0_createAccB"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="221dp"
-        android:text="Already Have an Account?"
+        android:text="@string/register0_alreadyTV"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +113,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="32dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Sign In"
+        android:text="@string/register0_signInTV"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textStyle="bold"

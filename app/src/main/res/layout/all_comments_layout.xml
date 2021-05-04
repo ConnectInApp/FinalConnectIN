@@ -31,7 +31,7 @@
                 android:id="@+id/comment_username_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
+                android:text="@string/all_comment_uname"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="commented on"
+                android:text="@string/all_commented_on"
                 android:textAlignment="center"
                 android:textColor="#000000" />
 
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date: "
+                android:text="@string/all_comment_date"
                 android:textAlignment="center"
                 android:textColor="#000000" />
         </LinearLayout>
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Comment text will display here.."
+            android:text="@string/all_comment_hint"
             android:textColor="#000000"
             android:textSize="16sp" />
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:text="Time: "
+            android:text="@string/all_comment_time"
             android:textAlignment="viewStart"
             android:textColor="#000000"
             android:textSize="14sp" />

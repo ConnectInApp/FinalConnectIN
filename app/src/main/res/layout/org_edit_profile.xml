@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="EDIT PROFILE"
+        android:text="@string/org_edit_header"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="24sp"
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Organisation Name"
+        android:text="@string/org_edit_name"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -41,19 +41,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:hint="@string/org_edit_namefield"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/textView21"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/textView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Address"
+        android:text="@string/org_edit_address"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -68,19 +70,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:hint="@string/org_edit_addressfield"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+        app:layout_constraintTop_toBottomOf="@+id/textView22"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Website"
+        android:text="@string/org_edit_website"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -95,12 +99,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:hint="@string/org_edit_websiteField"
         android:inputType="textUri"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/textView23"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/update_OrgProfileB"
@@ -109,7 +115,7 @@
         android:layout_marginTop="22dp"
         android:layout_marginBottom="60dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Update"
+        android:text="@string/org_edit_updateB"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="ABOUT US"
+        android:text="@string/org_edit_aboutUs"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -137,10 +143,12 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/org_edit_aboutField"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        android:importantForAutofill="no" />
 </androidx.constraintlayout.widget.ConstraintLayout>
