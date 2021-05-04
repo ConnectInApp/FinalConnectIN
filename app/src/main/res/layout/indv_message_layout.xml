@@ -10,6 +10,7 @@
         android:id="@+id/message_DP"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:contentDescription="@string/indv_msg_img"
         app:srcCompat="@drawable/username" />
 
     <TextView
@@ -21,7 +22,7 @@
         android:layout_toEndOf="@id/message_DP"
         android:background="#00B2FF"
 
-        android:text="Receiver Message"
+        android:text="@string/indv_msg_reciver"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -34,7 +35,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
         android:background="#006AFF"
-        android:text="Sender message"
+        android:text="@string/indv_msg_sender"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold" />

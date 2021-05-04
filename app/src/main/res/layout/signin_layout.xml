@@ -12,6 +12,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
+        android:contentDescription="@string/signin_layout_img"
         app:layout_constraintBottom_toTopOf="@+id/loginUID_EV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,9 +43,9 @@
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/username"
+        android:drawableStart="@drawable/username"
         android:ems="10"
-        android:hint="Username"
+        android:hint="@string/signin_layout_uname"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textAllCaps="true"
@@ -53,7 +54,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/loginPassword_EV"
@@ -61,9 +63,9 @@
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
+        android:drawableStart="@drawable/password"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/signin_layout_password"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -71,7 +73,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginUID_EV" />
+        app:layout_constraintTop_toBottomOf="@+id/loginUID_EV"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/loginB"
@@ -81,7 +84,7 @@
         android:layout_marginBottom="10dp"
         android:hapticFeedbackEnabled="true"
         android:onClick="onClickButton"
-        android:text="Login"
+        android:text="@string/signin_layout_loginB"
         app:cornerRadius="20dp"
         app:icon="@drawable/login_icon"
         app:iconPadding="5dp"
@@ -99,7 +102,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="160dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Forgot Password?"
+        android:text="@string/signin_layout_forgotPassTV"
         android:textColor="@color/black"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
@@ -113,7 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
-        android:text="Don't have an account?"
+        android:text="@string/signin_layout_donthaveTV"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -126,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="29dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Register"
+        android:text="@string/signin_layout_registeTV"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
