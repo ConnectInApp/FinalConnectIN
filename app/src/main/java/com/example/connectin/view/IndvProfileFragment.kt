@@ -152,7 +152,7 @@ class IndvProfileFragment : Fragment() {
 
         if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
             imgUri = data.data!!
-            profilePresenter.uploadtoStorage(reference,currentUserId,imgUri,requireActivity(),userPfp)
+            profilePresenter.uploadtoStorage(reference,currentUserId,imgUri,requireActivity())
             //userPfp.setImageURI(imgUri)
         }
          else {

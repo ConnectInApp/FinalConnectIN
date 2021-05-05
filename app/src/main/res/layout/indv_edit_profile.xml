@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_2">
+    android:background="@drawable/background4_2">
 
     <TextView
         android:id="@+id/textView15"
@@ -30,6 +30,7 @@
         android:textAllCaps="true"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +60,7 @@
         android:textAllCaps="true"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,13 +73,13 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/indv_edit_occupationfield"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <TextView
         android:id="@+id/textView19"
@@ -88,6 +90,7 @@
         android:textAllCaps="true"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -98,6 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:backgroundTint="#21A179"
         android:hapticFeedbackEnabled="true"
         android:text="@string/indv_edit_updateB"
         app:cornerRadius="20dp"
@@ -113,6 +117,7 @@
         android:text="@string/indv_edit_gender"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editIndvDOB_EV" />
@@ -132,21 +137,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/indv_edit_radio_male"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/editFemale_R"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/indv_edit_radio_female"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/editOther_R"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/indv_edit_radio_other"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textStyle="bold" />
     </RadioGroup>
 
     <TextView
@@ -157,6 +165,7 @@
         android:text="@string/indv_edit_aboutme"
         android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editGender_RG" />
@@ -171,13 +180,13 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/indv_edit_aboutmefield"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView24"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
     <EditText
         android:id="@+id/editIndvDOB_EV"

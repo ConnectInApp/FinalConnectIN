@@ -214,6 +214,9 @@
     <string name="signin_layout_donthaveTV">Dont have an account?</string>
     <string name="signin_layout_registeTV">Register</string>
 
+    <string name="settings">Settings</string>
+    <string name="myprofile">Profile</string>
+
 
 
 

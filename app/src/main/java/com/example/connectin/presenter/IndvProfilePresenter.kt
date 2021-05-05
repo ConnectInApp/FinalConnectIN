@@ -120,7 +120,7 @@ class IndvProfilePresenter(val view: android.view.View) {
         })
     }
 
-    fun uploadtoStorage(reference: FirebasePresenter, currentUserId: String, imgUri: Uri, activity: Context,imgV:ImageView) {
+    fun uploadtoStorage(reference: FirebasePresenter, currentUserId: String, imgUri: Uri, activity: Context) {
         val resultUri = imgUri
 
         val path = reference.userProfileImgRef.child("$currentUserId.jpg")
@@ -150,7 +150,41 @@ class IndvProfilePresenter(val view: android.view.View) {
                     Toast.LENGTH_SHORT
             ).show()
         }
-        imgV.setImageURI(imgUri)
+        userPfp.setImageURI(imgUri)
+    }
+
+
+    fun uploadtoOrgStorage(reference: FirebasePresenter, currentUserId: String, imgUri: Uri, activity: Context) {
+        val resultUri = imgUri
+
+        val path = reference.userProfileImgRef.child("$currentUserId.jpg")
+
+        path.putFile(resultUri).addOnCompleteListener {
+
+            if (it.isSuccessful) {
+                Toast.makeText(activity, "Profile image stored to database!!",
+                        Toast.LENGTH_SHORT
+                ).show()
+                path.downloadUrl.addOnSuccessListener {
+                    val downloadUrl = it.toString()
+                    reference.userReference.child(currentUserId).child("profileImage").setValue(downloadUrl)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(
+                                            activity,
+                                            "Image stored to firebase database",
+                                            Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                }
+            } else Toast.makeText(
+                    activity,
+                    "Error: ${it.exception?.message}",
+                    Toast.LENGTH_SHORT
+            ).show()
+        }
+        orgPfp.setImageURI(imgUri)
     }
 
 }

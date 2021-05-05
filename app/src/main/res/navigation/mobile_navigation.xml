@@ -14,10 +14,10 @@
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.example.connectin.view.SettingsFragment"
-        android:label="fragment_settings"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.connectin.view.SelfProfile"
-        android:label="selfProfile" />
+        android:label="@string/myprofile" />
 </navigation>

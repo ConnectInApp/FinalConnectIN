@@ -5,7 +5,7 @@
     android:id="@+id/orgSelfProfileL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4_2">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="#21A179"
                 android:hapticFeedbackEnabled="true"
                 android:text="@string/org_self_uploadB"
                 android:textColor="#FFFFFF"
@@ -97,6 +98,7 @@
                 android:textAlignment="center"
                 app:icon="@drawable/edit"
                 app:iconSize="28dp"
+                app:iconTint="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/selfOrgInfo_TV"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -107,6 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:backgroundTint="#800000FF"
                 android:drawableLeft="@drawable/view_filled"
                 android:drawingCacheQuality="low"
                 android:hapticFeedbackEnabled="true"
@@ -127,6 +130,7 @@
                 android:layout_marginBottom="48dp"
                 android:clickable="true"
                 android:contentDescription="@string/org_self_createB"
+                android:focusable="true"
                 android:hapticFeedbackEnabled="true"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -134,8 +138,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selfOrgInfo_TV"
                 app:maxImageSize="70dp"
-                app:srcCompat="@drawable/post_icon"
-                android:focusable="true" />
+                app:srcCompat="@drawable/post_icon" />
 
             <TextView
                 android:id="@+id/orgFollowers"
@@ -144,7 +147,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/org_self_followers"
                 android:textAlignment="viewStart"
-                android:textColor="#338BFF"
+                android:textColor="@color/purple_700"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

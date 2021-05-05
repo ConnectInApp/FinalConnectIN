@@ -111,10 +111,11 @@
             android:layout_width="53dp"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
-            android:background="@color/white"
+            android:background="@drawable/app_background"
             android:backgroundTint="#D1CDCD"
             android:contentDescription="@string/all_conn_occupation"
             android:hapticFeedbackEnabled="true"
+            android:tint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT"
             app:srcCompat="@android:drawable/stat_notify_chat" />

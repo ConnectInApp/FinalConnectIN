@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4_2">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -74,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:backgroundTint="#800000FF"
                 android:drawableLeft="@drawable/plus"
                 android:hapticFeedbackEnabled="true"
                 android:text="@string/org_user_followB"
@@ -88,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:backgroundTint="#800000FF"
                 android:drawableLeft="@drawable/view_filled"
                 android:hapticFeedbackEnabled="true"
                 android:text="@string/org_user_viewJobsB"

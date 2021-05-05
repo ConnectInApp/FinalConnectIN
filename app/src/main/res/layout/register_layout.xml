@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_2">
+    android:background="@drawable/background4_2">
 
     <TextView
         android:id="@+id/textView"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/register_layout_header"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,6 +39,7 @@
             android:hapticFeedbackEnabled="true"
             android:onClick="radioClicked"
             android:text="@string/register_layout_radio_indv"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <RadioButton
@@ -49,6 +50,7 @@
             android:hapticFeedbackEnabled="true"
             android:onClick="radioClicked"
             android:text="@string/register_layout_radio_org"
+            android:textColor="@color/black"
             android:textSize="18sp" />
     </RadioGroup>
 

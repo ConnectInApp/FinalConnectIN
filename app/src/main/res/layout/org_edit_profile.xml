@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4_2">
 
     <TextView
         android:id="@+id/orgtitleTV"
@@ -30,6 +30,7 @@
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,13 +43,13 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/org_edit_namefield"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <TextView
         android:id="@+id/textView22"
@@ -59,6 +60,7 @@
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,13 +73,13 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/org_edit_addressfield"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView22"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <TextView
         android:id="@+id/textView23"
@@ -88,6 +90,7 @@
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,13 +103,13 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/org_edit_websiteField"
+        android:importantForAutofill="no"
         android:inputType="textUri"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
     <Button
         android:id="@+id/update_OrgProfileB"
@@ -114,6 +117,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="22dp"
         android:layout_marginBottom="60dp"
+        android:backgroundTint="#21A179"
         android:hapticFeedbackEnabled="true"
         android:text="@string/org_edit_updateB"
         app:cornerRadius="20dp"
@@ -129,6 +133,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/org_edit_aboutUs"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,11 +149,11 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/org_edit_aboutField"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
 </androidx.constraintlayout.widget.ConstraintLayout>

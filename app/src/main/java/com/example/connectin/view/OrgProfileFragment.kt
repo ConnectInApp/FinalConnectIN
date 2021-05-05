@@ -113,41 +113,7 @@ class OrgProfileFragment : Fragment() {
         }
 
         profileReference.populateOrgProfile(reference,requireActivity())
-        /*reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists())
-                {
-                    if(snapshot.hasChild("accountType")) {
-                        val type = snapshot.child("accountType").getValue().toString()
-                        if (type.compareTo("organisation") == 0) {
-                            if(snapshot.hasChild("profileImage")) {
-                                val img = snapshot.child("profileImage").value.toString()
-                                Picasso.get().load(img).into(orgPfp)
-                            }
-                            //validation
-                            if (snapshot.hasChild("username")) {
-                                val name = snapshot.child("username").getValue().toString()
-                                userProfileName?.setText(name)
-                            }
-                            if (snapshot.hasChild("address") && snapshot.hasChild("website")) {
-                                val address = snapshot.child("address").getValue().toString()
-                                val website = snapshot.child("website").getValue().toString()
-                                if(snapshot.hasChild("about")) {
-                                    val about = snapshot.child("about").value.toString()
-                                    orgProfileInfo?.setText("$about \n $address \n $website")
-                                }else{
-                                    orgProfileInfo?.setText("$address \n $website")
-                                }
 
-                            } else {
-                                Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -157,43 +123,11 @@ class OrgProfileFragment : Fragment() {
             imgUri = data.data!!
 
             //userPfp.setImageURI(imgUri)
-            profileReference.uploadtoStorage(reference,reference.currentUserId,imgUri,requireActivity(),orgPfp)
+            profileReference.uploadtoStorage(reference,reference.currentUserId,imgUri,requireActivity())
 
         } else {
             Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /*private fun uploadtoStorage() {
-        val resultUri = imgUri
-
-        val path = reference.userProfileImgRef.child("${reference.currentUserId}.jpg")
-
-        path.putFile(resultUri).addOnCompleteListener {
-
-            if (it.isSuccessful) {
-                Toast.makeText(activity, "Profile image stored to database!!",
-                    Toast.LENGTH_SHORT
-                ).show()
-                path.downloadUrl.addOnSuccessListener {
-                    val downloadUrl = it.toString()
-                    reference.userReference.child(reference.currentUserId).child("profileImage").setValue(downloadUrl)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(
-                                    activity,
-                                    "Image stored to firebase database",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                }
-            } else Toast.makeText(
-                activity,
-                "Error: ${it.exception?.message}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        orgPfp.setImageURI(imgUri)
-    }*/
 }

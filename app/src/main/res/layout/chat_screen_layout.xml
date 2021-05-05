@@ -84,7 +84,8 @@
             app:icon="@drawable/send_message"
             app:iconGravity="textEnd"
             app:iconPadding="0dp"
-            app:iconSize="30dp" />
+            app:iconSize="30dp"
+            app:iconTint="@color/black" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
