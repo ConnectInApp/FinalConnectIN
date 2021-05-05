@@ -311,9 +311,10 @@ class SearchIndvProfileFragment:Fragment() {
                         if(it.isSuccessful)
                         {
                             Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
-                            val i = Intent(activity,NavigationActivity::class.java)
+                            endorseConnectionB.setText("Endorsed")
+                            /*val i = Intent(activity,NavigationActivity::class.java)
                             startActivity(i)
-                            activity?.finish()
+                            activity?.finish()*/
                         } else {
                             Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
                         }

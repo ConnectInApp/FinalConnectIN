@@ -69,7 +69,7 @@ class SelfProfile : Fragment() {
             if(result?.isNotEmpty()!!){
                 val responseObj = JSONObject(result)
                 val accountType  = responseObj.getString("accountType")
-                Toast.makeText(activity,"$accountType",Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity,"$accountType",Toast.LENGTH_LONG).show()
                 type = accountType
             } else {
                 Toast.makeText(activity,"Error",Toast.LENGTH_LONG).show()
@@ -90,7 +90,7 @@ class SelfProfile : Fragment() {
             Thread.sleep(1000)
 
             activity?.runOnUiThread {
-                Toast.makeText(activity,"Its working: $type",Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity,"Its working: $type",Toast.LENGTH_LONG).show()
                 if(type?.compareTo("individual") == 0){
                     val frag = IndvProfileFragment()
                     activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.selfProfileLayout,frag)?.commit()

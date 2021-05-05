@@ -100,11 +100,12 @@
         android:id="@+id/update_IndvProfileB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="64dp"
         android:backgroundTint="#21A179"
         android:hapticFeedbackEnabled="true"
         android:text="@string/indv_edit_updateB"
         app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editIndvAbout_EV" />

@@ -101,6 +101,7 @@ class SearchOrgProfileFragment:Fragment() {
                             } else {
                                 Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
                             }
+                            followButtonText()
                         }
                     }
                 }
@@ -108,6 +109,29 @@ class SearchOrgProfileFragment:Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun followButtonText() {
+        reference.followersReference.child(postKey).addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.hasChild(reference.currentUserId))
+                {
+                    curr_state = "follows"
+                    orgFollowB.setText("Unfollow")
+                    orgViewPost.visibility = View.VISIBLE
+                }
+                else {
+                    curr_state = "notFollows"
+                    orgFollowB.setText("Follow")
+                    orgViewPost.visibility = View.INVISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
         })
     }
 
