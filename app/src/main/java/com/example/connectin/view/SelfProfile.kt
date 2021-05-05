@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
@@ -23,25 +24,21 @@ import java.net.URL
 
 class SelfProfile : Fragment() {
 
-    lateinit var mauth : FirebaseAuth
+    /*lateinit var mauth : FirebaseAuth
     lateinit var userReference: DatabaseReference
 
-    lateinit var currentUserId : String
-    var flag : Int? = 0
+
+    lateinit var currentUserId : String*/
     var type : String? = ""
 
-    var userProfileName : TextView? = null
-    var orgProfileInfo : TextView? = null
-
-    val pref = activity?.getSharedPreferences("flags",Context.MODE_PRIVATE)
-    val editor = pref?.edit()
+    lateinit var reference : FirebasePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mauth = FirebaseAuth.getInstance()
+       /* mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        userReference = FirebaseDatabase.getInstance().reference.child("Users")*/
     }
 
     lateinit var job : Job
@@ -73,7 +70,7 @@ class SelfProfile : Fragment() {
 
     inner class FlagTask : AsyncTask<String,Void,String>(){
         override fun doInBackground(vararg params: String?): String {
-            return getResponse(currentUserId) ?: ""
+            return getResponse(reference.currentUserId) ?: ""
         }
 
         override fun onPostExecute(result: String?) {
@@ -89,62 +86,16 @@ class SelfProfile : Fragment() {
         }
     }
 
-    /*fun getLayout() : Int{
-        var f = 5
-        val bundle = Bundle()
-
-        val a = userReference.child(currentUserId).child("accountType")
-        activity?.runOnUiThread {
-            Toast.makeText(activity,"$a",Toast.LENGTH_LONG).show()
-        }
-        userReference.child(currentUserId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val accountType = snapshot.child("accountType").getValue().toString()
-                    //Toast.makeText(activity, "$accountType", Toast.LENGTH_LONG).show()
-                    if (accountType.equals("individual", true) == true) {
-                        //decision
-                            activity?.runOnUiThread {
-                                f = 1
-                                bundle.putInt("flag",1)
-                                editor?.putInt("f",1)
-                                editor?.commit()
-                            }
-
-                        //Toast.makeText(activity,"Indv: $flag",Toast.LENGTH_LONG).show()
-                    } else {
-                        //decision = inflater.inflate(R.layout.org_self_profile,container,false)
-                        f = 0
-                        bundle.putInt("flag",0)
-                        editor?.putInt("f",0)
-                        editor?.apply()
-                        editor?.commit()
-                        //Toast.makeText(activity,"Org",Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-        return f
-    }*/
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         job = CoroutineScope(Dispatchers.Default).launch {
             val result = CoroutineScope(Dispatchers.Default).async {
                 FlagTask().execute()
             }
             result.await()!!
-
-            val bundle = Bundle()
-            val fl = bundle.getInt("flag")
-            val fl1 = pref?.getInt("f",15)
-
             Thread.sleep(1000)
 
             activity?.runOnUiThread {

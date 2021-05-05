@@ -11,6 +11,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -24,15 +25,17 @@ class EditIndvInfo : Fragment() {
     lateinit var updateB : Button
 
     lateinit var mauth : FirebaseAuth
-    lateinit var editUserRef : DatabaseReference
+    //lateinit var editUserRef : DatabaseReference
     lateinit var currentUserId : String
+
+    lateinit var reference : FirebasePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
-        editUserRef = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
+        //editUserRef = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
 
     }
 
@@ -42,6 +45,9 @@ class EditIndvInfo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         editName = view.findViewById(R.id.edit_IndvName_EV)
         editOccupation = view.findViewById(R.id.edit_IndvOccupation_EV)
@@ -59,7 +65,7 @@ class EditIndvInfo : Fragment() {
             }
         }
 
-        editUserRef.addValueEventListener(object : ValueEventListener{
+        reference.userReference.child(currentUserId).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val name = snapshot.child("username").value.toString()
                 val occupation = snapshot.child("occupation").value.toString()
@@ -73,11 +79,11 @@ class EditIndvInfo : Fragment() {
                 editDOB.setText(dob)
 
                 updateB.setOnClickListener {
-                    editUserRef.child("username").setValue(editName.text.toString())
-                    editUserRef.child("occupation").setValue(editOccupation.text.toString())
-                    editUserRef.child("dateOfBirth").setValue(editDOB.text.toString())
-                    editUserRef.child("gender").setValue(gender.toString())
-                    editUserRef.child("about").setValue(editAbout.text.toString())
+                    reference.userReference.child(currentUserId).child("username").setValue(editName.text.toString())
+                    reference.userReference.child(currentUserId).child("occupation").setValue(editOccupation.text.toString())
+                    reference.userReference.child(currentUserId).child("dateOfBirth").setValue(editDOB.text.toString())
+                    reference.userReference.child(currentUserId).child("gender").setValue(gender.toString())
+                    reference.userReference.child(currentUserId).child("about").setValue(editAbout.text.toString())
                     val i = Intent(activity,NavigationActivity::class.java)
                     startActivity(i)
                     Toast.makeText(activity,"Profile Updated",Toast.LENGTH_SHORT).show()

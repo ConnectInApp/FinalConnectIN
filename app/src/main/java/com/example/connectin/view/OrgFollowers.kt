@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Follow
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -22,10 +23,12 @@ class OrgFollowers : Fragment() {
 
     lateinit var followersList : RecyclerView
 
-    lateinit var userReference : DatabaseReference
+    lateinit var reference : FirebasePresenter
+
+    /*lateinit var userReference : DatabaseReference
     lateinit var followersReference: DatabaseReference
     lateinit var mauth : FirebaseAuth
-    lateinit var currentUserID : String
+    lateinit var currentUserID : String*/
 
     lateinit var titleText : String
 
@@ -34,10 +37,10 @@ class OrgFollowers : Fragment() {
 
         titleText= arguments?.getString("text","").toString()
 
-        mauth = FirebaseAuth.getInstance()
+        /*mauth = FirebaseAuth.getInstance()
         currentUserID = mauth.currentUser.uid
         userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        followersReference = FirebaseDatabase.getInstance().reference.child("Follows").child(currentUserID)
+        followersReference = FirebaseDatabase.getInstance().reference.child("Follows").child(currentUserID)*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,6 +49,9 @@ class OrgFollowers : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         if(titleText.equals("Following")) {
             fragmentText.setText(titleText)
@@ -64,7 +70,9 @@ class OrgFollowers : Fragment() {
     }
 
     private fun displayFollowers() {
-        val options = FirebaseRecyclerOptions.Builder<Follow>().setQuery(followersReference, Follow::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Follow>()
+                .setQuery(reference.followersReference.child(reference.currentUserId)
+                        , Follow::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Follow, FollowersViewHolder> =
                 object : FirebaseRecyclerAdapter<Follow,FollowersViewHolder>(options) {
@@ -78,10 +86,9 @@ class OrgFollowers : Fragment() {
                     override fun onBindViewHolder(holder: FollowersViewHolder, position: Int, model: Follow)
                     {
                         val followerID = getRef(position).key
-                        userReference.child(model.uid).addValueEventListener(object : ValueEventListener{
+                        reference.userReference.child(model.uid).addValueEventListener(object : ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val username = snapshot.child("username").value.toString()
-
                                 val img = snapshot.child("profileImage").value.toString()
                                 if(snapshot.child("occupation").exists()){
                                     val occupation = snapshot.child("occupation").value.toString()
@@ -96,7 +103,6 @@ class OrgFollowers : Fragment() {
                             }
 
                             override fun onCancelled(error: DatabaseError) {}
-
                         })
                     }
                 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Posts
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -24,10 +25,12 @@ class IndvViewPosts : Fragment(){
 
     lateinit var postList : RecyclerView
 
-    lateinit var userReference: DatabaseReference
+    lateinit var reference : FirebasePresenter
+
+    /*lateinit var userReference: DatabaseReference
     lateinit var postReference: DatabaseReference
     lateinit var likesReference: DatabaseReference
-    lateinit var dislikesReference: DatabaseReference
+    lateinit var dislikesReference: DatabaseReference*/
     lateinit var mauth : FirebaseAuth
     lateinit var UserId : String
 
@@ -45,10 +48,10 @@ class IndvViewPosts : Fragment(){
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
         postKey=arguments?.getString("postKey","")
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        /*userReference = FirebaseDatabase.getInstance().reference.child("Users")
         postReference = FirebaseDatabase.getInstance().reference.child("Posts")
         likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
-        dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")*/
         from = arguments?.getString("from","")!!
         if(postKey?.isNullOrBlank() == false)
         {
@@ -73,6 +76,9 @@ class IndvViewPosts : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+
         postList = view.findViewById(R.id.indvViewPostRV)
         postList.setHasFixedSize(true)
         val layout = LinearLayoutManager(view.context)
@@ -85,7 +91,7 @@ class IndvViewPosts : Fragment(){
 
     private fun displayAllPost() {
 
-        val indvQuery = postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
+        val indvQuery = reference.postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
 
         val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery, Posts::class.java).build()
 
@@ -130,17 +136,17 @@ class IndvViewPosts : Fragment(){
 
                 holder.likeButton.setOnClickListener {
                     likeCheck = true
-                    likesReference.addValueEventListener(object : ValueEventListener{
+                    reference.likesReference.addValueEventListener(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(likeCheck.equals(true))
                             {
                                 if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 } else {
-                                    likesReference.child(postKey).child(currentUserId!!).setValue(true)
-                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.likesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 }
                             }
@@ -152,17 +158,17 @@ class IndvViewPosts : Fragment(){
 
                 holder.dislikeButton.setOnClickListener {
                     dislikeCheck = true
-                    dislikesReference.addValueEventListener(object : ValueEventListener{
+                    reference.dislikesReference.addValueEventListener(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(dislikeCheck.equals(true))
                             {
                                 if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 } else {
-                                    dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
-                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    reference.likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 }
                             }

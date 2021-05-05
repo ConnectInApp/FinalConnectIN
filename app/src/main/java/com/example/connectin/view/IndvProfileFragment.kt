@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -23,9 +24,10 @@ import java.net.URI
 
 class IndvProfileFragment : Fragment() {
 
-    lateinit var mauth : FirebaseAuth
+    /*lateinit var mauth : FirebaseAuth
     lateinit var userReference: DatabaseReference
-    lateinit var userProfileImgRef : StorageReference
+    lateinit var userProfileImgRef : StorageReference*/
+    lateinit var reference: FirebasePresenter
 
     lateinit var currentUserId : String
 
@@ -50,10 +52,10 @@ class IndvProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
-        userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
+        //mauth = FirebaseAuth.getInstance()
+        //currentUserId = mauth.currentUser.uid
+        //userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
+        //userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
     }
 
     override fun onCreateView(
@@ -66,6 +68,10 @@ class IndvProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        currentUserId = reference.auth.currentUser.uid
 
         nameE = view.findViewById(R.id.selfName_EV)
         occupationE = view.findViewById(R.id.selfOccupation_EV)
@@ -151,7 +157,7 @@ class IndvProfileFragment : Fragment() {
                     ?.commit()
         }
 
-        userReference.addValueEventListener(object : ValueEventListener {
+        reference.userReference.child(currentUserId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     if (snapshot.hasChild("accountType")) {
@@ -191,18 +197,14 @@ class IndvProfileFragment : Fragment() {
                     }
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private fun uploadtoStorage() {
         val resultUri = imgUri
 
-        val path = userProfileImgRef.child("$currentUserId.jpg")
+        val path = reference.userProfileImgRef.child("$currentUserId.jpg")
 
         path.putFile(resultUri).addOnCompleteListener {
 
@@ -212,7 +214,7 @@ class IndvProfileFragment : Fragment() {
                 ).show()
                 path.downloadUrl.addOnSuccessListener {
                     val downloadUrl = it.toString()
-                    userReference.child("profileImage").setValue(downloadUrl)
+                    reference.userReference.child(currentUserId).child("profileImage").setValue(downloadUrl)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     Toast.makeText(
@@ -223,7 +225,6 @@ class IndvProfileFragment : Fragment() {
                                 }
                             }
                 }
-                //val downLoadUrl = it.result?.downloadUrl.toString()
             } else Toast.makeText(
                 activity,
                 "Error: ${it.exception?.message}",
@@ -235,56 +236,13 @@ class IndvProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
             imgUri = data.data!!
-
-            //userPfp.setImageURI(imgUri)
             uploadtoStorage()
             userPfp.setImageURI(imgUri)
-//            activity?.let {
-//                CropImage.activity(imgUri)
-//                    .setGuidelines(CropImageView.Guidelines.ON)
-//                    .setAspectRatio(1, 1).start(it)
-//            }
         }
-
-        /*if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            val result = CropImage.getActivityResult(data)
-
-            if(resultCode == RESULT_OK) {
-                val resultUri = result.uri
-
-                val path = userProfileImgRef.child("$currentUserId.jpg")
-
-                path.putFile(resultUri).addOnCompleteListener {
-
-                    if(it.isSuccessful){
-                        Toast.makeText(activity,"Profile image stored to database!!",Toast.LENGTH_SHORT).show()
-                        val downLoadUrl = it.result?.storage?.downloadUrl.toString()
-                        userReference.child("profileImage").setValue(downLoadUrl).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val i =Intent(activity,NavigationActivity::class.java)
-                                startActivity(i)
-                                Toast.makeText(activity,"Image stored to firebase database",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-
-                    } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            Toast.makeText(activity,"Error occured",Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
          else {
             Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
 }

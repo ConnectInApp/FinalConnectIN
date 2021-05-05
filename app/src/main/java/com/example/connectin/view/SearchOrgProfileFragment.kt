@@ -10,17 +10,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
 class SearchOrgProfileFragment:Fragment() {
-    lateinit var userReference: DatabaseReference
+    /*lateinit var userReference: DatabaseReference
     lateinit var followReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth
+    lateinit var mauth : FirebaseAuth*/
+    lateinit var reference : FirebasePresenter
 
-    lateinit var currentUserId : String
+    //lateinit var currentUserId : String
     lateinit var postKey : String
 
     lateinit var userProfileName : TextView
@@ -34,10 +36,10 @@ class SearchOrgProfileFragment:Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         postKey=arguments?.getString("postKey")!!
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(postKey)
+        /*userReference = FirebaseDatabase.getInstance().reference.child("Users").child(postKey)
         followReference = FirebaseDatabase.getInstance().reference.child("Follows")
         mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
+        currentUserId = mauth.currentUser.uid*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,6 +50,8 @@ class SearchOrgProfileFragment:Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         curr_state = "notFollows"
         userProfileName = view.findViewById(R.id.orgName_TV)
@@ -56,7 +60,7 @@ class SearchOrgProfileFragment:Fragment() {
         orgViewPost = view.findViewById(R.id.selfOrgViewPostB)
         orgFollowB = view.findViewById(R.id.orgFollowB)
 
-        if(currentUserId.compareTo(postKey) ==0 )
+        if(reference.currentUserId.compareTo(postKey) ==0 )
         {
             orgFollowB.visibility = View.INVISIBLE
         }
@@ -65,7 +69,7 @@ class SearchOrgProfileFragment:Fragment() {
             viewOrgJobs()
         }
 
-        if(!currentUserId.equals(postKey)) {
+        if(!reference.currentUserId.equals(postKey)) {
             orgViewPost.visibility = View.INVISIBLE
         }
 
@@ -82,7 +86,7 @@ class SearchOrgProfileFragment:Fragment() {
             }
         }
 
-        userReference.addValueEventListener(object: ValueEventListener {
+       reference.userReference.child(postKey).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     if (snapshot.hasChild("accountType")) {
@@ -115,9 +119,9 @@ class SearchOrgProfileFragment:Fragment() {
     }
 
     private fun unfollowOrg() {
-        followReference.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+        reference.followersReference.child(postKey).child(reference.currentUserId).removeValue().addOnCompleteListener {
             if(it.isSuccessful) {
-                followReference.child(currentUserId).child(postKey).removeValue()
+                reference.followersReference.child(reference.currentUserId).child(postKey).removeValue()
                 orgFollowB.isEnabled = true
                 curr_state = "notFollows"
                 orgFollowB.setText("Follow")
@@ -127,11 +131,11 @@ class SearchOrgProfileFragment:Fragment() {
     }
 
     private fun followOrg() {
-        followReference.child(postKey).child(currentUserId).child("follows").setValue("yes").addOnCompleteListener {
+        reference.followersReference.child(postKey).child(reference.currentUserId).child("follows").setValue("yes").addOnCompleteListener {
             if(it.isSuccessful) {
-                followReference.child(postKey).child(currentUserId).child("uid").setValue(currentUserId)
-                followReference.child(currentUserId).child(postKey).child("following").setValue("yes")
-                followReference.child(currentUserId).child(postKey).child("uid").setValue(postKey)
+                reference.followersReference.child(postKey).child(reference.currentUserId).child("uid").setValue(reference.currentUserId)
+                reference.followersReference.child(reference.currentUserId).child(postKey).child("following").setValue("yes")
+                reference.followersReference.child(reference.currentUserId).child(postKey).child("uid").setValue(postKey)
                 orgFollowB.isEnabled = true
                 curr_state = "follows"
                 orgFollowB.setText("Unfollow")

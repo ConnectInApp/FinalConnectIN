@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Endorsements
 import com.example.connectin.model.UserJobsApplied
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -20,20 +21,22 @@ import kotlinx.android.synthetic.main.fragment_endorsement.*
 
 class JobsAppliedFragment : Fragment() {
 
-    lateinit var userReference : DatabaseReference
+    /*lateinit var userReference : DatabaseReference
     lateinit var mauth : FirebaseAuth
-    lateinit var currentUserID : String
-    lateinit var jobsReference: DatabaseReference
+    lateinit var jobsReference: DatabaseReference*/
 
+    lateinit var reference : FirebasePresenter
+
+    lateinit var currentUserID : String
     lateinit var jobsAppliedList : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mauth = FirebaseAuth.getInstance()
-        currentUserID = mauth.currentUser.uid
-        jobsReference = FirebaseDatabase.getInstance().reference.child("Jobs")
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserID).child("jobsApplied")
+        //mauth = FirebaseAuth.getInstance()
+        //currentUserID = mauth.currentUser.uid
+        //jobsReference = FirebaseDatabase.getInstance().reference.child("Jobs")
+        //userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserID).child("jobsApplied")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +45,9 @@ class JobsAppliedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        currentUserID = reference.auth.currentUser.uid
 
         fragmentText.setText("Applied Jobs")
 
@@ -56,7 +62,9 @@ class JobsAppliedFragment : Fragment() {
     }
 
     private fun displayAllJobs() {
-        val options = FirebaseRecyclerOptions.Builder<UserJobsApplied>().setQuery(userReference, UserJobsApplied::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<UserJobsApplied>()
+                .setQuery(reference.userReference.child(currentUserID).child("jobsApplied")
+                        , UserJobsApplied::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<UserJobsApplied, JobsViewHolder> =
                 object : FirebaseRecyclerAdapter<UserJobsApplied, JobsViewHolder>(options) {
@@ -69,7 +77,8 @@ class JobsAppliedFragment : Fragment() {
                     override fun onBindViewHolder(holder: JobsViewHolder, position: Int, model: UserJobsApplied)
                     {
                         val userID = getRef(position).key
-                        userReference.child(userID!!).addValueEventListener(object : ValueEventListener {
+                        reference.userReference.child(currentUserID).child("jobsApplied")
+                                .child(userID!!).addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val username = snapshot.child("username").value.toString()
                                 val desc = snapshot.child("description").value.toString()

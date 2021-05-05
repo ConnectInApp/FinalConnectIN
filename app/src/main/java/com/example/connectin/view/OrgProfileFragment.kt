@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -24,12 +25,13 @@ import org.w3c.dom.Text
 class OrgProfileFragment : Fragment() {
 
 
-    lateinit var mauth : FirebaseAuth
+    /*lateinit var mauth : FirebaseAuth
     lateinit var userReference: DatabaseReference
     lateinit var followersReference: DatabaseReference
-    lateinit var orgProfileImgRef : StorageReference
+    lateinit var orgProfileImgRef : StorageReference*/
+    lateinit var reference : FirebasePresenter
 
-    lateinit var currentUserId : String
+    //lateinit var currentUserId : String
 
     var userProfileName : TextView? = null
     var orgProfileInfo : TextView? = null
@@ -47,11 +49,11 @@ class OrgProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mauth = FirebaseAuth.getInstance()
+        /*mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
         userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
         followersReference = FirebaseDatabase.getInstance().reference.child("Follows")
-        orgProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
+        orgProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")*/
 
     }
 
@@ -65,6 +67,8 @@ class OrgProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         userProfileName = view.findViewById(R.id.selfOrgName_TV)
         orgProfileInfo = view.findViewById(R.id.selfOrgInfo_TV)
@@ -86,7 +90,7 @@ class OrgProfileFragment : Fragment() {
         viewJobs.setOnClickListener {
             val frag = OrgViewJobs()
             val bundle = Bundle()
-            bundle.putString("postKey",currentUserId)
+            bundle.putString("postKey",reference.currentUserId)
             bundle.putString("profile","orgprofile")
             frag.arguments = bundle
             activity?.supportFragmentManager?.beginTransaction()
@@ -119,7 +123,7 @@ class OrgProfileFragment : Fragment() {
                     ?.commit()
         }
 
-        userReference.addValueEventListener(object: ValueEventListener {
+        reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists())
                 {
@@ -152,9 +156,7 @@ class OrgProfileFragment : Fragment() {
                     }
                 }
             }
-            override fun onCancelled(error: DatabaseError) {
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
@@ -175,7 +177,7 @@ class OrgProfileFragment : Fragment() {
     private fun uploadtoStorage() {
         val resultUri = imgUri
 
-        val path = orgProfileImgRef.child("$currentUserId.jpg")
+        val path = reference.userProfileImgRef.child("${reference.currentUserId}.jpg")
 
         path.putFile(resultUri).addOnCompleteListener {
 
@@ -185,7 +187,7 @@ class OrgProfileFragment : Fragment() {
                 ).show()
                 path.downloadUrl.addOnSuccessListener {
                     val downloadUrl = it.toString()
-                    userReference.child("profileImage").setValue(downloadUrl)
+                    reference.userReference.child(reference.currentUserId).child("profileImage").setValue(downloadUrl)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 Toast.makeText(

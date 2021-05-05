@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
-import com.example.connectin.presenter.DatabaseReferencePresenter
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -19,7 +19,8 @@ import kotlin.collections.HashMap
 
 class  IndvCreatePostFragment : Fragment() {
 
-    lateinit var reference : DatabaseReferencePresenter
+
+    lateinit var reference : FirebasePresenter
 
     lateinit var postContent : EditText
     lateinit var postB : Button
@@ -55,7 +56,7 @@ class  IndvCreatePostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //initializing presenter reference
-        reference = DatabaseReferencePresenter(view)
+        reference = FirebasePresenter(view)
 
         postContent = view.findViewById(R.id.newpostContent_EV)
         postB = view.findViewById(R.id.editpostButton)

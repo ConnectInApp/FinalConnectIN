@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Jobs
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -35,25 +36,26 @@ class OrgViewJobs : Fragment() {
 
     lateinit var jobList : RecyclerView
 
-    lateinit var userReference: DatabaseReference
+    lateinit var reference : FirebasePresenter
+    /*lateinit var userReference: DatabaseReference
     lateinit var jobReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth
+    lateinit var mauth : FirebaseAuth*/
 
     var postKey : String? = null
-    var currentUserId : String? = null
+    //var currentUserId : String? = null
     var check:String?=null
 
     var type : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
+        /*mauth = FirebaseAuth.getInstance()
+        currentUserId = mauth.currentUser.uid*/
         postKey=arguments?.getString("postKey","")
         check=arguments?.getString("profile")
         Toast.makeText(activity,"$postKey",Toast.LENGTH_SHORT).show()
-        jobReference = FirebaseDatabase.getInstance().reference.child("Jobs")
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        /*jobReference = FirebaseDatabase.getInstance().reference.child("Jobs")
+        userReference = FirebaseDatabase.getInstance().reference.child("Users")*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,6 +64,7 @@ class OrgViewJobs : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        reference = FirebasePresenter(view)
 
         jobList = view.findViewById(R.id.indvViewPostRV)
         jobList.setHasFixedSize(true)
@@ -75,7 +78,7 @@ class OrgViewJobs : Fragment() {
 
     private fun displayAllJobs() {
 
-        val orgQuery = jobReference.orderByChild("uid").startAt(postKey).endAt(postKey + "\uf8ff")
+        val orgQuery = reference.jobsReference.orderByChild("uid").startAt(postKey).endAt(postKey + "\uf8ff")
 
         val options = FirebaseRecyclerOptions.Builder<Jobs>().setQuery(orgQuery,Jobs::class.java).build()
 
@@ -100,7 +103,7 @@ class OrgViewJobs : Fragment() {
                     }
                     result.await()!!
                     Thread.sleep(1000)
-                    if(currentUserId?.compareTo(postKey!!)!=0 || type?.compareTo("organisation")!=0)
+                    if(reference.currentUserId.compareTo(postKey!!) !=0 || type?.compareTo("organisation")!=0)
                     {
                         CoroutineScope(Dispatchers.Main).launch {
                             holder.cardView.setOnClickListener {
@@ -126,7 +129,7 @@ class OrgViewJobs : Fragment() {
                         }
                     }
                 }
-                if(currentUserId?.compareTo(postKey!!) ==0) {
+                if(reference.currentUserId.compareTo(postKey!!) ==0) {
                     holder.cardView.setOnClickListener {
                         val frag = JobApplicationsFragment()
                         val bundle = Bundle()
@@ -154,16 +157,16 @@ class OrgViewJobs : Fragment() {
     }
 
     private fun applyJob(title:String,desc:String,salary:String,username:String) {
-        userReference.child(currentUserId!!).addValueEventListener(object:ValueEventListener{
+        reference.userReference.child(reference.currentUserId).addValueEventListener(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     val name = snapshot.child("username").value.toString()
                     val pfp = snapshot.child("profileImage").value.toString()
                     val hm = HashMap<String,Any>()
                     hm["username"] = name
-                    hm["email"] = mauth.currentUser.email
+                    hm["email"] = reference.auth.currentUser.email
                     hm["profileImg"] = pfp
-                    jobReference.child("$postKey$title").child("applications").child(currentUserId!!).updateChildren(hm).addOnCompleteListener {
+                    reference.jobsReference.child("$postKey$title").child("applications").child(reference.currentUserId).updateChildren(hm).addOnCompleteListener {
                         Toast.makeText(activity,"Job Applied",Toast.LENGTH_SHORT).show()
                         if (it.isSuccessful){
                             val um = HashMap<String,Any>()
@@ -171,7 +174,7 @@ class OrgViewJobs : Fragment() {
                             um["description"] = desc
                             um["salary"] = salary
                             um["username"] = username
-                            userReference.child(currentUserId!!).child("jobsApplied").child("$postKey$title").updateChildren(um).addOnCompleteListener {
+                            reference.userReference.child(reference.currentUserId).child("jobsApplied").child("$postKey$title").updateChildren(um).addOnCompleteListener {
                                 if(it.isSuccessful){}
                             }
                         } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
@@ -215,7 +218,7 @@ class OrgViewJobs : Fragment() {
 
     inner class FlagTask : AsyncTask<String, Void, String>(){
         override fun doInBackground(vararg params: String?): String {
-            return getResponse(currentUserId!!) ?: ""
+            return getResponse(reference.currentUserId) ?: ""
         }
 
         override fun onPostExecute(result: String?) {

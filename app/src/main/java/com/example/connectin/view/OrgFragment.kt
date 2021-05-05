@@ -10,17 +10,16 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.example.connectin.presenter.OrgPresenter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.business_registration_layout.*
 
 class OrgFragment : Fragment(), OrgPresenter.View {
 
     lateinit var presenter: OrgPresenter
-    lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference
+    /*lateinit var mauth : FirebaseAuth
+    lateinit var userReference: DatabaseReference*/
+
+    lateinit var reference : FirebasePresenter
 
     lateinit var currentUserId : String
 
@@ -34,9 +33,9 @@ class OrgFragment : Fragment(), OrgPresenter.View {
 
         presenter = OrgPresenter(this)
 
-        mauth = FirebaseAuth.getInstance()
+        /*mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
+        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)*/
     }
 
     override fun onCreateView(
@@ -50,7 +49,10 @@ class OrgFragment : Fragment(), OrgPresenter.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initialiseValues(view)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+
+        initialiseValues()
 
         orgRegister.setOnClickListener {
             registerOrg()
@@ -58,6 +60,7 @@ class OrgFragment : Fragment(), OrgPresenter.View {
     }
 
     override fun registerOrg() {
+        initialiseValues()
         var name = username.text
         var address = address.text
         var website = website.text
@@ -70,7 +73,7 @@ class OrgFragment : Fragment(), OrgPresenter.View {
             hm["address"] = address.toString()
             hm["website"] = website.toString()
             hm["accountType"] = "organisation"
-            userReference.updateChildren(hm).addOnCompleteListener {
+            reference.userReference.child(reference.currentUserId).updateChildren(hm).addOnCompleteListener {
                 if(it.isSuccessful)
                 {
                     Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
@@ -83,11 +86,10 @@ class OrgFragment : Fragment(), OrgPresenter.View {
         }
     }
 
-    fun initialiseValues(view:View) {
-        username = view.findViewById(R.id.orgName_EV)
-        address = view.findViewById(R.id.orgAddress_EV)
-        website = view.findViewById(R.id.orgWebsite)
-        orgRegister = view.findViewById(R.id.orgRegisterB)
+    override fun initialiseValues() {
+        username = view?.findViewById(R.id.orgName_EV)!!
+        address = view?.findViewById(R.id.orgAddress_EV)!!
+        website = view?.findViewById(R.id.orgWebsite)!!
+        orgRegister = view?.findViewById(R.id.orgRegisterB)!!
     }
-
 }

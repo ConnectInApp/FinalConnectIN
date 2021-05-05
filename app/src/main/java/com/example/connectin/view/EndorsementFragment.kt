@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Endorsements
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -27,8 +28,10 @@ class EndorsementFragment : Fragment() {
 
     lateinit var endorsementList : RecyclerView
 
-    lateinit var endorsementReference : DatabaseReference
-    lateinit var userReference : DatabaseReference
+    lateinit var reference : FirebasePresenter
+
+    //lateinit var endorsementReference : DatabaseReference
+    //lateinit var userReference : DatabaseReference
     lateinit var mauth : FirebaseAuth
     lateinit var currentUserID : String
 
@@ -41,8 +44,8 @@ class EndorsementFragment : Fragment() {
 
         mauth = FirebaseAuth.getInstance()
         currentUserID = mauth.currentUser.uid
-        endorsementReference = FirebaseDatabase.getInstance().reference.child("Endorsements").child(currentUserID)
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
+        //endorsementReference = FirebaseDatabase.getInstance().reference.child("Endorsements").child(currentUserID)
+        //userReference = FirebaseDatabase.getInstance().reference.child("Users")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +56,9 @@ class EndorsementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         endorsementList = view.findViewById(R.id.userEndorseRV)
         endorsementList.setHasFixedSize(true)
@@ -66,7 +72,9 @@ class EndorsementFragment : Fragment() {
 
     private fun displayEndorsements() {
 
-        val options = FirebaseRecyclerOptions.Builder<Endorsements>().setQuery(endorsementReference,Endorsements::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Endorsements>()
+                .setQuery(reference.endorsementReference.child(currentUserID)
+                        ,Endorsements::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Endorsements,EndorsementViewHolder> =
             object : FirebaseRecyclerAdapter<Endorsements,EndorsementViewHolder>(options) {
@@ -80,7 +88,7 @@ class EndorsementFragment : Fragment() {
             override fun onBindViewHolder(holder: EndorsementViewHolder,position: Int,model: Endorsements)
             {
                 val userID = getRef(position).key
-                userReference.child(userID!!).addValueEventListener(object : ValueEventListener {
+                reference.userReference.child(userID!!).addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val username = snapshot.child("username").value.toString()
                         val profileImg = snapshot.child("profileImage").value.toString()

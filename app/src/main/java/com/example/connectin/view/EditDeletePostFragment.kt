@@ -11,15 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import com.example.connectin.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.example.connectin.presenter.EditDeletePostPresenter
+import com.example.connectin.presenter.FirebasePresenter
 import kotlinx.android.synthetic.main.indv_edit_delete_post.*
-import kotlinx.android.synthetic.main.indv_user_profile.*
 
-class EditDeletePostFragment : Fragment() {
+class EditDeletePostFragment : Fragment(), EditDeletePostPresenter.View {
 
     lateinit var newPostContentT : EditText
     lateinit var editPostButton : Button
@@ -27,20 +24,15 @@ class EditDeletePostFragment : Fragment() {
 
     var postKey : String = ""
 
-    lateinit var mauth : FirebaseAuth
-    lateinit var editdelpostReference : DatabaseReference
+    lateinit var reference : FirebasePresenter
+    lateinit var editDeletePostPresenter: EditDeletePostPresenter
     lateinit var currentUserId : String
-    lateinit var databaseUserId : String
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val bundle : Bundle? = this.arguments
         postKey = bundle?.getString("postKey").toString()
-
-        editdelpostReference = FirebaseDatabase.getInstance().reference.child("Posts").child(postKey)
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
     }
 
     override fun onCreateView(
@@ -54,37 +46,19 @@ class EditDeletePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Toast.makeText(activity,"workin?: $postKey",Toast.LENGTH_LONG).show()
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        editDeletePostPresenter = EditDeletePostPresenter(view)
 
-        newPostContentT = view.findViewById(R.id.newpostContent_EV)
-        editPostButton = view.findViewById(R.id.editpostButton)
-        deletePostButton = view.findViewById(R.id.deletepostButton)
+        initialiseValues()
 
-        editdelpostReference.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val content = snapshot.child("content").value.toString()
-                databaseUserId = snapshot.child("uid").value.toString()
-                newPostContentT.setText(content)
-
-                editPostButton.setOnClickListener {
-                    editdelpostReference.child("content").setValue(newPostContentT.text.toString())
-                    val i = Intent(activity,NavigationActivity::class.java)
-                    startActivity(i)
-                    Toast.makeText(activity,"Post updated",Toast.LENGTH_SHORT).show()
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+        editDeletePostPresenter.updateDeletePost(reference,postKey,newPostContentT,editPostButton,requireActivity())
 
         deletePostButton.setOnClickListener {
             delete_post_animation.visibility= VISIBLE
             delete_post_animation.playAnimation()
             Handler().postDelayed({
-                editdelpostReference.removeValue()
+                reference.postReference.child(postKey).removeValue()
                 val i = Intent(activity,NavigationActivity::class.java)
                 startActivity(i)
                 Toast.makeText(activity,"Post deleted",Toast.LENGTH_SHORT).show()
@@ -92,5 +66,11 @@ class EditDeletePostFragment : Fragment() {
             },1500)
 
         }
+    }
+
+    override fun initialiseValues() {
+        newPostContentT = view?.findViewById(R.id.newpostContent_EV)!!
+        editPostButton = view?.findViewById(R.id.editpostButton)!!
+        deletePostButton = view?.findViewById(R.id.deletepostButton)!!
     }
 }
