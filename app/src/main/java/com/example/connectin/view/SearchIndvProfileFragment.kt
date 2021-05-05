@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
 import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.SearchProfilePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -26,17 +27,9 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class SearchIndvProfileFragment:Fragment() {
-    /*lateinit var userReference: DatabaseReference
-    lateinit var userProfileImgRef : StorageReference
-    lateinit var connectionReqRef : DatabaseReference
-    lateinit var conntectionReference : DatabaseReference
-    lateinit var blockReference: DatabaseReference
-    lateinit var endorseReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth
-
-    lateinit var currentUserId : String*/
 
     lateinit var reference : FirebasePresenter
+    lateinit var profilePresenter : SearchProfilePresenter
 
     lateinit var nameE : TextView
     lateinit var occupationE : TextView
@@ -61,17 +54,7 @@ class SearchIndvProfileFragment:Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         postKey=arguments?.getString("postKey")!!
-        /*userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
-        connectionReqRef = FirebaseDatabase.getInstance().reference.child("ConnectionRequests")
-        conntectionReference = FirebaseDatabase.getInstance().reference.child("Connections")
-        endorseReference = FirebaseDatabase.getInstance().reference.child("Endorsements")
-        blockReference = FirebaseDatabase.getInstance().reference.child("Blocks")
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid*/
-
         from = arguments?.getString("from","")!!
         if(from.isNullOrEmpty())
         {
@@ -91,6 +74,7 @@ class SearchIndvProfileFragment:Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //initializing presenter reference
         reference = FirebasePresenter(view)
+        profilePresenter = SearchProfilePresenter(view)
 
         initialisation(view)
 
@@ -203,7 +187,6 @@ class SearchIndvProfileFragment:Fragment() {
                                 ).show()
                             }
                             connectButtonText()
-                            //blockButtonText()
                             endorseButtonText()
                         }
                     }
@@ -211,8 +194,6 @@ class SearchIndvProfileFragment:Fragment() {
             }
             override fun onCancelled(error: DatabaseError) {}
         })
-
-
     }
 
     private fun blockButtonText() {
@@ -306,7 +287,6 @@ class SearchIndvProfileFragment:Fragment() {
                     endorseConnectionB.setText("Endorse")
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
 
         })
@@ -331,9 +311,9 @@ class SearchIndvProfileFragment:Fragment() {
                         if(it.isSuccessful)
                         {
                             Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
-                            /*val i = Intent(activity,NavigationActivity::class.java)
+                            val i = Intent(activity,NavigationActivity::class.java)
                             startActivity(i)
-                            activity?.finish()*/
+                            activity?.finish()
                         } else {
                             Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
                         }

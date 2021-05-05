@@ -22,21 +22,10 @@ class OrgCreateJobFragment : Fragment() {
     lateinit var postJobB : Button
 
     lateinit var reference : FirebasePresenter
-
-    /*lateinit var userReference: DatabaseReference
-    lateinit var jobReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth*/
-    //lateinit var currentUserId : String
-
     lateinit var jobName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        jobReference = FirebaseDatabase.getInstance().reference.child("Jobs")
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,8 +42,6 @@ class OrgCreateJobFragment : Fragment() {
         jobDesc = view.findViewById(R.id.jobDescription_EV)
         jobSalary = view.findViewById(R.id.salary_EV)
         postJobB = view.findViewById(R.id.postJobB)
-
-
 
         postJobB.setOnClickListener {
             reference.userReference.child(reference.currentUserId).addValueEventListener(object : ValueEventListener{

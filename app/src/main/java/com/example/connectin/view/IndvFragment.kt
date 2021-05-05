@@ -21,9 +21,6 @@ import kotlinx.android.synthetic.main.individual_registration_layout.*
 
 class IndvFragment :Fragment() {
 
-    //lateinit var auth: FirebaseAuth
-    //lateinit var userReference : DatabaseReference
-
     lateinit var reference: FirebasePresenter
 
     lateinit var currentUserId : String
@@ -36,9 +33,6 @@ class IndvFragment :Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //auth = FirebaseAuth.getInstance()
-        //userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
     }
 
     override fun onCreateView(
@@ -55,6 +49,7 @@ class IndvFragment :Fragment() {
         //initializing presenter reference
         reference = FirebasePresenter(view)
         currentUserId = reference.auth.currentUser.uid
+
 
         username = view.findViewById(R.id.indvName_EV)
         dob =view.findViewById(R.id.indvDOB_EV)

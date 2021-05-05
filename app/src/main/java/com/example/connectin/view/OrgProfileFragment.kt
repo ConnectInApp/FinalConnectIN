@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
 import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.IndvProfilePresenter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -24,17 +25,11 @@ import org.w3c.dom.Text
 
 class OrgProfileFragment : Fragment() {
 
-
-    /*lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference
-    lateinit var followersReference: DatabaseReference
-    lateinit var orgProfileImgRef : StorageReference*/
     lateinit var reference : FirebasePresenter
+    lateinit var profileReference: IndvProfilePresenter
 
-    //lateinit var currentUserId : String
-
-    var userProfileName : TextView? = null
-    var orgProfileInfo : TextView? = null
+    /*var userProfileName : TextView? = null
+    var orgProfileInfo : TextView? = null*/
     lateinit var uploadB : Button
     lateinit var orgPfp : ImageView
     lateinit var createJobB : FloatingActionButton
@@ -48,13 +43,6 @@ class OrgProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
-        followersReference = FirebaseDatabase.getInstance().reference.child("Follows")
-        orgProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")*/
-
     }
 
     override fun onCreateView(
@@ -69,12 +57,13 @@ class OrgProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //initializing presenter reference
         reference = FirebasePresenter(view)
+        profileReference = IndvProfilePresenter(view)
 
-        userProfileName = view.findViewById(R.id.selfOrgName_TV)
-        orgProfileInfo = view.findViewById(R.id.selfOrgInfo_TV)
+        /*userProfileName = view.findViewById(R.id.selfOrgName_TV)
+        orgProfileInfo = view.findViewById(R.id.selfOrgInfo_TV)*/
         createJobB = view.findViewById(R.id.selfOrgCreatePost_FAB)
         uploadB = view.findViewById(R.id.orguploadB)
-        orgPfp = view.findViewById(R.id.selfOrgImg_IV)
+        //orgPfp = view.findViewById(R.id.selfOrgImg_IV)
         editInfoB = view.findViewById(R.id.selfOrgEditInfoB)
         viewJobs = view.findViewById(R.id.orgViewPostsB5)
         viewFollowers = view.findViewById(R.id.orgFollowers)
@@ -123,7 +112,8 @@ class OrgProfileFragment : Fragment() {
                     ?.commit()
         }
 
-        reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener {
+        profileReference.populateOrgProfile(reference,requireActivity())
+        /*reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists())
                 {
@@ -157,7 +147,7 @@ class OrgProfileFragment : Fragment() {
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
-        })
+        })*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -167,14 +157,14 @@ class OrgProfileFragment : Fragment() {
             imgUri = data.data!!
 
             //userPfp.setImageURI(imgUri)
-            uploadtoStorage()
-            orgPfp.setImageURI(imgUri)
+            profileReference.uploadtoStorage(reference,reference.currentUserId,imgUri,requireActivity(),orgPfp)
+
         } else {
             Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun uploadtoStorage() {
+    /*private fun uploadtoStorage() {
         val resultUri = imgUri
 
         val path = reference.userProfileImgRef.child("${reference.currentUserId}.jpg")
@@ -204,5 +194,6 @@ class OrgProfileFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
+        orgPfp.setImageURI(imgUri)
+    }*/
 }

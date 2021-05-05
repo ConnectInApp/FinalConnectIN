@@ -24,21 +24,12 @@ import java.net.URL
 
 class SelfProfile : Fragment() {
 
-    /*lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference
-
-
-    lateinit var currentUserId : String*/
     var type : String? = ""
 
     lateinit var reference : FirebasePresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-       /* mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")*/
     }
 
     lateinit var job : Job

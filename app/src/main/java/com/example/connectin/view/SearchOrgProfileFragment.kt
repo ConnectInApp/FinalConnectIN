@@ -17,9 +17,6 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
 class SearchOrgProfileFragment:Fragment() {
-    /*lateinit var userReference: DatabaseReference
-    lateinit var followReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth*/
     lateinit var reference : FirebasePresenter
 
     //lateinit var currentUserId : String
@@ -36,10 +33,6 @@ class SearchOrgProfileFragment:Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         postKey=arguments?.getString("postKey")!!
-        /*userReference = FirebaseDatabase.getInstance().reference.child("Users").child(postKey)
-        followReference = FirebaseDatabase.getInstance().reference.child("Follows")
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

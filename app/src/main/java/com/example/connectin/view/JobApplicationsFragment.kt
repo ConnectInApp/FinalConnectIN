@@ -14,6 +14,7 @@ import com.example.connectin.R
 import com.example.connectin.model.Endorsements
 import com.example.connectin.model.JobApplications
 import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.JobApplicationPresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -23,15 +24,11 @@ import kotlinx.android.synthetic.main.fragment_endorsement.*
 
 class JobApplicationsFragment : Fragment(){
 
-
     lateinit var jobapplicationList : RecyclerView
-
-    /*lateinit var userReference : DatabaseReference
-    lateinit var jobsReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth*/
     lateinit var currentUserID : String
 
     lateinit var reference : FirebasePresenter
+    lateinit var applicationPresenter : JobApplicationPresenter
 
     lateinit var jobKey:String
     lateinit var jobTitle:String
@@ -41,13 +38,7 @@ class JobApplicationsFragment : Fragment(){
 
         jobKey= arguments?.getString("jobKey","").toString()
         jobTitle=arguments?.getString("jobTitle","").toString()
-
         Toast.makeText(activity,"$jobKey$jobTitle",Toast.LENGTH_SHORT).show()
-
-        /*mauth = FirebaseAuth.getInstance()
-        currentUserID = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        jobsReference = FirebaseDatabase.getInstance().reference.child("Jobs").child("$jobKey$jobTitle").child("applications")*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,6 +51,7 @@ class JobApplicationsFragment : Fragment(){
         //initializing presenter reference
         reference = FirebasePresenter(view)
         currentUserID = reference.auth.currentUser.uid
+        applicationPresenter = JobApplicationPresenter(view)
 
         fragmentText.setText("Job Applications")
 
@@ -70,10 +62,10 @@ class JobApplicationsFragment : Fragment(){
         layout.stackFromEnd = true
         jobapplicationList.layoutManager = layout
 
-        displayApplications()
+        applicationPresenter.displayApplications(reference,jobKey, jobTitle, jobapplicationList)
     }
 
-    private fun displayApplications() {
+    /*private fun displayApplications() {
         val options = FirebaseRecyclerOptions.Builder<JobApplications>()
                 .setQuery(reference.jobsReference.child("$jobKey$jobTitle")
                         .child("applications"), JobApplications::class.java).build()
@@ -117,5 +109,5 @@ class JobApplicationsFragment : Fragment(){
         val usernameT = itemView.findViewById<TextView>(R.id.connectionName)
         val emailT = itemView.findViewById<TextView>(R.id.connectionOccupation)
         val imgV = itemView.findViewById<ImageView>(R.id.connectionIV)
-    }
+    }*/
 }

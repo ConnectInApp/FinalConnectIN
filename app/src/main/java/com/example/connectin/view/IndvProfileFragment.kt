@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
 import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.IndvProfilePresenter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -24,18 +25,11 @@ import java.net.URI
 
 class IndvProfileFragment : Fragment() {
 
-    /*lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference
-    lateinit var userProfileImgRef : StorageReference*/
     lateinit var reference: FirebasePresenter
-
+    lateinit var profilePresenter : IndvProfilePresenter
     lateinit var currentUserId : String
 
-    lateinit var nameE : TextView
-    lateinit var occupationE : TextView
-    lateinit var aboutE : TextView
     lateinit var uploadB : Button
-    lateinit var userPfp : ImageView
     lateinit var createPostB : FloatingActionButton
     lateinit var editInfo : Button
     lateinit var viewPosts : Button
@@ -43,6 +37,7 @@ class IndvProfileFragment : Fragment() {
     lateinit var viewEndorsements : TextView
     lateinit var viewJobsApplied : TextView
     lateinit var viewFollowing : TextView
+    lateinit var userPfp : ImageView
 
     var galleryPick : Int = 0
 
@@ -51,11 +46,6 @@ class IndvProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //mauth = FirebaseAuth.getInstance()
-        //currentUserId = mauth.currentUser.uid
-        //userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
-        //userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
     }
 
     override fun onCreateView(
@@ -72,12 +62,9 @@ class IndvProfileFragment : Fragment() {
         //initializing presenter reference
         reference = FirebasePresenter(view)
         currentUserId = reference.auth.currentUser.uid
+        profilePresenter = IndvProfilePresenter(view)
 
-        nameE = view.findViewById(R.id.selfName_EV)
-        occupationE = view.findViewById(R.id.selfOccupation_EV)
-        aboutE = view.findViewById(R.id.selfAbout_EV)
         uploadB = view.findViewById(R.id.uploadB)
-        userPfp = view.findViewById(R.id.selfImg_IV)
         createPostB = view.findViewById(R.id.selfCreatePostB)
         editInfo = view.findViewById(R.id.selfEdit_IV)
         viewPosts = view.findViewById(R.id.selfViewPostsB)
@@ -157,80 +144,7 @@ class IndvProfileFragment : Fragment() {
                     ?.commit()
         }
 
-        reference.userReference.child(currentUserId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    if (snapshot.hasChild("accountType")) {
-                        val type = snapshot.child("accountType").getValue().toString()
-                        if (type.compareTo("individual") == 0) {
-                            if(snapshot.hasChild("profileImage")) {
-                                val img = snapshot.child("profileImage").value.toString()
-                                Picasso.get().load(img).into(userPfp)
-                            }
-
-                            if (snapshot.hasChild("username")) {
-                                val name = snapshot.child("username").getValue().toString()
-                                nameE.setText(name)
-                            }
-                            if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
-                                val dob = snapshot.child("dateOfBirth").getValue().toString()
-                                val gender = snapshot.child("gender").getValue().toString()
-                                if(snapshot.hasChild("about"))
-                                {
-                                    val about = snapshot.child("about").getValue().toString()
-                                    aboutE.setText("$about \n Date of Birth: $dob \n Gender: $gender")
-                                } else {
-                                    aboutE.setText("Date of Birth: $dob \n Gender: $gender")
-                                }
-                            }
-                            if (snapshot.hasChild("occupation")) {
-                                val occ = snapshot.child("occupation").getValue().toString()
-                                occupationE.setText(occ)
-                            } else {
-                                Toast.makeText(
-                                    activity,
-                                    "Profile name does not exists!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    private fun uploadtoStorage() {
-        val resultUri = imgUri
-
-        val path = reference.userProfileImgRef.child("$currentUserId.jpg")
-
-        path.putFile(resultUri).addOnCompleteListener {
-
-            if (it.isSuccessful) {
-                Toast.makeText(activity, "Profile image stored to database!!",
-                    Toast.LENGTH_SHORT
-                ).show()
-                path.downloadUrl.addOnSuccessListener {
-                    val downloadUrl = it.toString()
-                    reference.userReference.child(currentUserId).child("profileImage").setValue(downloadUrl)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Toast.makeText(
-                                            activity,
-                                            "Image stored to firebase database",
-                                            Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                }
-            } else Toast.makeText(
-                activity,
-                "Error: ${it.exception?.message}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        profilePresenter.populateIndvProfile(reference,currentUserId,requireActivity())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -238,8 +152,8 @@ class IndvProfileFragment : Fragment() {
 
         if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
             imgUri = data.data!!
-            uploadtoStorage()
-            userPfp.setImageURI(imgUri)
+            profilePresenter.uploadtoStorage(reference,currentUserId,imgUri,requireActivity(),userPfp)
+            //userPfp.setImageURI(imgUri)
         }
          else {
             Toast.makeText(activity, "Error occured", Toast.LENGTH_SHORT).show()

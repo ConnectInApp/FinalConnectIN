@@ -16,9 +16,6 @@ import com.example.connectin.presenter.OrgPresenter
 class OrgFragment : Fragment(), OrgPresenter.View {
 
     lateinit var presenter: OrgPresenter
-    /*lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference*/
-
     lateinit var reference : FirebasePresenter
 
     lateinit var currentUserId : String
@@ -30,12 +27,6 @@ class OrgFragment : Fragment(), OrgPresenter.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        presenter = OrgPresenter(this)
-
-        /*mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)*/
     }
 
     override fun onCreateView(
@@ -51,6 +42,7 @@ class OrgFragment : Fragment(), OrgPresenter.View {
 
         //initializing presenter reference
         reference = FirebasePresenter(view)
+        presenter = OrgPresenter(view)
 
         initialiseValues()
 
