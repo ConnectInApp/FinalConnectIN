@@ -45,7 +45,6 @@ class EndorsementPresenter(val view: View) {
                                 holder.usernameT.setText(username)
                                 holder.occupationT.setText(occupation)
                                 Picasso.get().load(profileImg).into(holder.imgV)
-                                //Toast.makeText(view.context,"From endorse presenter",Toast.LENGTH_SHORT).show()
                             }
 
                             override fun onCancelled(error: DatabaseError) {}

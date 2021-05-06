@@ -107,26 +107,13 @@ class ChatActivity: AppCompatActivity() {
                         var messages=snapshot.getValue(Chats::class.java)
                         chatlist.add(messages!!)
                         adapter.notifyDataSetChanged()
-
                     }
                 }
 
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onCancelled(error: DatabaseError) {}
             })
 
     }
@@ -140,11 +127,9 @@ class ChatActivity: AppCompatActivity() {
         }
         else{
             var senderRef="Messages/" + senderId + "/" + postKey
-
             var receiverRef="Messages/" + postKey + "/" + senderId
 
             chatReference=userReference.child(senderId).child(postKey).push()
-
              messageKey=chatReference.key!!
 
             var calendar = Calendar.getInstance()
@@ -169,7 +154,7 @@ class ChatActivity: AppCompatActivity() {
 
             userReference.updateChildren(hmBody).addOnCompleteListener {
                 if(it.isSuccessful){
-                    Toast.makeText(this,"Message sent Successfully",Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this,"Message sent Successfully",Toast.LENGTH_LONG).show()
                     inputMessage.setText("")
                 }
                 else{
@@ -185,7 +170,7 @@ class ChatActivity: AppCompatActivity() {
     }
     fun getToken(message:String){
 
-        userReference.child("Users").child(currentUserId).addValueEventListener(object : ValueEventListener{
+        userReference.child("Users").child(senderId).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 name = snapshot.child("username").value.toString()
             }

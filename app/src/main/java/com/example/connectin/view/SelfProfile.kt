@@ -38,6 +38,7 @@ class SelfProfile : Fragment() {
         return inflater.inflate(R.layout.fragment_selfprofile,container,false)
     }
 
+    //get the account type of user
     fun getResponse(id: String) : String?{
         val urlS = "https://connectin-77e24-default-rtdb.firebaseio.com/Users/$id.json"
         val url = URL(urlS)
@@ -89,6 +90,7 @@ class SelfProfile : Fragment() {
             result.await()!!
             Thread.sleep(1000)
 
+            //on the basis of the user's account type change the layout
             activity?.runOnUiThread {
                 //Toast.makeText(activity,"Its working: $type",Toast.LENGTH_LONG).show()
                 if(type?.compareTo("individual") == 0){

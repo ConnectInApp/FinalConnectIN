@@ -26,7 +26,6 @@ class IndvViewPosts : Fragment(){
     lateinit var postList : RecyclerView
 
     lateinit var reference : FirebasePresenter
-
     lateinit var mauth : FirebaseAuth
     lateinit var UserId : String
 

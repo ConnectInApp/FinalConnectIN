@@ -38,7 +38,7 @@ class JobApplicationsFragment : Fragment(){
 
         jobKey= arguments?.getString("jobKey","").toString()
         jobTitle=arguments?.getString("jobTitle","").toString()
-        Toast.makeText(activity,"$jobKey$jobTitle",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(activity,"$jobKey$jobTitle",Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,50 +64,4 @@ class JobApplicationsFragment : Fragment(){
 
         applicationPresenter.displayApplications(reference,jobKey, jobTitle, jobapplicationList)
     }
-
-    /*private fun displayApplications() {
-        val options = FirebaseRecyclerOptions.Builder<JobApplications>()
-                .setQuery(reference.jobsReference.child("$jobKey$jobTitle")
-                        .child("applications"), JobApplications::class.java).build()
-
-        val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<JobApplications, JobApplicationViewHolder> =
-                object : FirebaseRecyclerAdapter<JobApplications, JobApplicationViewHolder>(options) {
-
-                    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): JobApplicationViewHolder {
-                        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.all_connection_layout,parent,false)
-                        val viewHolder = JobApplicationViewHolder(view)
-                        return viewHolder
-                    }
-
-                    override fun onBindViewHolder(holder: JobApplicationViewHolder, position: Int, model: JobApplications)
-                    {
-                        val applicationID = getRef(position).key
-                        reference.jobsReference.child("$jobKey$jobTitle")
-                                .child("applications").child(applicationID!!)
-                                .addValueEventListener(object:ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val username = snapshot.child("username").value.toString()
-                                val email = snapshot.child("email").value.toString()
-                                val img = snapshot.child("profileImg").value.toString()
-                                holder.usernameT.setText(username)
-                                holder.emailT.setText(email)
-                                Picasso.get().load(img).into(holder.imgV)
-
-                            }
-                            override fun onCancelled(error: DatabaseError) {}
-                        })
-
-                    }
-
-                }
-
-        jobapplicationList.adapter = firebaseRecyclerAdapter
-        firebaseRecyclerAdapter.startListening()
-    }
-
-    inner class JobApplicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val usernameT = itemView.findViewById<TextView>(R.id.connectionName)
-        val emailT = itemView.findViewById<TextView>(R.id.connectionOccupation)
-        val imgV = itemView.findViewById<ImageView>(R.id.connectionIV)
-    }*/
 }

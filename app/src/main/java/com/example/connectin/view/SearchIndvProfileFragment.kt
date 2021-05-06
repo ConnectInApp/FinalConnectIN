@@ -44,8 +44,8 @@ class SearchIndvProfileFragment:Fragment() {
 
     lateinit var currentDate : String
 
-    lateinit var curr_state : String
-    lateinit var block_state : String
+    lateinit var curr_state : String //current state of connection request
+    lateinit var block_state : String //current state of blocking a user
 
     lateinit var postKey : String
     lateinit var from : String
@@ -86,6 +86,7 @@ class SearchIndvProfileFragment:Fragment() {
         chatConnectionB.visibility = View.INVISIBLE
         blockUserB.visibility = View.INVISIBLE
 
+        //if currentuser is visiting their own profile
         if(reference.currentUserId.compareTo(postKey) == 0) {
             sendConnectionB.visibility = View.INVISIBLE
             endorseConnectionB.visibility = View.INVISIBLE
@@ -174,7 +175,14 @@ class SearchIndvProfileFragment:Fragment() {
                             if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
                                 val dob = snapshot.child("dateOfBirth").getValue().toString()
                                 val gender = snapshot.child("gender").getValue().toString()
-                                aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                if(snapshot.hasChild("about"))
+                                {
+                                    val about = snapshot.child("about").getValue().toString()
+                                    aboutE.setText("$about \n Date of Birth: $dob \n Gender: $gender")
+                                } else {
+                                    aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                }
+                                //aboutE.setText("Date of Birth: $dob \n Gender: $gender")
                             }
                             if (snapshot.hasChild("occupation")) {
                                 val occ = snapshot.child("occupation").getValue().toString()
@@ -196,6 +204,7 @@ class SearchIndvProfileFragment:Fragment() {
         })
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun blockButtonText() {
         reference.blockReference.child(reference.currentUserId).addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -231,6 +240,7 @@ class SearchIndvProfileFragment:Fragment() {
         })
     }
 
+    //unblock a user
     private fun unblockUser() {
         reference.blockReference.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful)
@@ -253,6 +263,7 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //block user
     private fun blockUser() {
         reference.blockReference.child(reference.currentUserId).child(postKey).child("blocked").setValue("yes").addOnCompleteListener {
             if(it.isSuccessful)
@@ -275,6 +286,7 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun endorseButtonText() {
         reference.endorsementReference.child(postKey).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -288,10 +300,10 @@ class SearchIndvProfileFragment:Fragment() {
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
-
         })
     }
 
+    //endorse a user, you cannot unendorse a user after endorsing them
     private fun endorseUser() {
         Toast.makeText(activity,"Endorsed", Toast.LENGTH_SHORT).show()
         reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener{
@@ -312,9 +324,6 @@ class SearchIndvProfileFragment:Fragment() {
                         {
                             Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
                             endorseConnectionB.setText("Endorsed")
-                            /*val i = Intent(activity,NavigationActivity::class.java)
-                            startActivity(i)
-                            activity?.finish()*/
                         } else {
                             Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
                         }
@@ -338,6 +347,7 @@ class SearchIndvProfileFragment:Fragment() {
                 ?.commit()
     }
 
+    //unconnect a person similar to unfriend
     private fun unconnect() {
         reference.connectionReference.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful) {
@@ -360,6 +370,7 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //accept a user's connection request
     private fun acceptRequest() {
         var calendar = Calendar.getInstance()
         val current = SimpleDateFormat("dd-MM-yyyy")
@@ -397,6 +408,7 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //user can choose to cancel the request they have received
     private fun cancelRequest() {
         reference.connectionReqRef.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful) {
@@ -412,6 +424,7 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun connectButtonText() {
         reference.connectionReqRef.child(reference.currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -462,8 +475,8 @@ class SearchIndvProfileFragment:Fragment() {
         })
     }
 
+    //send request to another user
     private fun sendRequest() {
-
         reference.connectionReqRef.child(reference.currentUserId).child(postKey).child("request_type").setValue("request_sent").addOnCompleteListener {
             if(it.isSuccessful) {
                 reference.connectionReqRef.child(postKey).child(reference.currentUserId).child("request_type").setValue("request_received").addOnCompleteListener {

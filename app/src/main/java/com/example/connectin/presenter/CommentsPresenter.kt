@@ -49,7 +49,7 @@ class CommentsPresenter(val view: android.view.View) {
             reference.postReference.child(postKey).child("Comments").child(commentName).updateChildren(hm).addOnCompleteListener {
                 if(it.isSuccessful)
                 {
-                    Toast.makeText(activity,"Comment added!:from presenter again!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Comment added!", Toast.LENGTH_SHORT).show()
                     commentInput.setText("")
                 } else {
                     Toast.makeText(activity,"Error occured!", Toast.LENGTH_SHORT).show()

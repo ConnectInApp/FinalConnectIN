@@ -56,7 +56,7 @@ class EditProfileInfoPresenter(val view: android.view.View) {
                     reference.userReference.child(reference.currentUserId).child("about").setValue(editAbout.text.toString())
                     val i = Intent(activity,NavigationActivity::class.java)
                     activity.startActivity(i)
-                    Toast.makeText(activity,"Profile Updated using presenter",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Profile Updated",Toast.LENGTH_SHORT).show()
                 }
             }
 

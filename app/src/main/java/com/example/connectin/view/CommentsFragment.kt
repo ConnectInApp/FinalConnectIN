@@ -43,6 +43,8 @@ class CommentsFragment : Fragment(){
 
     override fun onStart() {
         super.onStart()
+
+        //set up comment firebaserecycler view
         val options = FirebaseRecyclerOptions.Builder<Comments>()
                 .setQuery(reference.postReference.child(postKey).child("Comments")
                         , Comments::class.java).build()
@@ -71,6 +73,7 @@ class CommentsFragment : Fragment(){
         reference = FirebasePresenter(view)
         commentPresenter = CommentsPresenter(view)
 
+        //initialise comment recycler view
         comments = view?.findViewById(R.id.display_comments_RV)!!
         comments.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
@@ -82,6 +85,7 @@ class CommentsFragment : Fragment(){
         commentButton = view.findViewById(R.id.post_commentB)
 
         commentButton.setOnClickListener {
+            //add comment
             commentPresenter.commentClick(commentInput,requireActivity(),reference.currentUserId,postKey,reference)
         }
     }

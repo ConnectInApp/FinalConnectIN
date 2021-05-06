@@ -28,6 +28,7 @@ class SearchOrgProfileFragment:Fragment() {
     lateinit var orgViewPost : Button
     lateinit var orgFollowB : Button
 
+    //current state of the follow button
     lateinit var curr_state : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +98,13 @@ class SearchOrgProfileFragment:Fragment() {
                             if (snapshot.hasChild("address") && snapshot.hasChild("website")) {
                                 val address = snapshot.child("address").getValue().toString()
                                 val website = snapshot.child("website").getValue().toString()
-                                orgProfileInfo.setText("$address \n $website")
+                                if(snapshot.hasChild("about")) {
+                                    val about = snapshot.child("about").value.toString()
+                                    orgProfileInfo?.setText("$about \n $address \n $website")
+                                }else{
+                                    orgProfileInfo?.setText("$address \n $website")
+                                }
+                                //orgProfileInfo.setText("$address \n $website")
                             } else {
                                 Toast.makeText(activity, "Profile name does not exists!", Toast.LENGTH_SHORT).show()
                             }
