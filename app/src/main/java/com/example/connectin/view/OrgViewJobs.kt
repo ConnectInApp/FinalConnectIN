@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.model.Jobs
+import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.ViewJobsPresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -31,29 +33,25 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class OrgViewJobs : Fragment() {
+class OrgViewJobs : Fragment(),ViewJobsPresenter.View {
 
     lateinit var jobList : RecyclerView
 
-    lateinit var userReference: DatabaseReference
-    lateinit var jobReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth
+    lateinit var reference : FirebasePresenter
+    lateinit var viewJobsPresenter: ViewJobsPresenter
 
     var postKey : String? = null
-    var currentUserId : String? = null
+    //var currentUserId : String? = null
     var check:String?=null
 
     var type : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
+
         postKey=arguments?.getString("postKey","")
         check=arguments?.getString("profile")
         Toast.makeText(activity,"$postKey",Toast.LENGTH_SHORT).show()
-        jobReference = FirebaseDatabase.getInstance().reference.child("Jobs")
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,6 +60,8 @@ class OrgViewJobs : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        reference = FirebasePresenter(view)
+        viewJobsPresenter = ViewJobsPresenter(view)
 
         jobList = view.findViewById(R.id.indvViewPostRV)
         jobList.setHasFixedSize(true)
@@ -73,9 +73,9 @@ class OrgViewJobs : Fragment() {
         displayAllJobs()
     }
 
-    private fun displayAllJobs() {
+    override fun displayAllJobs() {
 
-        val orgQuery = jobReference.orderByChild("uid").startAt(postKey).endAt(postKey + "\uf8ff")
+        val orgQuery = reference.jobsReference.orderByChild("uid").startAt(postKey).endAt(postKey + "\uf8ff")
 
         val options = FirebaseRecyclerOptions.Builder<Jobs>().setQuery(orgQuery,Jobs::class.java).build()
 
@@ -100,7 +100,7 @@ class OrgViewJobs : Fragment() {
                     }
                     result.await()!!
                     Thread.sleep(1000)
-                    if(currentUserId?.compareTo(postKey!!)!=0 || type?.compareTo("organisation")!=0)
+                    if(reference.currentUserId.compareTo(postKey!!) !=0 || type?.compareTo("organisation")!=0)
                     {
                         CoroutineScope(Dispatchers.Main).launch {
                             holder.cardView.setOnClickListener {
@@ -111,7 +111,7 @@ class OrgViewJobs : Fragment() {
                                     when(which)
                                     {
                                         DialogInterface.BUTTON_POSITIVE -> {
-                                            applyJob(model.title,model.description,model.salary,model.username)
+                                            viewJobsPresenter.applyJob(reference,model.title,model.description,model.salary,model.username,postKey!!,requireActivity())
                                         }
                                         DialogInterface.BUTTON_NEUTRAL -> {
                                             Toast.makeText(activity,"Application cancelled",Toast.LENGTH_SHORT).show()
@@ -126,7 +126,7 @@ class OrgViewJobs : Fragment() {
                         }
                     }
                 }
-                if(currentUserId?.compareTo(postKey!!) ==0) {
+                if(reference.currentUserId.compareTo(postKey!!) ==0) {
                     holder.cardView.setOnClickListener {
                         val frag = JobApplicationsFragment()
                         val bundle = Bundle()
@@ -153,37 +153,6 @@ class OrgViewJobs : Fragment() {
         firebaseRecyclerAdapter.startListening()
     }
 
-    private fun applyJob(title:String,desc:String,salary:String,username:String) {
-        userReference.child(currentUserId!!).addValueEventListener(object:ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
-                    val name = snapshot.child("username").value.toString()
-                    val pfp = snapshot.child("profileImage").value.toString()
-                    val hm = HashMap<String,Any>()
-                    hm["username"] = name
-                    hm["email"] = mauth.currentUser.email
-                    hm["profileImg"] = pfp
-                    jobReference.child("$postKey$title").child("applications").child(currentUserId!!).updateChildren(hm).addOnCompleteListener {
-                        Toast.makeText(activity,"Job Applied",Toast.LENGTH_SHORT).show()
-                        if (it.isSuccessful){
-                            val um = HashMap<String,Any>()
-                            um["title"] = title
-                            um["description"] = desc
-                            um["salary"] = salary
-                            um["username"] = username
-                            userReference.child(currentUserId!!).child("jobsApplied").child("$postKey$title").updateChildren(um).addOnCompleteListener {
-                                if(it.isSuccessful){}
-                            }
-                        } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-
-        })
-    }
-
     inner class JobsViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
 
         val title = itemView.findViewById<TextView>(R.id.orgJobTitle)
@@ -192,30 +161,9 @@ class OrgViewJobs : Fragment() {
         val cardView = itemView.findViewById<CardView>(R.id.orgJobCV)
     }
 
-    fun getResponse(id: String) : String?{
-        val urlS = "https://connectin-77e24-default-rtdb.firebaseio.com/Users/$id.json"
-        val url = URL(urlS)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.connectTimeout = 3000
-        connection.readTimeout = 3000
-        if(connection.responseCode == 200){
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            var line = reader.readLine()
-            var response = ""
-            while(line != null) {
-                response += line
-                line = reader.readLine()
-            }
-            return response
-        } else {
-            Log.d("selfProfile","Error: ${connection.responseCode}, ${connection.responseMessage}")
-        }
-        return null
-    }
-
     inner class FlagTask : AsyncTask<String, Void, String>(){
         override fun doInBackground(vararg params: String?): String {
-            return getResponse(currentUserId!!) ?: ""
+            return viewJobsPresenter.getResponse(reference.currentUserId) ?: ""
         }
 
         override fun onPostExecute(result: String?) {

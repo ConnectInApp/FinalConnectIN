@@ -7,24 +7,19 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
 import com.example.connectin.view.CommentsFragment
 import com.example.connectin.view.EditDeletePostFragment
-import com.example.connectin.view.Posts
+import com.example.connectin.model.Posts
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import kotlin.properties.Delegates
 
 class HomeFragment : Fragment() {
@@ -79,7 +74,7 @@ class HomeFragment : Fragment() {
 
         val sortPostQuery = postReference.orderByChild("counter")
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostQuery,Posts::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(sortPostQuery, Posts::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts,PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {

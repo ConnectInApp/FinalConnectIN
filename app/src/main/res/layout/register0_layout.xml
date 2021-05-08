@@ -4,111 +4,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4_1">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="325dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="116dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/uname_EV"
+                android:layout_width="200dp"
+                android:layout_height="57dp"
+                android:drawableStart="@drawable/email"
+                android:ems="10"
+                android:hint="@string/register0_uname"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/pass_EV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/pass_EV"
+                android:layout_width="200dp"
+                android:layout_height="57dp"
+                android:layout_marginBottom="1dp"
+                android:drawableStart="@drawable/password"
+                android:ems="10"
+                android:hint="@string/register0_password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/Cpass_EV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/Cpass_EV"
+                android:layout_width="200dp"
+                android:layout_height="57dp"
+                android:layout_marginBottom="10dp"
+                android:drawableStart="@drawable/password"
+                android:ems="10"
+                android:hint="@string/register0_Conf_pass"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/nextB"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/nextB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:backgroundTint="#04724D"
+                android:hapticFeedbackEnabled="true"
+                android:onClick="onClickButton"
+                android:text="@string/register0_createAccB"
+                app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="30dp"
-        android:drawableLeft="@drawable/username"
-        android:text="User Registration"
-        android:textColor="#214283"
+        android:layout_marginBottom="34dp"
+        android:text="@string/register0_header"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/uname_EV"
+        app:drawableLeftCompat="@drawable/username"
+        app:drawableTint="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/cardView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/uname_EV"
-        android:layout_width="200dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/email"
-        android:ems="10"
-        android:hint="Username(Email)"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/pass_EV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <EditText
-        android:id="@+id/pass_EV"
-        android:layout_width="200dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/Cpass_EV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uname_EV" />
-
-    <EditText
-        android:id="@+id/Cpass_EV"
-        android:layout_width="200dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/nextB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_EV" />
-
-    <Button
-        android:id="@+id/nextB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="374dp"
-        android:onClick="onClickButton"
-        android:text="Create Account"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Cpass_EV" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="221dp"
-        android:text="Already Have an Account?"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/register0_alreadyTV"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/sign_TV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nextB" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView3" />
 
     <TextView
         android:id="@+id/sign_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="32dp"
-        android:text="Sign In"
+        android:layout_marginBottom="44dp"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/register0_signInTV"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="249dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

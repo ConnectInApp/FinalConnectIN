@@ -6,6 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
+    android:backgroundTintMode="multiply"
     app:cardBackgroundColor="#F6F6F6"
     app:cardCornerRadius="10dp"
     app:cardElevation="2dp">
@@ -20,6 +23,7 @@
             android:id="@+id/userpostImgIV"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:contentDescription="@string/all_user_posts_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
@@ -29,7 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:textColor="#000000"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userpostImgIV"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +45,9 @@
             android:layout_width="0dp"
             android:layout_height="33dp"
             android:layout_marginStart="16dp"
-            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:textColor="#000000"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/userpostTimeT"
             app:layout_constraintStart_toEndOf="@+id/userpostImgIV"
             app:layout_constraintTop_toBottomOf="@+id/usernamepostT" />
@@ -48,7 +56,9 @@
             android:id="@+id/userpostTimeT"
             android:layout_width="0dp"
             android:layout_height="33dp"
-            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:textColor="#000000"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userpostDateT"
             app:layout_constraintTop_toBottomOf="@+id/usernamepostT" />
@@ -57,33 +67,55 @@
             android:id="@+id/userpostContentT"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:layout_marginTop="12dp"
+            android:textAlignment="viewStart"
+            android:textColor="#000000"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userpostDateT" />
 
         <ImageButton
             android:id="@+id/postlikeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/app_background"
+            android:contentDescription="@string/all_user_like_button"
+            android:hapticFeedbackEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT"
-            app:srcCompat="@drawable/like" />
+            app:srcCompat="@drawable/not_liked" />
 
         <ImageButton
             android:id="@+id/postdislikeButton"
-            android:layout_width="53dp"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/app_background"
+            android:contentDescription="@string/all_user_comment_button"
+            android:hapticFeedbackEnabled="true"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toStartOf="@+id/postdislikeText"
             app:layout_constraintStart_toEndOf="@+id/postlikeText"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT"
-            app:srcCompat="@drawable/dislike" />
+            app:srcCompat="@drawable/not_disliked" />
 
         <ImageButton
             android:id="@+id/postcommentButton"
+            style="@android:style/Widget.ImageButton"
             android:layout_width="53dp"
             android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/app_background"
+            android:backgroundTint="#D1CDCD"
+            android:contentDescription="@string/all_conn_occupation"
+            android:hapticFeedbackEnabled="true"
+            android:tint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT"
             app:srcCompat="@android:drawable/stat_notify_chat" />
@@ -92,7 +124,10 @@
             android:id="@+id/postlikeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 likes"
+            android:layout_marginStart="5dp"
+            android:text="@string/all_user_like_text"
+            android:textColor="#000000"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/postlikeButton"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT" />
@@ -101,7 +136,10 @@
             android:id="@+id/postdislikeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 dislikes"
+            android:layout_marginStart="5dp"
+            android:text="@string/all_user_dislike_text"
+            android:textColor="#000000"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/postdislikeButton"
             app:layout_constraintTop_toBottomOf="@+id/userpostContentT" />

@@ -4,15 +4,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="325dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="81dp"
+        app:cardBackgroundColor="#FFFAFA"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/loginPassword_EV"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="30dp"
+                android:drawableStart="@drawable/password"
+                android:ems="10"
+                android:hint="@string/signin_layout_password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/loginB"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/loginUID_EV"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="30dp"
+                android:drawableStart="@drawable/username"
+                android:ems="10"
+                android:hint="@string/signin_layout_uname"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/loginPassword_EV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/loginB"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="#04724D"
+                android:hapticFeedbackEnabled="true"
+                android:onClick="onClickButton"
+                android:text="@string/signin_layout_loginB"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/login_icon"
+                app:iconPadding="5dp"
+                app:iconSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginUID_EV"
+        android:layout_width="279dp"
+        android:layout_height="168dp"
+        android:contentDescription="@string/signin_layout_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +101,7 @@
         android:layout_height="131dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="1dp"
-        android:background="@drawable/background"
+        android:background="@drawable/app_background"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,78 +112,29 @@
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/unlock_login" />
 
-    <EditText
-        android:id="@+id/loginUID_EV"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/username"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        app:layout_constraintBottom_toTopOf="@+id/loginPassword_EV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <EditText
-        android:id="@+id/loginPassword_EV"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:drawableLeft="@drawable/password"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/loginB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginUID_EV" />
-
-    <Button
-        android:id="@+id/loginB"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="onClickButton"
-        android:text="Login"
-        app:icon="@drawable/login_icon"
-        app:iconPadding="5dp"
-        app:iconSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/forgotPassword_TV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword_EV" />
-
     <TextView
         android:id="@+id/forgotPassword_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="160dp"
-        android:text="Forgot Password?"
-        android:textStyle="italic"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="32dp"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/signin_layout_forgotPassTV"
+        android:textColor="#231F20"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginB" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:text="Don't have an account?"
+        android:text="@string/signin_layout_donthaveTV"
+        android:textColor="#231F20"
+        app:layout_constraintBottom_toTopOf="@+id/register_TV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,14 +144,17 @@
         android:id="@+id/register_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:text="Register"
+        android:layout_marginBottom="32dp"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/signin_layout_registeTV"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/wrongPasswordAnimation"
@@ -132,7 +162,7 @@
         android:layout_height="133dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="3dp"
-        android:background="@drawable/background"
+        android:background="@drawable/app_background"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,5 +172,12 @@
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
         app:lottie_rawRes="@raw/wrong_password" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="249dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

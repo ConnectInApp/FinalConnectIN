@@ -2,8 +2,11 @@ package com.example.connectin.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -11,25 +14,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
+import com.example.connectin.presenter.SearchProfilePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.indv_user_profile.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
 class SearchIndvProfileFragment:Fragment() {
-    lateinit var userReference: DatabaseReference
-    lateinit var userProfileImgRef : StorageReference
-    lateinit var connectionReqRef : DatabaseReference
-    lateinit var conntectionReference : DatabaseReference
-    lateinit var blockReference: DatabaseReference
-    lateinit var endorseReference: DatabaseReference
-    lateinit var mauth : FirebaseAuth
 
-    lateinit var currentUserId : String
+    lateinit var reference : FirebasePresenter
+    lateinit var profilePresenter : SearchProfilePresenter
 
     lateinit var nameE : TextView
     lateinit var occupationE : TextView
@@ -44,34 +44,37 @@ class SearchIndvProfileFragment:Fragment() {
 
     lateinit var currentDate : String
 
-    lateinit var curr_state : String
-    lateinit var block_state : String
+    lateinit var curr_state : String //current state of connection request
+    lateinit var block_state : String //current state of blocking a user
 
     lateinit var postKey : String
+    lateinit var from : String
+    var layout : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         postKey=arguments?.getString("postKey")!!
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        userProfileImgRef = FirebaseStorage.getInstance().getReference().child("profileImgs")
-        connectionReqRef = FirebaseDatabase.getInstance().reference.child("ConnectionRequests")
-        conntectionReference = FirebaseDatabase.getInstance().reference.child("Connections")
-        endorseReference = FirebaseDatabase.getInstance().reference.child("Endorsements")
-        blockReference = FirebaseDatabase.getInstance().reference.child("Blocks")
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
+        from = arguments?.getString("from","")!!
+        if(from.isNullOrEmpty())
+        {
+            layout = R.id.parentL
+        }
+        else {
+            layout = R.id.indvSelfProfileL
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.indv_user_profile, container, false)
         return root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        profilePresenter = SearchProfilePresenter(view)
 
         initialisation(view)
 
@@ -83,7 +86,8 @@ class SearchIndvProfileFragment:Fragment() {
         chatConnectionB.visibility = View.INVISIBLE
         blockUserB.visibility = View.INVISIBLE
 
-        if(currentUserId.compareTo(postKey) == 0) {
+        //if currentuser is visiting their own profile
+        if(reference.currentUserId.compareTo(postKey) == 0) {
             sendConnectionB.visibility = View.INVISIBLE
             endorseConnectionB.visibility = View.INVISIBLE
             chatConnectionB.visibility = View.INVISIBLE
@@ -119,15 +123,26 @@ class SearchIndvProfileFragment:Fragment() {
 
             chatConnectionB.setOnClickListener {
 
-                val i = Intent(activity,ChatActivity::class.java)
-                i.putExtra("currentUserId",currentUserId)
-                i.putExtra("postKey",postKey)
-                startActivity(i)
+                message_animation.visibility= VISIBLE
+                message_animation.playAnimation()
+
+                Handler().postDelayed({
+                    val i = Intent(activity,ChatActivity::class.java)
+                    i.putExtra("currentUserId",reference.currentUserId)
+                    i.putExtra("postKey",postKey)
+                    startActivity(i)
+                    message_animation.visibility= INVISIBLE
+                },2000)
 
             }
 
             endorseConnectionB.setOnClickListener {
-                endorseUser()
+                endorse_animation.visibility= VISIBLE
+                endorse_animation.playAnimation()
+                Handler().postDelayed({
+                    endorseUser()
+                    endorse_animation.visibility= INVISIBLE
+                },1500)
             }
 
             blockUserB.setOnClickListener {
@@ -143,7 +158,7 @@ class SearchIndvProfileFragment:Fragment() {
             }
         }
 
-        userReference.child("$postKey").addValueEventListener(object : ValueEventListener {
+        reference.userReference.child("$postKey").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     if (snapshot.hasChild("accountType")) {
@@ -160,7 +175,14 @@ class SearchIndvProfileFragment:Fragment() {
                             if (snapshot.hasChild("dateOfBirth") && snapshot.hasChild("gender")) {
                                 val dob = snapshot.child("dateOfBirth").getValue().toString()
                                 val gender = snapshot.child("gender").getValue().toString()
-                                aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                if(snapshot.hasChild("about"))
+                                {
+                                    val about = snapshot.child("about").getValue().toString()
+                                    aboutE.setText("$about \n Date of Birth: $dob \n Gender: $gender")
+                                } else {
+                                    aboutE.setText("Date of Birth: $dob \n Gender: $gender")
+                                }
+                                //aboutE.setText("Date of Birth: $dob \n Gender: $gender")
                             }
                             if (snapshot.hasChild("occupation")) {
                                 val occ = snapshot.child("occupation").getValue().toString()
@@ -173,7 +195,6 @@ class SearchIndvProfileFragment:Fragment() {
                                 ).show()
                             }
                             connectButtonText()
-                            blockButtonText()
                             endorseButtonText()
                         }
                     }
@@ -181,12 +202,11 @@ class SearchIndvProfileFragment:Fragment() {
             }
             override fun onCancelled(error: DatabaseError) {}
         })
-
-
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun blockButtonText() {
-        blockReference.child(currentUserId).addListenerForSingleValueEvent(object :ValueEventListener{
+        reference.blockReference.child(reference.currentUserId).addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.hasChild(postKey))
                 {
@@ -220,15 +240,16 @@ class SearchIndvProfileFragment:Fragment() {
         })
     }
 
+    //unblock a user
     private fun unblockUser() {
-        blockReference.child(currentUserId).child(postKey).removeValue().addOnCompleteListener {
+        reference.blockReference.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful)
             {
-                blockReference.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+                reference.blockReference.child(postKey).child(reference.currentUserId).removeValue().addOnCompleteListener {
                     if(it.isSuccessful)
                     {
                         blockUserB.isEnabled = true
-                        curr_state = "unblocked"
+                        block_state = "unblocked"
                         blockUserB.setText("Block")
 
                         aboutE.visibility = View.VISIBLE
@@ -242,15 +263,16 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //block user
     private fun blockUser() {
-        blockReference.child(currentUserId).child(postKey).child("blocked").setValue("yes").addOnCompleteListener {
+        reference.blockReference.child(reference.currentUserId).child(postKey).child("blocked").setValue("yes").addOnCompleteListener {
             if(it.isSuccessful)
             {
-                blockReference.child(postKey).child(currentUserId).child("blocked").setValue("yes").addOnCompleteListener {
+                reference.blockReference.child(postKey).child(reference.currentUserId).child("blocked").setValue("yes").addOnCompleteListener {
                     if(it.isSuccessful)
                     {
                         blockUserB.isEnabled = true
-                        curr_state = "blocked"
+                        block_state = "blocked"
                         blockUserB.setText("Unblock")
 
                         aboutE.visibility = View.INVISIBLE
@@ -264,10 +286,11 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun endorseButtonText() {
-        endorseReference.child(postKey).addListenerForSingleValueEvent(object : ValueEventListener{
+        reference.endorsementReference.child(postKey).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.hasChild(currentUserId))
+                if(snapshot.hasChild(reference.currentUserId))
                 {
                     endorseConnectionB.setText("Endorsed")
                 }
@@ -276,15 +299,14 @@ class SearchIndvProfileFragment:Fragment() {
                     endorseConnectionB.setText("Endorse")
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
-
         })
     }
 
+    //endorse a user, you cannot unendorse a user after endorsing them
     private fun endorseUser() {
         Toast.makeText(activity,"Endorsed", Toast.LENGTH_SHORT).show()
-        userReference.child(currentUserId).addValueEventListener(object: ValueEventListener{
+        reference.userReference.child(reference.currentUserId).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists())
                 {
@@ -295,15 +317,13 @@ class SearchIndvProfileFragment:Fragment() {
                     hm["username"] = name
                     hm["occupation"] = occupation
                     hm["profileImg"] = profileImg
-                    hm["uid"] = currentUserId
+                    hm["uid"] = reference.currentUserId
 
-                    endorseReference.child(postKey).child(currentUserId).updateChildren(hm).addOnCompleteListener {
+                    reference.endorsementReference.child(postKey).child(reference.currentUserId).updateChildren(hm).addOnCompleteListener {
                         if(it.isSuccessful)
                         {
                             Toast.makeText(activity,"User endorsed!!",Toast.LENGTH_SHORT).show()
-                            val i = Intent(activity,NavigationActivity::class.java)
-                            startActivity(i)
-                            activity?.finish()
+                            endorseConnectionB.setText("Endorsed")
                         } else {
                             Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
                         }
@@ -319,17 +339,19 @@ class SearchIndvProfileFragment:Fragment() {
         val frag = IndvViewPosts()
         val bundle = Bundle()
         bundle.putString("postKey",postKey)
+        bundle.putString("from",from)
         frag.arguments = bundle
         activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.parentL,frag)
+                ?.replace(layout!!,frag)
                 ?.addToBackStack(null)
                 ?.commit()
     }
 
+    //unconnect a person similar to unfriend
     private fun unconnect() {
-        conntectionReference.child(currentUserId).child(postKey).removeValue().addOnCompleteListener {
+        reference.connectionReference.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful) {
-                conntectionReference.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+                reference.connectionReference.child(postKey).child(reference.currentUserId).removeValue().addOnCompleteListener {
                     if(it.isSuccessful) {
                         sendConnectionB.isEnabled = true
                         curr_state = "notConnected"
@@ -348,20 +370,21 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //accept a user's connection request
     private fun acceptRequest() {
         var calendar = Calendar.getInstance()
         val current = SimpleDateFormat("dd-MM-yyyy")
         currentDate = current.format(calendar.time)
 
-        conntectionReference.child(currentUserId).child(postKey).child("date").setValue(currentDate).addOnCompleteListener {
+        reference.connectionReference.child(reference.currentUserId).child(postKey).child("date").setValue(currentDate).addOnCompleteListener {
             if(it.isSuccessful)
             {
-                conntectionReference.child(postKey).child(currentUserId).child("date").setValue(currentDate).addOnCompleteListener {
+                reference.connectionReference.child(postKey).child(reference.currentUserId).child("date").setValue(currentDate).addOnCompleteListener {
                     if(it.isSuccessful)
                     {
-                        connectionReqRef.child(currentUserId).child(postKey).removeValue().addOnCompleteListener {
+                        reference.connectionReqRef.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
                             if(it.isSuccessful) {
-                                connectionReqRef.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+                                reference.connectionReqRef.child(postKey).child(reference.currentUserId).removeValue().addOnCompleteListener {
                                     if(it.isSuccessful) {
                                         sendConnectionB.isEnabled = true
                                         curr_state = "connected"
@@ -385,10 +408,11 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //user can choose to cancel the request they have received
     private fun cancelRequest() {
-        connectionReqRef.child(currentUserId).child(postKey).removeValue().addOnCompleteListener {
+        reference.connectionReqRef.child(reference.currentUserId).child(postKey).removeValue().addOnCompleteListener {
             if(it.isSuccessful) {
-                connectionReqRef.child(postKey).child(currentUserId).removeValue().addOnCompleteListener {
+                reference.connectionReqRef.child(postKey).child(reference.currentUserId).removeValue().addOnCompleteListener {
                     if(it.isSuccessful) {
                         sendConnectionB.isEnabled = true
                         curr_state = "notConnected"
@@ -400,8 +424,9 @@ class SearchIndvProfileFragment:Fragment() {
         }
     }
 
+    //function to hold button text when user navigates away from the screen
     private fun connectButtonText() {
-        connectionReqRef.child(currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
+        reference.connectionReqRef.child(reference.currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.hasChild(postKey))
                 {
@@ -423,7 +448,7 @@ class SearchIndvProfileFragment:Fragment() {
                     }
                 }
                 else {
-                    conntectionReference.child(currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
+                    reference.connectionReference.child(reference.currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(snapshot.hasChild(postKey))
                             {
@@ -435,6 +460,7 @@ class SearchIndvProfileFragment:Fragment() {
                                 occupationE.visibility = View.VISIBLE
                                 viewPostConnectionB.visibility = View.VISIBLE
                                 endorseConnectionB.visibility = View.VISIBLE
+                                chatConnectionB.visibility = View.VISIBLE
                                 blockUserB.visibility = View.VISIBLE
                                 blockButtonText()
                             }
@@ -449,11 +475,11 @@ class SearchIndvProfileFragment:Fragment() {
         })
     }
 
+    //send request to another user
     private fun sendRequest() {
-
-        connectionReqRef.child(currentUserId).child(postKey).child("request_type").setValue("request_sent").addOnCompleteListener {
+        reference.connectionReqRef.child(reference.currentUserId).child(postKey).child("request_type").setValue("request_sent").addOnCompleteListener {
             if(it.isSuccessful) {
-                connectionReqRef.child(postKey).child(currentUserId).child("request_type").setValue("request_received").addOnCompleteListener {
+                reference.connectionReqRef.child(postKey).child(reference.currentUserId).child("request_type").setValue("request_received").addOnCompleteListener {
                     if(it.isSuccessful) {
                         sendConnectionB.isEnabled = true
                         curr_state = "request_sent"

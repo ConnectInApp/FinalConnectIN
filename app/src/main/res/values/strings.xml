@@ -10,4 +10,215 @@
     <string name="button_signout">Sign Out</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    //activity_comments
+    <string name="Comments">Comments :</string>
+    <string name="Comment_hint">write a comment here...</string>
+
+    //activity_splash
+    <string name="splash">image</string>
+
+    //all_comments_layout
+    <string name="all_comment_uname">username</string>
+    <string name="all_commented_on">commented on</string>
+    <string name="all_comment_date">Date:</string>
+    <string name="all_comment_hint">Comment text will display here..</string>
+    <string name="all_comment_time">Time:</string>
+
+
+    //all_connections_layout
+    <string name="all_conn_image">Connection</string>
+    <string name="all_conn_name">Name</string>
+    <string name="all_conn_occupation">Occupation</string>
+
+    //all_user_post_layout
+    <string name="all_user_posts_image">user post image</string>
+    <string name="all_user_like_button">like button</string>
+    <string name="all_user_dislike_button">dislike button</string>
+    <string name="all_user_comment_button">Comment button</string>
+    <string name="all_user_like_text">0 likes</string>
+    <string name="all_user_dislike_text">0 dislikes</string>
+
+    //business_registration_layout
+    <string name="bus_reg_title">Business Registration</string>
+    <string name="bus_name">Name</string>
+    <string name="bus_website">Website</string>
+    <string name="bus_address">Address</string>
+    <string name="bus_reg_button">Register</string>
+
+    //chat_screen_layout
+
+    <string name="chat_prof_pic">chat profile pic</string>
+    <string name="chat_user_name">Name of User you are chatting to</string>
+    <string name="chat_message">Write Message...</string>
+
+
+    //forgotpassword_dialog_layout
+    <string name="forgotpassword_hint"></string>
+
+    //fragment_connections
+    <string name="frag_conn_title">My connections</string>
+
+    //fragment_endorsements
+    <string name="frag_endorse_title">Endorsements</string>
+
+    //fragment_settings
+    <string name="frag_settings_searchB">Search</string>
+
+    //individual_registration_layout
+    <string name="indv_reg_title">Individual Registration</string>
+    <string name="indv_reg_occupation">Occupation</string>
+    <string name="indv_reg_dob">DD/MM/YYYY</string>
+    <string name="indv_reg_name">Name</string>
+    <string name="indv_reg_registerB">Register</string>
+    <string name="indv_reg_radio_male">Male</string>
+    <string name="indv_reg_radio_female">Female</string>
+
+    //indv_create_post
+    <string name="indv_create_post_header">Create New Post</string>
+    <string name="indv_create_post_hint">What\'s on your mind?</string>
+    <string name="indv_create_postB">POST</string>
+
+    //indv_edit_delete_post
+    <string name="indv_ED_header">Update/Delete Post</string>
+    <string name="indv_ED_content">Content</string>
+    <string name="indv_ED_deleteB">Delete</string>
+    <string name="indv_ED_updateB">Update</string>
+    <string name="indv_ED_ev"></string>
+
+    //indv_edit_profile
+    <string name="indv_edit_header">Edit Profile</string>
+    <string name="indv_edit_occupation">Occupation</string>
+    <string name="indv_edit_name">Name</string>
+    <string name="indv_edit_dob">Date of Birth</string>
+    <string name="indv_edit_gender">GENDER</string>
+    <string name="indv_edit_radio_male">Male</string>
+    <string name="indv_edit_radio_female">Female</string>
+    <string name="indv_edit_radio_other">Other</string>
+    <string name="indv_edit_updateB">Update</string>
+    <string name="indv_edit_aboutme">ABOUT ME</string>
+    <string name="indv_edit_occupationfield"></string>
+    <string name="indv_edit_dobfield"></string>
+    <string name="indv_edit_aboutmefield"></string>
+    <string name="indv_edit_namefield"></string>
+
+    //indv_message_layout
+    <string name="indv_msg_img">message image</string>
+    <string name="indv_msg_reciver">Receiver Message</string>
+    <string name="indv_msg_sender">sender message</string>
+
+    //indv_self_profile
+    <string name="indv_self_img">Self image</string>
+    <string name="indv_self_uploadB">Upload</string>
+    <string name="indv_self_about">About</string>
+    <string name="indv_self_connection">My Connections</string>
+    <string name="indv_self_endorsement">View Endorsements</string>
+    <string name="indv_self_jobs">Applied Jobs</string>
+    <string name="indv_self_create">create post</string>
+    <string name="indv_self_viewB">View Posts</string>
+    <string name="indv_self_name">Name of User</string>
+    <string name="indv_self_occupation">Occupation</string>
+    <string name="indv_self_aboutfield">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget nisl hendrerit, tincidunt lacus non, pharetra nulla. In rhoncus, augue non posuere convallis, nibh enim feugiat leo, porttitor auctor velit augue sed tortor.</string>
+    <string name="indv_self_following">Following</string>
+
+    //indv_user_profile
+    <string name="indv_user_img">User image</string>
+    <string name="indv_user_viewPosts">View Posts</string>
+    <string name="indv_user_name">User Name will display here</string>
+    <string name="indv_user_occupation">User Occupation Will Display here</string>
+    <string name="indv_user_about">ABOUT</string>
+    <string name="indv_user_aboutfield">User Info will Display Here</string>
+    <string name="indv_user_connReq">Connect</string>
+    <string name="indv_user_message">Message</string>
+    <string name="indv_user_Endorsement">Endorse</string>
+    <string name="indv_user_block">Block</string>
+    <string name="indv_user_declineReq">Reject</string>
+
+    //org_create_post
+    <string name="org_create_header">Post Job</string>
+    <string name="org_create_jobTitle">Job Title</string>
+    <string name="org_create_jobDesc">Job Description</string>
+    <string name="org_create_salary">Salary</string>
+    <string name="org_create_jobTitlefield"></string>
+    <string name="org_create_jobDescfield"></string>
+    <string name="org_create_salaryfield"></string>
+    <string name="org_create_postB">Post Job</string>
+
+
+    //org_edit_profile
+    <string name="org_edit_header">EDIT PROFILE</string>
+    <string name="org_edit_name">Organisation Name</string>
+    <string name="org_edit_address">Address</string>
+    <string name="org_edit_website">Website</string>
+    <string name="org_edit_aboutUs">ABOUT US</string>
+    <string name="org_edit_updateB">Update</string>
+    <string name="org_edit_namefield"></string>
+    <string name="org_edit_addressfield"></string>
+    <string name="org_edit_websiteField"></string>
+    <string name="org_edit_aboutField"></string>
+
+
+    //orgs_jobs_layout
+    <string name="org_jobs_layout_title">Position: </string>
+    <string name="org_jobs_layout_salary">Salary: </string>
+
+    //org_self_profile
+    <string name="org_self_img">Org image</string>
+    <string name="org_self_uploadB">Upload</string>
+    <string name="org_self_name">Name</string>
+    <string name="org_self_aboutUs">ABOUT US</string>
+    <string name="org_self_aboutUsField">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget nisl hendrerit, tincidunt lacus non, pharetra nulla. In rhoncus, augue non posuere convallis, nibh enim feugiat leo, porttitor auctor velit augue sed tortor.</string>
+    <string name="org_self_viewJobsB">View Jobs</string>
+    <string name="org_self_createB">Create Jobs</string>
+    <string name="org_self_followers">Followers</string>
+
+
+    //org_user_profile
+    <string name="org_user_img">Org user image</string>
+    <string name="org_user_name">Name</string>
+    <string name="org_user_aboutUs">About Us</string>
+    <string name="org_user_aboutUsField">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget nisl hendrerit, tincidunt lacus non, pharetra nulla. In rhoncus, augue non posuere convallis, nibh enim feugiat leo, porttitor auctor velit augue sed tortor.</string>
+    <string name="org_user_followB">Follow</string>
+    <string name="org_user_viewJobsB">View Jobs</string>
+
+
+
+    //register0_layout
+    <string name="register0_header">User Registration</string>
+    <string name="register0_uname">Username(Email)</string>
+    <string name="register0_password">Password</string>
+    <string name="register0_Conf_pass">Confirm Password</string>
+    <string name="register0_createAccB">Create Account</string>
+    <string name="register0_alreadyTV">Already Have an Account?</string>
+    <string name="register0_signInTV">Sign In</string>
+
+
+
+    //register_layout
+    <string name="register_layout_header">Create Account</string>
+    <string name="register_layout_radio_indv">Individual</string>
+    <string name="register_layout_radio_org">Organization</string>
+
+
+
+    //search_list
+    <string name="search_list_name">Name</string>
+
+    //signin_layout
+    <string name="signin_layout_img">Logo</string>
+    <string name="signin_layout_uname">Username</string>
+    <string name="signin_layout_password">Password</string>
+    <string name="signin_layout_loginB">Login</string>
+    <string name="signin_layout_forgotPassTV">Forgot Password?</string>
+    <string name="signin_layout_donthaveTV">Dont have an account?</string>
+    <string name="signin_layout_registeTV">Register</string>
+
+    <string name="settings">Settings</string>
+    <string name="myprofile">Profile</string>
+
+
+
+
+
 </resources>

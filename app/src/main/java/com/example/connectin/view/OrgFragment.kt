@@ -10,17 +10,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.example.connectin.presenter.OrgPresenter
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.business_registration_layout.*
 
 class OrgFragment : Fragment(), OrgPresenter.View {
 
     lateinit var presenter: OrgPresenter
-    lateinit var mauth : FirebaseAuth
-    lateinit var userReference: DatabaseReference
+    lateinit var reference : FirebasePresenter
 
     lateinit var currentUserId : String
 
@@ -31,12 +27,6 @@ class OrgFragment : Fragment(), OrgPresenter.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        presenter = OrgPresenter(this)
-
-        mauth = FirebaseAuth.getInstance()
-        currentUserId = mauth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
     }
 
     override fun onCreateView(
@@ -50,42 +40,48 @@ class OrgFragment : Fragment(), OrgPresenter.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        username = view.findViewById(R.id.orgName_EV)
-        address = view.findViewById(R.id.orgAddress_EV)
-        website = view.findViewById(R.id.orgWebsite)
-        orgRegister = view.findViewById(R.id.orgRegisterB)
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        presenter = OrgPresenter(view)
 
-        var name = username.text
-        var address = address.text
-        var website = website.text
-
+        initialiseValues()
 
         orgRegister.setOnClickListener {
-            if(name.isEmpty()) Toast.makeText(activity,"Please enter valid name",Toast.LENGTH_LONG).show()
-            if(address.isEmpty()) Toast.makeText(activity,"Please enter address",Toast.LENGTH_LONG).show()
-            if(website.isEmpty()) Toast.makeText(activity,"Please enter your website",Toast.LENGTH_LONG).show()
-            else {
-                val hm = HashMap<String,Any>()
-                hm["username"] = name.toString()
-                hm["address"] = address.toString()
-                hm["website"] = website.toString()
-                hm["accountType"] = "organisation"
-                userReference.updateChildren(hm).addOnCompleteListener {
-                    if(it.isSuccessful)
-                    {
-                        Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
-                        val i = Intent(activity,NavigationActivity::class.java)
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        startActivity(i)
-                        activity?.finish()
-                    } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
-                }
-            }
+            registerOrg()
         }
     }
 
     override fun registerOrg() {
-
+        initialiseValues()
+        var name = username.text
+        var address = address.text
+        var website = website.text
+        if(name.isEmpty()) Toast.makeText(activity,"Please enter valid name",Toast.LENGTH_LONG).show()
+        if(address.isEmpty()) Toast.makeText(activity,"Please enter address",Toast.LENGTH_LONG).show()
+        if(website.isEmpty()) Toast.makeText(activity,"Please enter your website",Toast.LENGTH_LONG).show()
+        else {
+            val hm = HashMap<String,Any>()
+            hm["username"] = name.toString()
+            hm["address"] = address.toString()
+            hm["website"] = website.toString()
+            hm["accountType"] = "organisation"
+            reference.userReference.child(reference.currentUserId).updateChildren(hm).addOnCompleteListener {
+                if(it.isSuccessful)
+                {
+                    Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
+                    val i = Intent(activity,NavigationActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(i)
+                    activity?.finish()
+                } else Toast.makeText(activity,"Error: ${it.exception?.message}",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
+    override fun initialiseValues() {
+        username = view?.findViewById(R.id.orgName_EV)!!
+        address = view?.findViewById(R.id.orgAddress_EV)!!
+        website = view?.findViewById(R.id.orgWebsite)!!
+        orgRegister = view?.findViewById(R.id.orgRegisterB)!!
+    }
 }

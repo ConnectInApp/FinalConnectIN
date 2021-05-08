@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background_2">
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Update/Delete Post"
+        android:text="@string/indv_ED_header"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -29,7 +29,10 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/indv_ED_ev"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +43,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Update"
+        android:backgroundTint="#21A179"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/indv_ED_updateB"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toStartOf="@+id/deletepostButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newpostContent_EV" />
@@ -50,7 +57,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Content"
+        android:text="@string/indv_ED_content"
+        android:textAllCaps="true"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,9 +72,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Delete"
+        android:backgroundTint="#F03621"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/indv_ED_deleteB"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editpostButton"
         app:layout_constraintTop_toBottomOf="@+id/newpostContent_EV" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/delete_post_animation"
+        android:layout_width="296dp"
+        android:layout_height="103dp"
+
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="204dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/declineConnectionReqB"
+        app:layout_constraintVertical_bias="1.0"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/delete_post" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

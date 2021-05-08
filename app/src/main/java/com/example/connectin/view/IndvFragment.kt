@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.connectin.R
+import com.example.connectin.presenter.FirebasePresenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -20,8 +21,7 @@ import kotlinx.android.synthetic.main.individual_registration_layout.*
 
 class IndvFragment :Fragment() {
 
-    lateinit var auth: FirebaseAuth
-    lateinit var userReference : DatabaseReference
+    lateinit var reference: FirebasePresenter
 
     lateinit var currentUserId : String
 
@@ -33,10 +33,6 @@ class IndvFragment :Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        auth = FirebaseAuth.getInstance()
-        currentUserId = auth.currentUser.uid
-        userReference = FirebaseDatabase.getInstance().reference.child("Users").child(currentUserId)
     }
 
     override fun onCreateView(
@@ -49,6 +45,11 @@ class IndvFragment :Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
+        currentUserId = reference.auth.currentUser.uid
+
 
         username = view.findViewById(R.id.indvName_EV)
         dob =view.findViewById(R.id.indvDOB_EV)
@@ -79,7 +80,7 @@ class IndvFragment :Fragment() {
                 hm["gender"] = indvGender.toString()
                 hm["occupation"] = indvOccupation.toString()
                 hm["accountType"] = "individual"
-                userReference.updateChildren(hm).addOnCompleteListener {
+                reference.userReference.child(currentUserId).updateChildren(hm).addOnCompleteListener {
                     if(it.isSuccessful)
                     {
                         Toast.makeText(activity,"Your account is successfully created",Toast.LENGTH_SHORT).show()
@@ -92,18 +93,4 @@ class IndvFragment :Fragment() {
             }
         }
     }
-
-    /*auth.createUserWithEmailAndPassword(indvEmail,indvPassword).addOnCompleteListener(activity!!){ task->
-                if(task.isSuccessful){
-                    auth.currentUser?.sendEmailVerification()?.addOnCompleteListener{ task->
-                        if(task.isSuccessful){
-                            Toast.makeText(activity,"Email sent",Toast.LENGTH_LONG).show()
-                        }
-
-                    }
-                }
-
-
-            }*/
-
 }

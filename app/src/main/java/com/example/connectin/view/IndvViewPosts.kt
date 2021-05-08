@@ -12,11 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
+import com.example.connectin.model.Posts
+import com.example.connectin.presenter.FirebasePresenter
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlin.properties.Delegates
 
@@ -24,10 +25,7 @@ class IndvViewPosts : Fragment(){
 
     lateinit var postList : RecyclerView
 
-    lateinit var userReference: DatabaseReference
-    lateinit var postReference: DatabaseReference
-    lateinit var likesReference: DatabaseReference
-    lateinit var dislikesReference: DatabaseReference
+    lateinit var reference : FirebasePresenter
     lateinit var mauth : FirebaseAuth
     lateinit var UserId : String
 
@@ -36,6 +34,7 @@ class IndvViewPosts : Fragment(){
     var likeCheck = false
     var dislikeCheck = false
     var commentLayout : Int? = null
+    lateinit var from : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,21 +43,17 @@ class IndvViewPosts : Fragment(){
         mauth = FirebaseAuth.getInstance()
         currentUserId = mauth.currentUser.uid
         postKey=arguments?.getString("postKey","")
-        userReference = FirebaseDatabase.getInstance().reference.child("Users")
-        postReference = FirebaseDatabase.getInstance().reference.child("Posts")
-        likesReference = FirebaseDatabase.getInstance().reference.child("Likes")
-        dislikesReference = FirebaseDatabase.getInstance().reference.child("Dislikes")
+        from = arguments?.getString("from","")!!
         if(postKey?.isNullOrBlank() == false)
         {
             UserId = postKey!!
-            //commentLayout = R.id.parentL
         }
         else {
             UserId =  currentUserId!!
-            commentLayout = R.id.indvSelfProfileL
         }
-
-
+        if(from.isNullOrEmpty()){
+            commentLayout = R.id.parentL
+        }else commentLayout = R.id.indvSelfProfileL
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,6 +62,9 @@ class IndvViewPosts : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //initializing presenter reference
+        reference = FirebasePresenter(view)
 
         postList = view.findViewById(R.id.indvViewPostRV)
         postList.setHasFixedSize(true)
@@ -80,9 +78,9 @@ class IndvViewPosts : Fragment(){
 
     private fun displayAllPost() {
 
-        val indvQuery = postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
+        val indvQuery = reference.postReference.orderByChild("uid").startAt(UserId).endAt(UserId + "\uf8ff")
 
-        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery,Posts::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Posts>().setQuery(indvQuery, Posts::class.java).build()
 
         val firebaseRecyclerAdapter : FirebaseRecyclerAdapter<Posts, PostsViewHolder> = object : FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
@@ -113,9 +111,7 @@ class IndvViewPosts : Fragment(){
                         val frag = EditDeletePostFragment()
                         val bundle = Bundle()
                         bundle.putString("postKey",postKey.toString())
-
                         frag.arguments = bundle
-
                         activity?.supportFragmentManager?.beginTransaction()
                                 ?.replace(R.id.indvSelfProfileL,frag)
                                 ?.addToBackStack(null)
@@ -125,17 +121,17 @@ class IndvViewPosts : Fragment(){
 
                 holder.likeButton.setOnClickListener {
                     likeCheck = true
-                    likesReference.addValueEventListener(object : ValueEventListener{
+                    reference.likesReference.addValueEventListener(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(likeCheck.equals(true))
                             {
                                 if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 } else {
-                                    likesReference.child(postKey).child(currentUserId!!).setValue(true)
-                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.likesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     likeCheck = false
                                 }
                             }
@@ -147,17 +143,17 @@ class IndvViewPosts : Fragment(){
 
                 holder.dislikeButton.setOnClickListener {
                     dislikeCheck = true
-                    dislikesReference.addValueEventListener(object : ValueEventListener{
+                    reference.dislikesReference.addValueEventListener(object : ValueEventListener{
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if(dislikeCheck.equals(true))
                             {
                                 if(snapshot.child(postKey!!).hasChild(currentUserId!!))
                                 {
-                                    dislikesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 } else {
-                                    dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
-                                    likesReference.child(postKey).child(currentUserId!!).removeValue()
+                                    reference.dislikesReference.child(postKey).child(currentUserId!!).setValue(true)
+                                    reference.likesReference.child(postKey).child(currentUserId!!).removeValue()
                                     dislikeCheck = false
                                 }
                             }
@@ -171,9 +167,7 @@ class IndvViewPosts : Fragment(){
                     val frag = CommentsFragment()
                     val bundle = Bundle()
                     bundle.putString("postKey",postKey.toString())
-
                     frag.arguments = bundle
-
                     activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(commentLayout!!,frag)
                             ?.addToBackStack(null)?.commit()

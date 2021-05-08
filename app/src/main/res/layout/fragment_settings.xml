@@ -4,25 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background4_2"
     tools:context=".view.SettingsFragment">
 
     <Button
         android:id="@+id/signOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#F03621"
+        android:hapticFeedbackEnabled="true"
         android:text="@string/button_signout"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/logout"
+        app:iconSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchButton" />
 
     <Button
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Search"
+        android:backgroundTint="#800000FF"
+        android:hapticFeedbackEnabled="true"
+        android:text="@string/frag_settings_searchB"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/search"
+        app:iconSize="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/signOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,21 +1,15 @@
 package com.example.connectin.view
 
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectin.R
-import com.example.connectin.view.ui.home.HomeFragment
+import com.example.connectin.model.Users
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-
 
 
 //class SearchAdapter(var userList:ArrayList<Users>,var userListFilter:ArrayList<Users>,val listener:(String,String)->Unit) : RecyclerView.Adapter<SearchAdapter.ViewHolder>(),Filterable {
@@ -90,7 +84,7 @@ import com.google.firebase.ktx.Firebase
 //    }
 //}
 
-class SearchAdapter(var userList:ArrayList<Users>,var userListFilter:ArrayList<Users>,val listener:(String,String,String)->Unit) :FirebaseRecyclerAdapter<Users, SearchAdapter.ViewHolder>(FirebaseRecyclerOptions.Builder<Users>().setQuery(FirebaseDatabase.getInstance().reference.child("Users"),Users::class.java).build()),Filterable{
+class SearchAdapter(var userList:ArrayList<Users>, var userListFilter:ArrayList<Users>, val listener:(String, String, String)->Unit) :FirebaseRecyclerAdapter<Users, SearchAdapter.ViewHolder>(FirebaseRecyclerOptions.Builder<Users>().setQuery(FirebaseDatabase.getInstance().reference.child("Users"), Users::class.java).build()),Filterable{
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val nameT: TextView

@@ -1,10 +1,6 @@
 package com.example.connectin.view
 
-import android.icu.number.NumberFormatter.with
-import android.icu.number.NumberRangeFormatter.with
 import android.os.Bundle
-import android.provider.DocumentsContract
-import android.sax.RootElement
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -18,6 +14,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.connectin.R
+import com.example.connectin.model.Chats
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -43,6 +40,9 @@ class ChatActivity: AppCompatActivity() {
     lateinit var sendB:Button
     lateinit var Recieverprofilephoto:ImageView
     lateinit var messageKey:String
+
+    //new field added
+    var name :String = ""
 
     var chatlist=ArrayList<Chats>()
     lateinit var adapter: ChatsAdapter
@@ -107,26 +107,13 @@ class ChatActivity: AppCompatActivity() {
                         var messages=snapshot.getValue(Chats::class.java)
                         chatlist.add(messages!!)
                         adapter.notifyDataSetChanged()
-
                     }
                 }
 
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onCancelled(error: DatabaseError) {}
             })
 
     }
@@ -140,11 +127,9 @@ class ChatActivity: AppCompatActivity() {
         }
         else{
             var senderRef="Messages/" + senderId + "/" + postKey
-
             var receiverRef="Messages/" + postKey + "/" + senderId
 
             chatReference=userReference.child(senderId).child(postKey).push()
-
              messageKey=chatReference.key!!
 
             var calendar = Calendar.getInstance()
@@ -169,7 +154,7 @@ class ChatActivity: AppCompatActivity() {
 
             userReference.updateChildren(hmBody).addOnCompleteListener {
                 if(it.isSuccessful){
-                    Toast.makeText(this,"Message sent Successfully",Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this,"Message sent Successfully",Toast.LENGTH_LONG).show()
                     inputMessage.setText("")
                 }
                 else{
@@ -184,6 +169,16 @@ class ChatActivity: AppCompatActivity() {
 
     }
     fun getToken(message:String){
+
+        userReference.child("Users").child(senderId).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                name = snapshot.child("username").value.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+
         val databaseref=FirebaseDatabase.getInstance().getReference("Users").child(postKey)
         databaseref.addListenerForSingleValueEvent(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -198,7 +193,8 @@ class ChatActivity: AppCompatActivity() {
                     data.put("photo",Recieverprofilephoto)
                     data.put("message",message)
                     data.put("chatId",messageKey)
-                    data.put("title",chattingName.text.toString())
+                    //data.put("title",chattingName.text.toString())
+                    data.put("title",name)
 
                     to.put("to",token)
                     to.put("data",data)

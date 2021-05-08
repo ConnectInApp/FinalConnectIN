@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background4_2">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Create Account"
-        android:textColor="#000000"
+        android:text="@string/register_layout_header"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="50dp"
+            android:hapticFeedbackEnabled="true"
             android:onClick="radioClicked"
-            android:text="Individual"
+            android:text="@string/register_layout_radio_indv"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <RadioButton
@@ -45,8 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
+            android:hapticFeedbackEnabled="true"
             android:onClick="radioClicked"
-            android:text="Organization"
+            android:text="@string/register_layout_radio_org"
+            android:textColor="@color/black"
             android:textSize="18sp" />
     </RadioGroup>
 
